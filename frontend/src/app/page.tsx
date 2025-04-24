@@ -1,8 +1,8 @@
 // app/page.tsx
-import HeroSection from './hero-section';
-import FeaturesSection from './features-section';
-import HowItWorksSection from './works-section';
-import TestimonialsSection from './testimonal-section';
+import HeroSection from '../components/hero-section';
+import FeaturesSection from '../components/features-section';
+import HowItWorksSection from '../components/works-section';
+import TestimonialsSection from '../components/testimonal-section';
 
 export default function Home() {
   return (
