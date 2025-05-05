@@ -9,11 +9,11 @@ function Navbar() {
       <Link href="/about" className="text-gray-800 hover:text-gray-600">
         About
       </Link>
-      <Link href="/login" className="text-gray-800 hover:text-gray-600">
+      <Link href="/sign-in" className="text-gray-800 hover:text-gray-600">
         Log In
       </Link>
       <Link 
-        href="/signup" 
+        href="/sign-up" 
         className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800"
       >
         Sign Up
