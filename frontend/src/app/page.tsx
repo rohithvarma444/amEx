@@ -3,6 +3,7 @@ import HeroSection from '../components/hero-section';
 import FeaturesSection from '../components/features-section';
 import HowItWorksSection from '../components/works-section';
 import TestimonialsSection from '../components/testimonal-section';
+import Footer from '@/components/footer';
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
       <FeaturesSection />
       <HowItWorksSection />
       <TestimonialsSection />
+      <Footer />
     </main>
   );
 }

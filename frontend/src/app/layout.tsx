@@ -38,7 +38,6 @@ export default function RootLayout({
             reverseOrder={false}
           />
           {children}
-          <Footer />
         </body>
       </html>
     </ClerkProvider>
