@@ -2,33 +2,29 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-// import Link from 'next/link'; // No longer needed for the back button if using router.back()
-import { useParams, useRouter } from 'next/navigation'; // Added useRouter
+import { useParams, useRouter } from 'next/navigation'; 
 
-// Dummy data structure - replace with your actual Post type
+// Updated Post interface for multiple images
 interface Post {
   id: string;
   title: string;
   description: string;
   price: string;
-  category: string; // Or a more complex category object
+  category: string; 
   tags: string[];
-  imageUrl: string;
+  imageUrls: string[]; // Changed from imageUrl to imageUrls array
   author: {
     name: string;
     avatarUrl?: string;
   };
-  // Add other fields as per your schema (e.g., location, urgency for requests)
 }
 
 // Dummy function to simulate API call
 const fetchPostById = async (postId: string): Promise<Post | null> => {
   console.log(`Fetching post with ID: ${postId}`);
-  // Replace with actual API call: const response = await fetch(`/api/posts/${postId}`);
-  // const data = await response.json(); return data.post;
+  // Replace with actual API call
   
-  // Dummy data for now:
-  if (postId === "123") { // Example postId
+  if (postId === "123") { 
     return {
       id: "123",
       title: "Maggi Cooked to Order",
@@ -36,7 +32,11 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
       price: "₹40/pack",
       category: "Food",
       tags: ["Food", "Hostel", "Skills"],
-      imageUrl: "/img1.png", // Replace with actual image path or URL from your dummy data
+      imageUrls: [ // Array of image URLs
+        "/img1.png", 
+        "/placeholder-image-2.png", // Add more dummy image paths
+        "/placeholder-image-3.png"
+      ], 
       author: {
         name: "Seller Name",
       },
@@ -47,7 +47,7 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
 
 export default function PostPage() {
   const params = useParams();
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
   const postId = params.postId as string;
 
   const [post, setPost] = useState<Post | null>(null);
@@ -55,6 +55,7 @@ export default function PostPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSubmittedModal, setShowSubmittedModal] = useState(false);
   const [interestMessage, setInterestMessage] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // State for active image
 
   useEffect(() => {
     if (postId) {
@@ -62,6 +63,7 @@ export default function PostPage() {
         setIsLoading(true);
         const fetchedPost = await fetchPostById(postId);
         setPost(fetchedPost);
+        setCurrentImageIndex(0); // Reset image index when post loads
         setIsLoading(false);
       };
       loadPost();
@@ -75,27 +77,26 @@ export default function PostPage() {
   const handleConfirmInterest = async () => {
     setShowConfirmModal(false);
     console.log("Submitting interest for post:", postId, "with message:", interestMessage);
-    // Dummy submission logic
-    // Replace with actual API POST request to your endpoint
-    // try {
-    //   const response = await fetch('/api/interests', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ postId, message: interestMessage, userId: 'current_user_id' }), // Get current_user_id from Clerk
-    //   });
-    //   if (response.ok) {
-    //     setShowSubmittedModal(true);
-    //   } else {
-    //     // Handle error
-    //     alert('Failed to submit interest.');
-    //   }
-    // } catch (error) {
-    //   console.error('Error submitting interest:', error);
-    //   alert('An error occurred.');
-    // }
-    setShowSubmittedModal(true); // Show submitted modal directly for dummy implementation
-    setInterestMessage(''); // Clear message
+    setShowSubmittedModal(true); 
+    setInterestMessage(''); 
   };
+
+  const nextImage = () => {
+    if (post && post.imageUrls) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % post.imageUrls.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (post && post.imageUrls) {
+      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + post.imageUrls.length) % post.imageUrls.length);
+    }
+  };
+
+  const selectImage = (index: number) => {
+    setCurrentImageIndex(index);
+  };
+
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen">Loading post...</div>;
@@ -107,7 +108,6 @@ export default function PostPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      {/* Removed max-w-4xl and mx-auto to use more screen width */}
       <div className="w-full">
         <button 
           onClick={() => router.back()} 
@@ -119,28 +119,59 @@ export default function PostPage() {
           Back
         </button>
 
-        {/* Removed shadow-lg, rounded-lg, and overflow-hidden from this div */}
         <div className="bg-white md:flex">
-          {/* Image Section */}
-          {/* Adjusted padding for wider layout */}
           <div className="md:w-1/2 p-2 md:p-4">
-            <div className="relative w-full h-80 md:h-[500px] rounded-md overflow-hidden mb-4">
-              <Image 
-                src={post.imageUrl} 
-                alt={post.title} 
-                layout="fill" 
-                objectFit="cover" 
-              />
+            {/* Main Image with Slider Controls */}
+            <div className="relative w-full h-80 md:h-[500px] rounded-md overflow-hidden mb-4 group">
+              {post.imageUrls && post.imageUrls.length > 0 && (
+                <Image 
+                  src={post.imageUrls[currentImageIndex]} 
+                  alt={`${post.title} - image ${currentImageIndex + 1}`}
+                  layout="fill" 
+                  objectFit="cover" 
+                  priority={currentImageIndex === 0} // Prioritize loading the first image
+                />
+              )}
+              {post.imageUrls && post.imageUrls.length > 1 && (
+                <>
+                  <button 
+                    onClick={prevImage}
+                    className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                    aria-label="Previous image"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={nextImage}
+                    className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 focus:outline-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                    aria-label="Next image"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              )}
             </div>
-            {/* Thumbnail images (optional) */}
-            <div className="flex space-x-2">
-              <div className="relative w-20 h-20 rounded overflow-hidden border-2 border-gray-300">
-                <Image src={post.imageUrl} alt="thumbnail 1" layout="fill" objectFit="cover" />
+            
+            {/* Thumbnail images */}
+            {post.imageUrls && post.imageUrls.length > 1 && (
+              <div className="flex space-x-2 overflow-x-auto pb-2">
+                {post.imageUrls.map((url, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectImage(index)}
+                    className={`relative w-20 h-20 rounded overflow-hidden border-2 focus:outline-none
+                                ${currentImageIndex === index ? 'border-black' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                    aria-label={`View image ${index + 1}`}
+                  >
+                    <Image src={url} alt={`thumbnail ${index + 1}`} layout="fill" objectFit="cover" />
+                  </button>
+                ))}
               </div>
-              <div className="relative w-20 h-20 rounded overflow-hidden border-2 border-transparent opacity-50">
-                 <Image src={post.imageUrl} alt="thumbnail 2" layout="fill" objectFit="cover" />
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Details Section */}
@@ -174,7 +205,7 @@ export default function PostPage() {
         </div>
       </div>
 
-      {/* Confirm Interest Modal (remains centered) */}
+      {/* Confirm Interest Modal */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 md:p-8 shadow-xl w-full max-w-md">
@@ -213,7 +244,7 @@ export default function PostPage() {
         </div>
       )}
 
-      {/* Interest Submitted Modal (remains centered) */}
+      {/* Interest Submitted Modal */}
       {showSubmittedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 md:p-8 shadow-xl w-full max-w-md text-center">
