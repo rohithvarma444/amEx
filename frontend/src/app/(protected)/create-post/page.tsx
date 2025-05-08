@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import Link from 'next/link';
+import { uploadImages } from '@/lib/uploadImage';
 
 type PostType = 'listing' | 'request';
 
@@ -48,6 +49,8 @@ function CreatePost() {
     price: '',
     priceUnit: 'minute',
   });
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleNext = () => {
     // If we're on step 4 (categories) and mutual benefit is selected, skip step 5 (price)
@@ -123,6 +126,61 @@ function CreatePost() {
         previewImages: newPreviewImages
       };
     });
+  };
+
+  const uploadImagesToCloudinary = async () => {
+    if (formData.images.length === 0) {
+      return [];
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      // Upload all images and get their URLs
+      const urls = await uploadImages(formData.images);
+      console.log('Uploaded image URLs:', urls);
+      return urls;
+    } catch (err) {
+      console.error('Error uploading images:', err);
+      setUploadError('Failed to upload images. Please try again.');
+      return [];
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      // Upload images to Cloudinary
+      const imageUrls = await uploadImagesToCloudinary();
+      
+      // Log the image URLs (as requested)
+      console.log('Uploaded image URLs in order:', imageUrls);
+      
+      // Send the form data along with image URLs to your API
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          imageUrls,
+        }),
+      });
+      
+      // For now, just log the data that would be submitted
+      console.log('Form data to be submitted:', {
+        ...formData,
+        imageUrls,
+      });
+      
+      // Reset form or redirect
+      // router.push('/dashboard');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   const renderStepIndicator = () => {
@@ -561,11 +619,16 @@ function CreatePost() {
               </div>
             </div>
             
+            {uploadError && (
+              <div className="text-red-500 mb-4">{uploadError}</div>
+            )}
+            
             <button
-              onClick={() => alert('Post created! (Frontend only, backend integration pending)')}
-              className="w-full bg-black text-white py-3 rounded-md font-medium"
+              onClick={handleSubmit}
+              disabled={isUploading}
+              className="w-full bg-black text-white py-3 rounded-md font-medium disabled:bg-gray-400"
             >
-              Create Post
+              {isUploading ? 'Uploading Images...' : 'Create Post'}
             </button>
           </div>
         );

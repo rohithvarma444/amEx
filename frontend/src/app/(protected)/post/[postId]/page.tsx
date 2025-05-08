@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation'; 
+import { useUser } from "@clerk/nextjs"; // Import useUser
 
-// Updated Post interface for multiple images
+// Updated Post interface
 interface Post {
   id: string;
   title: string;
@@ -12,14 +13,25 @@ interface Post {
   price: string;
   category: string; 
   tags: string[];
-  imageUrls: string[]; // Changed from imageUrl to imageUrls array
+  imageUrls: string[]; 
   author: {
     name: string;
     avatarUrl?: string;
   };
+  authorId: string; // Added authorId
 }
 
-// Dummy function to simulate API call
+// Interface for an Interest
+interface Interest {
+  id: string;
+  userId: string; 
+  userName: string;
+  userAvatar?: string; 
+  message: string;
+  timestamp: string; 
+}
+
+// Dummy function to simulate API call for fetching a post
 const fetchPostById = async (postId: string): Promise<Post | null> => {
   console.log(`Fetching post with ID: ${postId}`);
   // Replace with actual API call
@@ -32,30 +44,53 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
       price: "₹40/pack",
       category: "Food",
       tags: ["Food", "Hostel", "Skills"],
-      imageUrls: [ // Array of image URLs
+      imageUrls: [ 
         "/img1.png", 
-        "/placeholder-image-2.png", // Add more dummy image paths
+        "/placeholder-image-2.png", 
         "/placeholder-image-3.png"
       ], 
       author: {
-        name: "Seller Name",
+        name: "Seller Name", 
       },
+      authorId: "user_2fxCEXAMPLEclerkID12345", // Example Clerk User ID
     };
   }
   return null;
 };
 
+// Dummy function to simulate API call for fetching interests
+const fetchInterestsByPostId = async (postId: string): Promise<Interest[]> => {
+  console.log(`Fetching interests for post ID: ${postId}`);
+  // Replace with actual API call:
+  // const response = await fetch(`/api/posts/${postId}/interests`);
+  // const data = await response.json(); return data.interests;
+  return [
+    { id: "interest_1", userId: "user_clerk_interested_1", userName: "Rohith", message: "I'm very interested! Can I pick it up today?", timestamp: new Date(Date.now() - 3600000).toISOString() },
+    { id: "interest_2", userId: "user_clerk_interested_2", userName: "Priya", message: "Is the price negotiable?", timestamp: new Date(Date.now() - 7200000).toISOString() },
+    { id: "interest_3", userId: "user_clerk_interested_3", userName: "Amit", message: "Available tomorrow evening?", timestamp: new Date(Date.now() - 10800000).toISOString() },
+  ];
+};
+
+
 export default function PostPage() {
   const params = useParams();
   const router = useRouter(); 
+  const { user } = useUser(); 
   const postId = params.postId as string;
 
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showSubmittedModal, setShowSubmittedModal] = useState(false);
+  const [showConfirmInterestModal, setShowConfirmInterestModal] = useState(false);
+  const [showInterestSubmittedModal, setShowInterestSubmittedModal] = useState(false);
   const [interestMessage, setInterestMessage] = useState('');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); // State for active image
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const [showInterestsListModal, setShowInterestsListModal] = useState(false);
+  const [interests, setInterests] = useState<Interest[]>([]);
+  const [isLoadingInterests, setIsLoadingInterests] = useState(false);
+  const [showMarkFulfilledModal, setShowMarkFulfilledModal] = useState(false);
+
+  const isAuthor = user && post && user.id === post.authorId;
 
   useEffect(() => {
     if (postId) {
@@ -63,23 +98,38 @@ export default function PostPage() {
         setIsLoading(true);
         const fetchedPost = await fetchPostById(postId);
         setPost(fetchedPost);
-        setCurrentImageIndex(0); // Reset image index when post loads
+        setCurrentImageIndex(0); 
         setIsLoading(false);
       };
       loadPost();
     }
   }, [postId]);
 
-  const handleShowInterest = () => {
-    setShowConfirmModal(true);
+  const handleShowInterestModal = () => {
+    setShowConfirmInterestModal(true);
   };
 
   const handleConfirmInterest = async () => {
-    setShowConfirmModal(false);
-    console.log("Submitting interest for post:", postId, "with message:", interestMessage);
-    setShowSubmittedModal(true); 
+    setShowConfirmInterestModal(false);
+    console.log("Submitting interest for post:", postId, "with message:", interestMessage, "by user:", user?.id);
+    setShowInterestSubmittedModal(true); 
     setInterestMessage(''); 
   };
+
+  const handleViewInterests = async () => {
+    setShowInterestsListModal(true);
+    setIsLoadingInterests(true);
+    const fetchedInterests = await fetchInterestsByPostId(postId);
+    setInterests(fetchedInterests);
+    setIsLoadingInterests(false);
+  };
+
+  const handleMarkAsFulfilled = async () => {
+    setShowMarkFulfilledModal(true);
+    setIsLoading(true);
+    setIsLoading(false);
+  };
+
 
   const nextImage = () => {
     if (post && post.imageUrls) {
@@ -129,7 +179,7 @@ export default function PostPage() {
                   alt={`${post.title} - image ${currentImageIndex + 1}`}
                   layout="fill" 
                   objectFit="cover" 
-                  priority={currentImageIndex === 0} // Prioritize loading the first image
+                  priority={currentImageIndex === 0} 
                 />
               )}
               {post.imageUrls && post.imageUrls.length > 1 && (
@@ -174,8 +224,6 @@ export default function PostPage() {
             )}
           </div>
 
-          {/* Details Section */}
-          {/* Adjusted padding for wider layout */}
           <div className="md:w-1/2 p-4 md:p-6">
             <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2">{post.title}</h1>
             <p className="text-gray-600 mb-4 text-sm md:text-base">{post.description.split('. ')[0]}.</p>
@@ -195,18 +243,36 @@ export default function PostPage() {
               </div>
             </div>
 
-            <button 
-              onClick={handleShowInterest}
-              className="w-full bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition duration-150 mt-4"
-            >
-              I'm interested
-            </button>
+            {/* CORRECTED PLACEMENT FOR CONDITIONAL BUTTONS */}
+            {isAuthor ? (
+              <div className="mt-6 space-y-3">
+                <button 
+                  onClick={handleViewInterests}
+                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition duration-150"
+                >
+                  View Interests ({interests.length > 0 ? interests.length : (isLoadingInterests ? '...' : '0')})
+                </button>
+                <button 
+                  onClick={() => setShowMarkFulfilledModal(true)}
+                  className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-150"
+                >
+                  Mark as Fulfilled
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={handleShowInterestModal}
+                className="w-full bg-black text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition duration-150 mt-4"
+              >
+                I'm interested
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Confirm Interest Modal */}
-      {showConfirmModal && (
+      {/* Confirm Interest Modal (for non-authors) */}
+      {showConfirmInterestModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 md:p-8 shadow-xl w-full max-w-md">
             <h2 className="text-2xl font-semibold mb-4">Confirm Interest</h2>
@@ -228,7 +294,7 @@ export default function PostPage() {
             </div>
             <div className="flex justify-end space-x-3">
               <button 
-                onClick={() => setShowConfirmModal(false)}
+                onClick={() => setShowConfirmInterestModal(false)}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
               >
                 Cancel
@@ -244,8 +310,8 @@ export default function PostPage() {
         </div>
       )}
 
-      {/* Interest Submitted Modal */}
-      {showSubmittedModal && (
+      {/* Interest Submitted Modal (for non-authors) */}
+      {showInterestSubmittedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 md:p-8 shadow-xl w-full max-w-md text-center">
             <h2 className="text-2xl font-semibold mb-3">Interest Submitted!</h2>
@@ -256,11 +322,77 @@ export default function PostPage() {
               Note: You can view or cancel your responses from the "My Activity" tab.
             </p>
             <button 
-              onClick={() => setShowSubmittedModal(false)}
+              onClick={() => setShowInterestSubmittedModal(false)}
               className="w-full max-w-xs mx-auto bg-black text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-gray-800 transition duration-150"
             >
               Got it
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* View Interests Modal (for author) */}
+      {isAuthor && showInterestsListModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 md:p-8 shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">Interests Received</h2>
+              <button onClick={() => setShowInterestsListModal(false)} className="text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            {isLoadingInterests ? (
+              <p className="text-center text-gray-600">Loading interests...</p>
+            ) : interests.length > 0 ? (
+              <div className="overflow-y-auto space-y-4">
+                {interests.map(interest => (
+                  <div key={interest.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <div className="flex items-center mb-2">
+                      <div className="w-8 h-8 rounded-full bg-gray-300 mr-3 flex items-center justify-center text-sm text-gray-600">
+                        {interest.userName.substring(0,1)}
+                      </div>
+                      <h3 className="font-semibold text-gray-800">{interest.userName}</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-1">{interest.message}</p>
+                    <p className="text-xs text-gray-400">{new Date(interest.timestamp).toLocaleString()}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-600">No interests received yet.</p>
+            )}
+            <button 
+              onClick={() => setShowInterestsListModal(false)}
+              className="mt-6 w-full bg-gray-200 text-gray-700 py-2.5 px-6 rounded-lg font-semibold hover:bg-gray-300 transition duration-150"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Mark as Fulfilled Modal (for author) */}
+      {isAuthor && showMarkFulfilledModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-6 md:p-8 shadow-2xl w-full max-w-md">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">Mark Post as Fulfilled?</h2>
+            <p className="text-sm text-gray-600 mb-6">
+              This will indicate that the item/service is no longer available. This action might be irreversible depending on your setup.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button 
+                onClick={() => setShowMarkFulfilledModal(false)}
+                className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleMarkAsFulfilled}
+                className="px-5 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700"
+              >
+                Yes, Mark as Fulfilled
+              </button>
+            </div>
           </div>
         </div>
       )}
