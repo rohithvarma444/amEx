@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     
     if (!files || files.length === 0) {
       return NextResponse.json(
-        { error: 'No files provided' },
+        { success: false, error: 'No files provided' },
         { status: 400 }
       );
     }
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
             folder: 'amex',
             resource_type: 'auto',
           },
-          (error, result) => {
+          (error: any, result: any) => {
             if (error) reject(error);
             else resolve(result);
           }
@@ -43,11 +43,14 @@ export async function POST(request: NextRequest) {
     const uploadResults = await Promise.all(uploadPromises);
     const secureUrls = uploadResults.map((result: any) => result.secure_url);
 
-    return NextResponse.json({ urls: secureUrls });
+    return NextResponse.json({ 
+      success: true, 
+      urls: secureUrls 
+    });
   } catch (error) {
     console.error('Error uploading to Cloudinary:', error);
     return NextResponse.json(
-      { error: 'Failed to upload images' },
+      { success: false, error: 'Failed to upload images' },
       { status: 500 }
     );
   }

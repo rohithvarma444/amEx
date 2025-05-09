@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "../../../lib/db";
+import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
@@ -7,7 +7,10 @@ export async function GET() {
     const { userId } = await auth();
     
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" }, 
+        { status: 401 }
+      );
     }
 
     // Fetch user data from the database
@@ -24,12 +27,21 @@ export async function GET() {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "User not found" }, 
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json({
+      success: true,
+      user: user
+    });
   } catch (error) {
     console.error("Error fetching user data:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Server error" }, 
+      { status: 500 }
+    );
   }
 }

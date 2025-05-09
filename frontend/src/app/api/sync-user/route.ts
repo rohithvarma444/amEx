@@ -9,7 +9,10 @@ export async function POST(req: Request) {
     const { userId, email, firstName, lastName, imageUrl } = body;
 
     if (!userId || !email) {
-      return NextResponse.json({ error: "Missing user ID or email" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Missing user ID or email" }, 
+        { status: 400 }
+      );
     }
 
     const existingUser = await db.user.findUnique({ where: { email } });
@@ -21,7 +24,6 @@ export async function POST(req: Request) {
           email,
           firstName,
           lastName,
-          imageUrl,
         },
       });
       console.log("✅ User created in DB");
@@ -32,6 +34,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("❌ Error in sync-user route:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Server error" }, 
+      { status: 500 }
+    );
   }
 }
