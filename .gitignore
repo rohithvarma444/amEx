@@ -1,6 +1,8 @@
 # Ignore all .env files in any directory
 **/.env
 **/.env.*
+.DS_STORE
 
 # Ignore all node_modules folders recursively
 **/node_modules/
+.DS_Store

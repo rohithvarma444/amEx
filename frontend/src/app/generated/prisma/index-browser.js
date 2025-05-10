@@ -119,30 +119,74 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  email: 'email',
   firstName: 'firstName',
   lastName: 'lastName',
+  email: 'email',
+  upiId: 'upiId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  imageUrl: 'imageUrl'
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.PostScalarFieldEnum = {
   id: 'id',
+  type: 'type',
   title: 'title',
-  content: 'content',
-  userId: 'userId',
+  caption: 'caption',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  categoryId: 'categoryId',
+  price: 'price',
+  priceUnit: 'priceUnit',
+  location: 'location',
+  urgency: 'urgency',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  status: 'status',
+  userId: 'userId'
 };
 
-exports.Prisma.ServiceRequestScalarFieldEnum = {
+exports.Prisma.InterestScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  details: 'details',
   userId: 'userId',
+  postId: 'postId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DealScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  selectedUserId: 'selectedUserId',
+  status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.ExchangeScalarFieldEnum = {
+  id: 'id',
+  buyerId: 'buyerId',
+  upiId: 'upiId',
+  amount: 'amount',
+  status: 'status',
+  qrCodeUrl: 'qrCodeUrl',
+  createdAt: 'createdAt',
+  dealId: 'dealId'
+};
+
+exports.Prisma.OTPScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  dealId: 'dealId',
+  expiresAt: 'expiresAt',
+  used: 'used',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -159,12 +203,43 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.PostType = exports.$Enums.PostType = {
+  LISTING: 'LISTING',
+  REQUEST: 'REQUEST'
+};
 
+exports.Urgency = exports.$Enums.Urgency = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH'
+};
+
+exports.STATUS = exports.$Enums.STATUS = {
+  ACTIVE: 'ACTIVE',
+  DELETED: 'DELETED',
+  FULLFILLED: 'FULLFILLED'
+};
+
+exports.DealStatus = exports.$Enums.DealStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.ExchangeStatus = exports.$Enums.ExchangeStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Category: 'Category',
   Post: 'Post',
-  ServiceRequest: 'ServiceRequest'
+  Interest: 'Interest',
+  Deal: 'Deal',
+  Exchange: 'Exchange',
+  OTP: 'OTP'
 };
 
 /**
