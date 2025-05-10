@@ -10,7 +10,7 @@ const HowItWorksSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           <div className="text-center">
             <Image 
-              src="/public/images/water-bottle.jpg" 
+              src="/water-bottle.png" 
               alt="Water bottle" 
               width={300} 
               height={200}
@@ -22,7 +22,7 @@ const HowItWorksSection = () => {
           
           <div className="text-center">
             <Image 
-              src="/public/images/documents.jpg" 
+              src="/documents.png" 
               alt="Documents" 
               width={300} 
               height={200}
@@ -34,7 +34,7 @@ const HowItWorksSection = () => {
           
           <div className="text-center">
             <Image 
-              src="/public/images/students.jpg" 
+              src="/students.png" 
               alt="Students" 
               width={300} 
               height={200}
@@ -125,7 +125,7 @@ const HowItWorksSection = () => {
                     <div>
                       <p className="font-medium">I can also solve you all the math</p>
                       <div className="flex items-center mt-1">
-                        <p className="font-bold mr-2">Rahith Verma</p>
+                        <p className="font-bold mr-2">Rohith Verma</p>
                         <div className="flex items-center">
                           <span className="text-yellow-400">★★★★</span>
                           <span className="text-gray-600 text-sm ml-1">4.3</span>
