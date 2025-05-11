@@ -11,15 +11,17 @@ export async function POST(request: NextRequest) {
     // Check if user is authenticated
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, message: 'Unauthorized' },
         { status: 401 }
       );
     }
 
+    console.log(userId);
+
     // Extract and validate required fields
     const { title, caption, description, price, priceUnit, category, imageUrls, location } = body;
     
-    if (!title || !caption || !description || !price || !priceUnit || !category || !imageUrls) {
+    if (!title || !price || !priceUnit || !category || !imageUrls) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
@@ -57,10 +59,10 @@ export async function POST(request: NextRequest) {
       message: 'Listing created successfully',
       listing: newListing
     });
-  } catch (error) {
-    console.error('Error creating listing:', error);
+  } catch (error: any) {
+    //console.error('Error creating listing:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create listing' },
+      { success: false, error: error.message || 'Internal Server Error'  },
       { status: 500 }
     );
   }

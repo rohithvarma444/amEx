@@ -11,10 +11,10 @@ export async function GET(request: NextRequest) {
         imageUrl: true,
       }
     });
-    
+
     return NextResponse.json({
       success: true,
-      categories: categories
+      categories: categories,
     });
   } catch (error) {
     console.error('Error fetching categories:', error);

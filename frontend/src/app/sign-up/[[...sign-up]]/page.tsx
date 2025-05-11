@@ -187,15 +187,7 @@ export default function SignUpPage() {
         await setActive({ session: response.createdSessionId });
         console.log("✅ User session activated");
         toast.success("Account created successfully!");
-        // Send sync request to backend
-        await axios.post("/api/sync-user", {
-          userId: signUp.id,
-          email,
-          firstName: signUp.firstName,
-          lastName: signUp.lastName,
-          imageUrl: signUp.imageUrl,
-        });
-        router.push("/dashboard");
+        router.push("/sync-user");
       } else {
         console.error("❌ No session ID in verification response");
         toast.error("Account created but unable to sign in automatically. Please log in.");

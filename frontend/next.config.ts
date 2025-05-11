@@ -1,8 +1,14 @@
-import type { NextConfig } from "next";
+// next.config.js
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     domains: ['res.cloudinary.com'],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb', // increase limit as needed (e.g., 5mb, 10mb)
+    },
   },
 };
 

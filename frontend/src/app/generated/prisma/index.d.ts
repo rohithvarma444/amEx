@@ -1484,17 +1484,17 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    posts: number
-    interests: number
     deals: number
     exchanges: number
+    interests: number
+    posts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    posts?: boolean | UserCountOutputTypeCountPostsArgs
-    interests?: boolean | UserCountOutputTypeCountInterestsArgs
     deals?: boolean | UserCountOutputTypeCountDealsArgs
     exchanges?: boolean | UserCountOutputTypeCountExchangesArgs
+    interests?: boolean | UserCountOutputTypeCountInterestsArgs
+    posts?: boolean | UserCountOutputTypeCountPostsArgs
   }
 
   // Custom InputTypes
@@ -1511,8 +1511,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostWhereInput
+  export type UserCountOutputTypeCountDealsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DealWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountExchangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExchangeWhereInput
   }
 
   /**
@@ -1525,15 +1532,8 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountDealsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DealWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountExchangesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ExchangeWhereInput
+  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
   }
 
 
@@ -1615,64 +1615,64 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: string | null
+    email: string | null
     firstName: string | null
     lastName: string | null
-    email: string | null
-    upiId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    upiId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
+    email: string | null
     firstName: string | null
     lastName: string | null
-    email: string | null
-    upiId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    upiId: string | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
+    email: number
     firstName: number
     lastName: number
-    email: number
-    upiId: number
     createdAt: number
     updatedAt: number
+    upiId: number
     _all: number
   }
 
 
   export type UserMinAggregateInputType = {
     id?: true
+    email?: true
     firstName?: true
     lastName?: true
-    email?: true
-    upiId?: true
     createdAt?: true
     updatedAt?: true
+    upiId?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
+    email?: true
     firstName?: true
     lastName?: true
-    email?: true
-    upiId?: true
     createdAt?: true
     updatedAt?: true
+    upiId?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
+    email?: true
     firstName?: true
     lastName?: true
-    email?: true
-    upiId?: true
     createdAt?: true
     updatedAt?: true
+    upiId?: true
     _all?: true
   }
 
@@ -1750,12 +1750,12 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId: string | null
     createdAt: Date
     updatedAt: Date
+    upiId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1777,55 +1777,55 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    email?: boolean
     firstName?: boolean
     lastName?: boolean
-    email?: boolean
-    upiId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    posts?: boolean | User$postsArgs<ExtArgs>
-    interests?: boolean | User$interestsArgs<ExtArgs>
+    upiId?: boolean
     deals?: boolean | User$dealsArgs<ExtArgs>
     exchanges?: boolean | User$exchangesArgs<ExtArgs>
+    interests?: boolean | User$interestsArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    email?: boolean
     firstName?: boolean
     lastName?: boolean
-    email?: boolean
-    upiId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    upiId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    email?: boolean
     firstName?: boolean
     lastName?: boolean
-    email?: boolean
-    upiId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    upiId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
+    email?: boolean
     firstName?: boolean
     lastName?: boolean
-    email?: boolean
-    upiId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    upiId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "upiId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "createdAt" | "updatedAt" | "upiId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    posts?: boolean | User$postsArgs<ExtArgs>
-    interests?: boolean | User$interestsArgs<ExtArgs>
     deals?: boolean | User$dealsArgs<ExtArgs>
     exchanges?: boolean | User$exchangesArgs<ExtArgs>
+    interests?: boolean | User$interestsArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1834,19 +1834,19 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      posts: Prisma.$PostPayload<ExtArgs>[]
-      interests: Prisma.$InterestPayload<ExtArgs>[]
       deals: Prisma.$DealPayload<ExtArgs>[]
       exchanges: Prisma.$ExchangePayload<ExtArgs>[]
+      interests: Prisma.$InterestPayload<ExtArgs>[]
+      posts: Prisma.$PostPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      email: string
       firstName: string
       lastName: string
-      email: string
-      upiId: string | null
       createdAt: Date
       updatedAt: Date
+      upiId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2241,10 +2241,10 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    interests<T extends User$interestsArgs<ExtArgs> = {}>(args?: Subset<T, User$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deals<T extends User$dealsArgs<ExtArgs> = {}>(args?: Subset<T, User$dealsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DealPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     exchanges<T extends User$exchangesArgs<ExtArgs> = {}>(args?: Subset<T, User$exchangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExchangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    interests<T extends User$interestsArgs<ExtArgs> = {}>(args?: Subset<T, User$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2275,12 +2275,12 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
+    readonly email: FieldRef<"User", 'String'>
     readonly firstName: FieldRef<"User", 'String'>
     readonly lastName: FieldRef<"User", 'String'>
-    readonly email: FieldRef<"User", 'String'>
-    readonly upiId: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly upiId: FieldRef<"User", 'String'>
   }
     
 
@@ -2669,54 +2669,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.posts
-   */
-  export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Post
-     */
-    select?: PostSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Post
-     */
-    omit?: PostOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PostInclude<ExtArgs> | null
-    where?: PostWhereInput
-    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
-    cursor?: PostWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
-  }
-
-  /**
-   * User.interests
-   */
-  export type User$interestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Interest
-     */
-    select?: InterestSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Interest
-     */
-    omit?: InterestOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: InterestInclude<ExtArgs> | null
-    where?: InterestWhereInput
-    orderBy?: InterestOrderByWithRelationInput | InterestOrderByWithRelationInput[]
-    cursor?: InterestWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: InterestScalarFieldEnum | InterestScalarFieldEnum[]
-  }
-
-  /**
    * User.deals
    */
   export type User$dealsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2762,6 +2714,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ExchangeScalarFieldEnum | ExchangeScalarFieldEnum[]
+  }
+
+  /**
+   * User.interests
+   */
+  export type User$interestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Interest
+     */
+    select?: InterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Interest
+     */
+    omit?: InterestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InterestInclude<ExtArgs> | null
+    where?: InterestWhereInput
+    orderBy?: InterestOrderByWithRelationInput | InterestOrderByWithRelationInput[]
+    cursor?: InterestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InterestScalarFieldEnum | InterestScalarFieldEnum[]
+  }
+
+  /**
+   * User.posts
+   */
+  export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
   /**
@@ -3892,14 +3892,14 @@ export namespace Prisma {
     title: string | null
     caption: string | null
     description: string | null
-    categoryId: string | null
     price: number | null
     priceUnit: string | null
     location: string | null
     urgency: $Enums.Urgency | null
     createdAt: Date | null
-    status: $Enums.STATUS | null
     userId: string | null
+    categoryId: string | null
+    status: $Enums.STATUS | null
   }
 
   export type PostMaxAggregateOutputType = {
@@ -3908,14 +3908,14 @@ export namespace Prisma {
     title: string | null
     caption: string | null
     description: string | null
-    categoryId: string | null
     price: number | null
     priceUnit: string | null
     location: string | null
     urgency: $Enums.Urgency | null
     createdAt: Date | null
-    status: $Enums.STATUS | null
     userId: string | null
+    categoryId: string | null
+    status: $Enums.STATUS | null
   }
 
   export type PostCountAggregateOutputType = {
@@ -3924,15 +3924,15 @@ export namespace Prisma {
     title: number
     caption: number
     description: number
-    imageUrl: number
-    categoryId: number
     price: number
     priceUnit: number
     location: number
     urgency: number
     createdAt: number
-    status: number
     userId: number
+    imageUrl: number
+    categoryId: number
+    status: number
     _all: number
   }
 
@@ -3951,14 +3951,14 @@ export namespace Prisma {
     title?: true
     caption?: true
     description?: true
-    categoryId?: true
     price?: true
     priceUnit?: true
     location?: true
     urgency?: true
     createdAt?: true
-    status?: true
     userId?: true
+    categoryId?: true
+    status?: true
   }
 
   export type PostMaxAggregateInputType = {
@@ -3967,14 +3967,14 @@ export namespace Prisma {
     title?: true
     caption?: true
     description?: true
-    categoryId?: true
     price?: true
     priceUnit?: true
     location?: true
     urgency?: true
     createdAt?: true
-    status?: true
     userId?: true
+    categoryId?: true
+    status?: true
   }
 
   export type PostCountAggregateInputType = {
@@ -3983,15 +3983,15 @@ export namespace Prisma {
     title?: true
     caption?: true
     description?: true
-    imageUrl?: true
-    categoryId?: true
     price?: true
     priceUnit?: true
     location?: true
     urgency?: true
     createdAt?: true
-    status?: true
     userId?: true
+    imageUrl?: true
+    categoryId?: true
+    status?: true
     _all?: true
   }
 
@@ -4087,15 +4087,15 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl: string[]
-    categoryId: string
     price: number
     priceUnit: string
     location: string | null
     urgency: $Enums.Urgency | null
     createdAt: Date
-    status: $Enums.STATUS
     userId: string
+    imageUrl: string[]
+    categoryId: string
+    status: $Enums.STATUS
     _count: PostCountAggregateOutputType | null
     _avg: PostAvgAggregateOutputType | null
     _sum: PostSumAggregateOutputType | null
@@ -4123,19 +4123,19 @@ export namespace Prisma {
     title?: boolean
     caption?: boolean
     description?: boolean
-    imageUrl?: boolean
-    categoryId?: boolean
     price?: boolean
     priceUnit?: boolean
     location?: boolean
     urgency?: boolean
     createdAt?: boolean
-    status?: boolean
     userId?: boolean
+    imageUrl?: boolean
+    categoryId?: boolean
+    status?: boolean
+    deal?: boolean | Post$dealArgs<ExtArgs>
+    interests?: boolean | Post$interestsArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
-    interests?: boolean | Post$interestsArgs<ExtArgs>
-    deal?: boolean | Post$dealArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -4145,15 +4145,15 @@ export namespace Prisma {
     title?: boolean
     caption?: boolean
     description?: boolean
-    imageUrl?: boolean
-    categoryId?: boolean
     price?: boolean
     priceUnit?: boolean
     location?: boolean
     urgency?: boolean
     createdAt?: boolean
-    status?: boolean
     userId?: boolean
+    imageUrl?: boolean
+    categoryId?: boolean
+    status?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
@@ -4164,15 +4164,15 @@ export namespace Prisma {
     title?: boolean
     caption?: boolean
     description?: boolean
-    imageUrl?: boolean
-    categoryId?: boolean
     price?: boolean
     priceUnit?: boolean
     location?: boolean
     urgency?: boolean
     createdAt?: boolean
-    status?: boolean
     userId?: boolean
+    imageUrl?: boolean
+    categoryId?: boolean
+    status?: boolean
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
@@ -4183,23 +4183,23 @@ export namespace Prisma {
     title?: boolean
     caption?: boolean
     description?: boolean
-    imageUrl?: boolean
-    categoryId?: boolean
     price?: boolean
     priceUnit?: boolean
     location?: boolean
     urgency?: boolean
     createdAt?: boolean
-    status?: boolean
     userId?: boolean
+    imageUrl?: boolean
+    categoryId?: boolean
+    status?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "title" | "caption" | "description" | "imageUrl" | "categoryId" | "price" | "priceUnit" | "location" | "urgency" | "createdAt" | "status" | "userId", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "title" | "caption" | "description" | "price" | "priceUnit" | "location" | "urgency" | "createdAt" | "userId" | "imageUrl" | "categoryId" | "status", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    deal?: boolean | Post$dealArgs<ExtArgs>
+    interests?: boolean | Post$interestsArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
-    interests?: boolean | Post$interestsArgs<ExtArgs>
-    deal?: boolean | Post$dealArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4214,10 +4214,10 @@ export namespace Prisma {
   export type $PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Post"
     objects: {
+      deal: Prisma.$DealPayload<ExtArgs> | null
+      interests: Prisma.$InterestPayload<ExtArgs>[]
       category: Prisma.$CategoryPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
-      interests: Prisma.$InterestPayload<ExtArgs>[]
-      deal: Prisma.$DealPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4225,15 +4225,15 @@ export namespace Prisma {
       title: string
       caption: string
       description: string
-      imageUrl: string[]
-      categoryId: string
       price: number
       priceUnit: string
       location: string | null
       urgency: $Enums.Urgency | null
       createdAt: Date
-      status: $Enums.STATUS
       userId: string
+      imageUrl: string[]
+      categoryId: string
+      status: $Enums.STATUS
     }, ExtArgs["result"]["post"]>
     composites: {}
   }
@@ -4628,10 +4628,10 @@ export namespace Prisma {
    */
   export interface Prisma__PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    deal<T extends Post$dealArgs<ExtArgs> = {}>(args?: Subset<T, Post$dealArgs<ExtArgs>>): Prisma__DealClient<$Result.GetResult<Prisma.$DealPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    interests<T extends Post$interestsArgs<ExtArgs> = {}>(args?: Subset<T, Post$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    interests<T extends Post$interestsArgs<ExtArgs> = {}>(args?: Subset<T, Post$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    deal<T extends Post$dealArgs<ExtArgs> = {}>(args?: Subset<T, Post$dealArgs<ExtArgs>>): Prisma__DealClient<$Result.GetResult<Prisma.$DealPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4666,15 +4666,15 @@ export namespace Prisma {
     readonly title: FieldRef<"Post", 'String'>
     readonly caption: FieldRef<"Post", 'String'>
     readonly description: FieldRef<"Post", 'String'>
-    readonly imageUrl: FieldRef<"Post", 'String[]'>
-    readonly categoryId: FieldRef<"Post", 'String'>
     readonly price: FieldRef<"Post", 'Float'>
     readonly priceUnit: FieldRef<"Post", 'String'>
     readonly location: FieldRef<"Post", 'String'>
     readonly urgency: FieldRef<"Post", 'Urgency'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
-    readonly status: FieldRef<"Post", 'STATUS'>
     readonly userId: FieldRef<"Post", 'String'>
+    readonly imageUrl: FieldRef<"Post", 'String[]'>
+    readonly categoryId: FieldRef<"Post", 'String'>
+    readonly status: FieldRef<"Post", 'STATUS'>
   }
     
 
@@ -5071,6 +5071,25 @@ export namespace Prisma {
   }
 
   /**
+   * Post.deal
+   */
+  export type Post$dealArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Deal
+     */
+    select?: DealSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Deal
+     */
+    omit?: DealOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DealInclude<ExtArgs> | null
+    where?: DealWhereInput
+  }
+
+  /**
    * Post.interests
    */
   export type Post$interestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5092,25 +5111,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InterestScalarFieldEnum | InterestScalarFieldEnum[]
-  }
-
-  /**
-   * Post.deal
-   */
-  export type Post$dealArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Deal
-     */
-    select?: DealSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Deal
-     */
-    omit?: DealOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DealInclude<ExtArgs> | null
-    where?: DealWhereInput
   }
 
   /**
@@ -5147,6 +5147,7 @@ export namespace Prisma {
     userId: string | null
     postId: string | null
     createdAt: Date | null
+    description: string | null
   }
 
   export type InterestMaxAggregateOutputType = {
@@ -5154,6 +5155,7 @@ export namespace Prisma {
     userId: string | null
     postId: string | null
     createdAt: Date | null
+    description: string | null
   }
 
   export type InterestCountAggregateOutputType = {
@@ -5161,6 +5163,7 @@ export namespace Prisma {
     userId: number
     postId: number
     createdAt: number
+    description: number
     _all: number
   }
 
@@ -5170,6 +5173,7 @@ export namespace Prisma {
     userId?: true
     postId?: true
     createdAt?: true
+    description?: true
   }
 
   export type InterestMaxAggregateInputType = {
@@ -5177,6 +5181,7 @@ export namespace Prisma {
     userId?: true
     postId?: true
     createdAt?: true
+    description?: true
   }
 
   export type InterestCountAggregateInputType = {
@@ -5184,6 +5189,7 @@ export namespace Prisma {
     userId?: true
     postId?: true
     createdAt?: true
+    description?: true
     _all?: true
   }
 
@@ -5264,6 +5270,7 @@ export namespace Prisma {
     userId: string
     postId: string
     createdAt: Date
+    description: string
     _count: InterestCountAggregateOutputType | null
     _min: InterestMinAggregateOutputType | null
     _max: InterestMaxAggregateOutputType | null
@@ -5288,8 +5295,9 @@ export namespace Prisma {
     userId?: boolean
     postId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    description?: boolean
     post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["interest"]>
 
   export type InterestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5297,8 +5305,9 @@ export namespace Prisma {
     userId?: boolean
     postId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    description?: boolean
     post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["interest"]>
 
   export type InterestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5306,8 +5315,9 @@ export namespace Prisma {
     userId?: boolean
     postId?: boolean
     createdAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    description?: boolean
     post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["interest"]>
 
   export type InterestSelectScalar = {
@@ -5315,33 +5325,35 @@ export namespace Prisma {
     userId?: boolean
     postId?: boolean
     createdAt?: boolean
+    description?: boolean
   }
 
-  export type InterestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "postId" | "createdAt", ExtArgs["result"]["interest"]>
+  export type InterestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "postId" | "createdAt" | "description", ExtArgs["result"]["interest"]>
   export type InterestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type InterestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type InterestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     post?: boolean | PostDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $InterestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Interest"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       post: Prisma.$PostPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       postId: string
       createdAt: Date
+      description: string
     }, ExtArgs["result"]["interest"]>
     composites: {}
   }
@@ -5736,8 +5748,8 @@ export namespace Prisma {
    */
   export interface Prisma__InterestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5771,6 +5783,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Interest", 'String'>
     readonly postId: FieldRef<"Interest", 'String'>
     readonly createdAt: FieldRef<"Interest", 'DateTime'>
+    readonly description: FieldRef<"Interest", 'String'>
   }
     
 
@@ -9555,12 +9568,12 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
+    email: 'email',
     firstName: 'firstName',
     lastName: 'lastName',
-    email: 'email',
-    upiId: 'upiId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    upiId: 'upiId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9584,15 +9597,15 @@ export namespace Prisma {
     title: 'title',
     caption: 'caption',
     description: 'description',
-    imageUrl: 'imageUrl',
-    categoryId: 'categoryId',
     price: 'price',
     priceUnit: 'priceUnit',
     location: 'location',
     urgency: 'urgency',
     createdAt: 'createdAt',
-    status: 'status',
-    userId: 'userId'
+    userId: 'userId',
+    imageUrl: 'imageUrl',
+    categoryId: 'categoryId',
+    status: 'status'
   };
 
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
@@ -9602,7 +9615,8 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     postId: 'postId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    description: 'description'
   };
 
   export type InterestScalarFieldEnum = (typeof InterestScalarFieldEnum)[keyof typeof InterestScalarFieldEnum]
@@ -9816,30 +9830,30 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    upiId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    posts?: PostListRelationFilter
-    interests?: InterestListRelationFilter
+    upiId?: StringNullableFilter<"User"> | string | null
     deals?: DealListRelationFilter
     exchanges?: ExchangeListRelationFilter
+    interests?: InterestListRelationFilter
+    posts?: PostListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
+    email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    email?: SortOrder
-    upiId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    posts?: PostOrderByRelationAggregateInput
-    interests?: InterestOrderByRelationAggregateInput
+    upiId?: SortOrderInput | SortOrder
     deals?: DealOrderByRelationAggregateInput
     exchanges?: ExchangeOrderByRelationAggregateInput
+    interests?: InterestOrderByRelationAggregateInput
+    posts?: PostOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9850,23 +9864,23 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
-    upiId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    posts?: PostListRelationFilter
-    interests?: InterestListRelationFilter
+    upiId?: StringNullableFilter<"User"> | string | null
     deals?: DealListRelationFilter
     exchanges?: ExchangeListRelationFilter
+    interests?: InterestListRelationFilter
+    posts?: PostListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
+    email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    email?: SortOrder
-    upiId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    upiId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -9877,12 +9891,12 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
+    email?: StringWithAggregatesFilter<"User"> | string
     firstName?: StringWithAggregatesFilter<"User"> | string
     lastName?: StringWithAggregatesFilter<"User"> | string
-    email?: StringWithAggregatesFilter<"User"> | string
-    upiId?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    upiId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type CategoryWhereInput = {
@@ -9954,19 +9968,19 @@ export namespace Prisma {
     title?: StringFilter<"Post"> | string
     caption?: StringFilter<"Post"> | string
     description?: StringFilter<"Post"> | string
-    imageUrl?: StringNullableListFilter<"Post">
-    categoryId?: StringFilter<"Post"> | string
     price?: FloatFilter<"Post"> | number
     priceUnit?: StringFilter<"Post"> | string
     location?: StringNullableFilter<"Post"> | string | null
     urgency?: EnumUrgencyNullableFilter<"Post"> | $Enums.Urgency | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
-    status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
     userId?: StringFilter<"Post"> | string
+    imageUrl?: StringNullableListFilter<"Post">
+    categoryId?: StringFilter<"Post"> | string
+    status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
+    deal?: XOR<DealNullableScalarRelationFilter, DealWhereInput> | null
+    interests?: InterestListRelationFilter
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    interests?: InterestListRelationFilter
-    deal?: XOR<DealNullableScalarRelationFilter, DealWhereInput> | null
   }
 
   export type PostOrderByWithRelationInput = {
@@ -9975,19 +9989,19 @@ export namespace Prisma {
     title?: SortOrder
     caption?: SortOrder
     description?: SortOrder
-    imageUrl?: SortOrder
-    categoryId?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrderInput | SortOrder
     urgency?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    status?: SortOrder
     userId?: SortOrder
+    imageUrl?: SortOrder
+    categoryId?: SortOrder
+    status?: SortOrder
+    deal?: DealOrderByWithRelationInput
+    interests?: InterestOrderByRelationAggregateInput
     category?: CategoryOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
-    interests?: InterestOrderByRelationAggregateInput
-    deal?: DealOrderByWithRelationInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -9999,19 +10013,19 @@ export namespace Prisma {
     title?: StringFilter<"Post"> | string
     caption?: StringFilter<"Post"> | string
     description?: StringFilter<"Post"> | string
-    imageUrl?: StringNullableListFilter<"Post">
-    categoryId?: StringFilter<"Post"> | string
     price?: FloatFilter<"Post"> | number
     priceUnit?: StringFilter<"Post"> | string
     location?: StringNullableFilter<"Post"> | string | null
     urgency?: EnumUrgencyNullableFilter<"Post"> | $Enums.Urgency | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
-    status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
     userId?: StringFilter<"Post"> | string
+    imageUrl?: StringNullableListFilter<"Post">
+    categoryId?: StringFilter<"Post"> | string
+    status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
+    deal?: XOR<DealNullableScalarRelationFilter, DealWhereInput> | null
+    interests?: InterestListRelationFilter
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    interests?: InterestListRelationFilter
-    deal?: XOR<DealNullableScalarRelationFilter, DealWhereInput> | null
   }, "id">
 
   export type PostOrderByWithAggregationInput = {
@@ -10020,15 +10034,15 @@ export namespace Prisma {
     title?: SortOrder
     caption?: SortOrder
     description?: SortOrder
-    imageUrl?: SortOrder
-    categoryId?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrderInput | SortOrder
     urgency?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    status?: SortOrder
     userId?: SortOrder
+    imageUrl?: SortOrder
+    categoryId?: SortOrder
+    status?: SortOrder
     _count?: PostCountOrderByAggregateInput
     _avg?: PostAvgOrderByAggregateInput
     _max?: PostMaxOrderByAggregateInput
@@ -10045,15 +10059,15 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Post"> | string
     caption?: StringWithAggregatesFilter<"Post"> | string
     description?: StringWithAggregatesFilter<"Post"> | string
-    imageUrl?: StringNullableListFilter<"Post">
-    categoryId?: StringWithAggregatesFilter<"Post"> | string
     price?: FloatWithAggregatesFilter<"Post"> | number
     priceUnit?: StringWithAggregatesFilter<"Post"> | string
     location?: StringNullableWithAggregatesFilter<"Post"> | string | null
     urgency?: EnumUrgencyNullableWithAggregatesFilter<"Post"> | $Enums.Urgency | null
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
-    status?: EnumSTATUSWithAggregatesFilter<"Post"> | $Enums.STATUS
     userId?: StringWithAggregatesFilter<"Post"> | string
+    imageUrl?: StringNullableListFilter<"Post">
+    categoryId?: StringWithAggregatesFilter<"Post"> | string
+    status?: EnumSTATUSWithAggregatesFilter<"Post"> | $Enums.STATUS
   }
 
   export type InterestWhereInput = {
@@ -10064,8 +10078,9 @@ export namespace Prisma {
     userId?: StringFilter<"Interest"> | string
     postId?: StringFilter<"Interest"> | string
     createdAt?: DateTimeFilter<"Interest"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    description?: StringFilter<"Interest"> | string
     post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type InterestOrderByWithRelationInput = {
@@ -10073,8 +10088,9 @@ export namespace Prisma {
     userId?: SortOrder
     postId?: SortOrder
     createdAt?: SortOrder
-    user?: UserOrderByWithRelationInput
+    description?: SortOrder
     post?: PostOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type InterestWhereUniqueInput = Prisma.AtLeast<{
@@ -10086,8 +10102,9 @@ export namespace Prisma {
     userId?: StringFilter<"Interest"> | string
     postId?: StringFilter<"Interest"> | string
     createdAt?: DateTimeFilter<"Interest"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    description?: StringFilter<"Interest"> | string
     post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId_postId">
 
   export type InterestOrderByWithAggregationInput = {
@@ -10095,6 +10112,7 @@ export namespace Prisma {
     userId?: SortOrder
     postId?: SortOrder
     createdAt?: SortOrder
+    description?: SortOrder
     _count?: InterestCountOrderByAggregateInput
     _max?: InterestMaxOrderByAggregateInput
     _min?: InterestMinOrderByAggregateInput
@@ -10108,6 +10126,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Interest"> | string
     postId?: StringWithAggregatesFilter<"Interest"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Interest"> | Date | string
+    description?: StringWithAggregatesFilter<"Interest"> | string
   }
 
   export type DealWhereInput = {
@@ -10316,88 +10335,88 @@ export namespace Prisma {
 
   export type UserCreateInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutUserInput
-    interests?: InterestCreateNestedManyWithoutUserInput
+    upiId?: string | null
     deals?: DealCreateNestedManyWithoutSelectedUserInput
     exchanges?: ExchangeCreateNestedManyWithoutBuyerInput
+    interests?: InterestCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    upiId?: string | null
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
     exchanges?: ExchangeUncheckedCreateNestedManyWithoutBuyerInput
+    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutUserNestedInput
-    interests?: InterestUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
     exchanges?: ExchangeUpdateManyWithoutBuyerNestedInput
+    interests?: InterestUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
     exchanges?: ExchangeUncheckedUpdateManyWithoutBuyerNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    upiId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CategoryCreateInput = {
@@ -10473,17 +10492,17 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
+    deal?: DealCreateNestedOneWithoutPostInput
+    interests?: InterestCreateNestedManyWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
-    interests?: InterestCreateNestedManyWithoutPostInput
-    deal?: DealCreateNestedOneWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
@@ -10492,17 +10511,17 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
-    status?: $Enums.STATUS
     userId: string
-    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
+    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
@@ -10511,17 +10530,17 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    deal?: DealUpdateOneWithoutPostNestedInput
+    interests?: InterestUpdateManyWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
-    interests?: InterestUpdateManyWithoutPostNestedInput
-    deal?: DealUpdateOneWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
@@ -10530,17 +10549,17 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     userId?: StringFieldUpdateOperationsInput | string
-    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
@@ -10549,15 +10568,15 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
-    status?: $Enums.STATUS
     userId: string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
   }
 
   export type PostUpdateManyMutationInput = {
@@ -10566,12 +10585,12 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
   }
 
@@ -10581,22 +10600,23 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     userId?: StringFieldUpdateOperationsInput | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
   }
 
   export type InterestCreateInput = {
     id?: string
     createdAt?: Date | string
-    user: UserCreateNestedOneWithoutInterestsInput
+    description: string
     post: PostCreateNestedOneWithoutInterestsInput
+    user: UserCreateNestedOneWithoutInterestsInput
   }
 
   export type InterestUncheckedCreateInput = {
@@ -10604,13 +10624,15 @@ export namespace Prisma {
     userId: string
     postId: string
     createdAt?: Date | string
+    description: string
   }
 
   export type InterestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutInterestsNestedInput
+    description?: StringFieldUpdateOperationsInput | string
     post?: PostUpdateOneRequiredWithoutInterestsNestedInput
+    user?: UserUpdateOneRequiredWithoutInterestsNestedInput
   }
 
   export type InterestUncheckedUpdateInput = {
@@ -10618,6 +10640,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type InterestCreateManyInput = {
@@ -10625,11 +10648,13 @@ export namespace Prisma {
     userId: string
     postId: string
     createdAt?: Date | string
+    description: string
   }
 
   export type InterestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type InterestUncheckedUpdateManyInput = {
@@ -10637,6 +10662,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type DealCreateInput = {
@@ -10860,6 +10886,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -10875,29 +10912,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type PostListRelationFilter = {
-    every?: PostWhereInput
-    some?: PostWhereInput
-    none?: PostWhereInput
-  }
-
-  export type InterestListRelationFilter = {
-    every?: InterestWhereInput
-    some?: InterestWhereInput
-    none?: InterestWhereInput
-  }
-
   export type DealListRelationFilter = {
     every?: DealWhereInput
     some?: DealWhereInput
@@ -10910,17 +10924,21 @@ export namespace Prisma {
     none?: ExchangeWhereInput
   }
 
+  export type InterestListRelationFilter = {
+    every?: InterestWhereInput
+    some?: InterestWhereInput
+    none?: InterestWhereInput
+  }
+
+  export type PostListRelationFilter = {
+    every?: PostWhereInput
+    some?: PostWhereInput
+    none?: PostWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
-  }
-
-  export type PostOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type InterestOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type DealOrderByRelationAggregateInput = {
@@ -10931,34 +10949,42 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type InterestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PostOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
+    email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    email?: SortOrder
-    upiId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    upiId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
+    email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    email?: SortOrder
-    upiId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    upiId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
+    email?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
-    email?: SortOrder
-    upiId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    upiId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -10979,6 +11005,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -10995,20 +11035,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type CategoryCountOrderByAggregateInput = {
@@ -11045,14 +11071,6 @@ export namespace Prisma {
     not?: NestedEnumPostTypeFilter<$PrismaModel> | $Enums.PostType
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -11071,11 +11089,24 @@ export namespace Prisma {
     not?: NestedEnumUrgencyNullableFilter<$PrismaModel> | $Enums.Urgency | null
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type EnumSTATUSFilter<$PrismaModel = never> = {
     equals?: $Enums.STATUS | EnumSTATUSFieldRefInput<$PrismaModel>
     in?: $Enums.STATUS[] | ListEnumSTATUSFieldRefInput<$PrismaModel>
     notIn?: $Enums.STATUS[] | ListEnumSTATUSFieldRefInput<$PrismaModel>
     not?: NestedEnumSTATUSFilter<$PrismaModel> | $Enums.STATUS
+  }
+
+  export type DealNullableScalarRelationFilter = {
+    is?: DealWhereInput | null
+    isNot?: DealWhereInput | null
   }
 
   export type CategoryScalarRelationFilter = {
@@ -11088,26 +11119,21 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type DealNullableScalarRelationFilter = {
-    is?: DealWhereInput | null
-    isNot?: DealWhereInput | null
-  }
-
   export type PostCountOrderByAggregateInput = {
     id?: SortOrder
     type?: SortOrder
     title?: SortOrder
     caption?: SortOrder
     description?: SortOrder
-    imageUrl?: SortOrder
-    categoryId?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrder
     urgency?: SortOrder
     createdAt?: SortOrder
-    status?: SortOrder
     userId?: SortOrder
+    imageUrl?: SortOrder
+    categoryId?: SortOrder
+    status?: SortOrder
   }
 
   export type PostAvgOrderByAggregateInput = {
@@ -11120,14 +11146,14 @@ export namespace Prisma {
     title?: SortOrder
     caption?: SortOrder
     description?: SortOrder
-    categoryId?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrder
     urgency?: SortOrder
     createdAt?: SortOrder
-    status?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
+    status?: SortOrder
   }
 
   export type PostMinOrderByAggregateInput = {
@@ -11136,14 +11162,14 @@ export namespace Prisma {
     title?: SortOrder
     caption?: SortOrder
     description?: SortOrder
-    categoryId?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrder
     urgency?: SortOrder
     createdAt?: SortOrder
-    status?: SortOrder
     userId?: SortOrder
+    categoryId?: SortOrder
+    status?: SortOrder
   }
 
   export type PostSumOrderByAggregateInput = {
@@ -11211,6 +11237,7 @@ export namespace Prisma {
     userId?: SortOrder
     postId?: SortOrder
     createdAt?: SortOrder
+    description?: SortOrder
   }
 
   export type InterestMaxOrderByAggregateInput = {
@@ -11218,6 +11245,7 @@ export namespace Prisma {
     userId?: SortOrder
     postId?: SortOrder
     createdAt?: SortOrder
+    description?: SortOrder
   }
 
   export type InterestMinOrderByAggregateInput = {
@@ -11225,6 +11253,7 @@ export namespace Prisma {
     userId?: SortOrder
     postId?: SortOrder
     createdAt?: SortOrder
+    description?: SortOrder
   }
 
   export type EnumDealStatusFilter<$PrismaModel = never> = {
@@ -11409,20 +11438,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type PostCreateNestedManyWithoutUserInput = {
-    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
-    createMany?: PostCreateManyUserInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type InterestCreateNestedManyWithoutUserInput = {
-    create?: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput> | InterestCreateWithoutUserInput[] | InterestUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: InterestCreateOrConnectWithoutUserInput | InterestCreateOrConnectWithoutUserInput[]
-    createMany?: InterestCreateManyUserInputEnvelope
-    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-  }
-
   export type DealCreateNestedManyWithoutSelectedUserInput = {
     create?: XOR<DealCreateWithoutSelectedUserInput, DealUncheckedCreateWithoutSelectedUserInput> | DealCreateWithoutSelectedUserInput[] | DealUncheckedCreateWithoutSelectedUserInput[]
     connectOrCreate?: DealCreateOrConnectWithoutSelectedUserInput | DealCreateOrConnectWithoutSelectedUserInput[]
@@ -11437,18 +11452,18 @@ export namespace Prisma {
     connect?: ExchangeWhereUniqueInput | ExchangeWhereUniqueInput[]
   }
 
-  export type PostUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
-    createMany?: PostCreateManyUserInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type InterestUncheckedCreateNestedManyWithoutUserInput = {
+  export type InterestCreateNestedManyWithoutUserInput = {
     create?: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput> | InterestCreateWithoutUserInput[] | InterestUncheckedCreateWithoutUserInput[]
     connectOrCreate?: InterestCreateOrConnectWithoutUserInput | InterestCreateOrConnectWithoutUserInput[]
     createMany?: InterestCreateManyUserInputEnvelope
     connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+  }
+
+  export type PostCreateNestedManyWithoutUserInput = {
+    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
+    createMany?: PostCreateManyUserInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
   export type DealUncheckedCreateNestedManyWithoutSelectedUserInput = {
@@ -11465,44 +11480,30 @@ export namespace Prisma {
     connect?: ExchangeWhereUniqueInput | ExchangeWhereUniqueInput[]
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
+  export type InterestUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput> | InterestCreateWithoutUserInput[] | InterestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: InterestCreateOrConnectWithoutUserInput | InterestCreateOrConnectWithoutUserInput[]
+    createMany?: InterestCreateManyUserInputEnvelope
+    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type PostUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
+    createMany?: PostCreateManyUserInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
 
-  export type PostUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutUserInput | PostUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PostCreateManyUserInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type InterestUpdateManyWithoutUserNestedInput = {
-    create?: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput> | InterestCreateWithoutUserInput[] | InterestUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: InterestCreateOrConnectWithoutUserInput | InterestCreateOrConnectWithoutUserInput[]
-    upsert?: InterestUpsertWithWhereUniqueWithoutUserInput | InterestUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: InterestCreateManyUserInputEnvelope
-    set?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    disconnect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    delete?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    update?: InterestUpdateWithWhereUniqueWithoutUserInput | InterestUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: InterestUpdateManyWithWhereWithoutUserInput | InterestUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type DealUpdateManyWithoutSelectedUserNestedInput = {
@@ -11533,21 +11534,7 @@ export namespace Prisma {
     deleteMany?: ExchangeScalarWhereInput | ExchangeScalarWhereInput[]
   }
 
-  export type PostUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutUserInput | PostUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: PostCreateManyUserInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type InterestUncheckedUpdateManyWithoutUserNestedInput = {
+  export type InterestUpdateManyWithoutUserNestedInput = {
     create?: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput> | InterestCreateWithoutUserInput[] | InterestUncheckedCreateWithoutUserInput[]
     connectOrCreate?: InterestCreateOrConnectWithoutUserInput | InterestCreateOrConnectWithoutUserInput[]
     upsert?: InterestUpsertWithWhereUniqueWithoutUserInput | InterestUpsertWithWhereUniqueWithoutUserInput[]
@@ -11559,6 +11546,20 @@ export namespace Prisma {
     update?: InterestUpdateWithWhereUniqueWithoutUserInput | InterestUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: InterestUpdateManyWithWhereWithoutUserInput | InterestUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
+  }
+
+  export type PostUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutUserInput | PostUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PostCreateManyUserInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type DealUncheckedUpdateManyWithoutSelectedUserNestedInput = {
@@ -11587,6 +11588,34 @@ export namespace Prisma {
     update?: ExchangeUpdateWithWhereUniqueWithoutBuyerInput | ExchangeUpdateWithWhereUniqueWithoutBuyerInput[]
     updateMany?: ExchangeUpdateManyWithWhereWithoutBuyerInput | ExchangeUpdateManyWithWhereWithoutBuyerInput[]
     deleteMany?: ExchangeScalarWhereInput | ExchangeScalarWhereInput[]
+  }
+
+  export type InterestUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput> | InterestCreateWithoutUserInput[] | InterestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: InterestCreateOrConnectWithoutUserInput | InterestCreateOrConnectWithoutUserInput[]
+    upsert?: InterestUpsertWithWhereUniqueWithoutUserInput | InterestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: InterestCreateManyUserInputEnvelope
+    set?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    disconnect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    delete?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    update?: InterestUpdateWithWhereUniqueWithoutUserInput | InterestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: InterestUpdateManyWithWhereWithoutUserInput | InterestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutUserInput | PostUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PostCreateManyUserInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type PostCreateNestedManyWithoutCategoryInput = {
@@ -11635,6 +11664,19 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type DealCreateNestedOneWithoutPostInput = {
+    create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
+    connectOrCreate?: DealCreateOrConnectWithoutPostInput
+    connect?: DealWhereUniqueInput
+  }
+
+  export type InterestCreateNestedManyWithoutPostInput = {
+    create?: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput> | InterestCreateWithoutPostInput[] | InterestUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: InterestCreateOrConnectWithoutPostInput | InterestCreateOrConnectWithoutPostInput[]
+    createMany?: InterestCreateManyPostInputEnvelope
+    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+  }
+
   export type CategoryCreateNestedOneWithoutPostsInput = {
     create?: XOR<CategoryCreateWithoutPostsInput, CategoryUncheckedCreateWithoutPostsInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutPostsInput
@@ -11647,14 +11689,7 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type InterestCreateNestedManyWithoutPostInput = {
-    create?: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput> | InterestCreateWithoutPostInput[] | InterestUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: InterestCreateOrConnectWithoutPostInput | InterestCreateOrConnectWithoutPostInput[]
-    createMany?: InterestCreateManyPostInputEnvelope
-    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-  }
-
-  export type DealCreateNestedOneWithoutPostInput = {
+  export type DealUncheckedCreateNestedOneWithoutPostInput = {
     create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
     connectOrCreate?: DealCreateOrConnectWithoutPostInput
     connect?: DealWhereUniqueInput
@@ -11667,19 +11702,8 @@ export namespace Prisma {
     connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
   }
 
-  export type DealUncheckedCreateNestedOneWithoutPostInput = {
-    create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
-    connectOrCreate?: DealCreateOrConnectWithoutPostInput
-    connect?: DealWhereUniqueInput
-  }
-
   export type EnumPostTypeFieldUpdateOperationsInput = {
     set?: $Enums.PostType
-  }
-
-  export type PostUpdateimageUrlInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -11694,8 +11718,37 @@ export namespace Prisma {
     set?: $Enums.Urgency | null
   }
 
+  export type PostUpdateimageUrlInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type EnumSTATUSFieldUpdateOperationsInput = {
     set?: $Enums.STATUS
+  }
+
+  export type DealUpdateOneWithoutPostNestedInput = {
+    create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
+    connectOrCreate?: DealCreateOrConnectWithoutPostInput
+    upsert?: DealUpsertWithoutPostInput
+    disconnect?: DealWhereInput | boolean
+    delete?: DealWhereInput | boolean
+    connect?: DealWhereUniqueInput
+    update?: XOR<XOR<DealUpdateToOneWithWhereWithoutPostInput, DealUpdateWithoutPostInput>, DealUncheckedUpdateWithoutPostInput>
+  }
+
+  export type InterestUpdateManyWithoutPostNestedInput = {
+    create?: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput> | InterestCreateWithoutPostInput[] | InterestUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: InterestCreateOrConnectWithoutPostInput | InterestCreateOrConnectWithoutPostInput[]
+    upsert?: InterestUpsertWithWhereUniqueWithoutPostInput | InterestUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: InterestCreateManyPostInputEnvelope
+    set?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    disconnect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    delete?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+    update?: InterestUpdateWithWhereUniqueWithoutPostInput | InterestUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: InterestUpdateManyWithWhereWithoutPostInput | InterestUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
   }
 
   export type CategoryUpdateOneRequiredWithoutPostsNestedInput = {
@@ -11714,21 +11767,7 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPostsInput, UserUpdateWithoutPostsInput>, UserUncheckedUpdateWithoutPostsInput>
   }
 
-  export type InterestUpdateManyWithoutPostNestedInput = {
-    create?: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput> | InterestCreateWithoutPostInput[] | InterestUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: InterestCreateOrConnectWithoutPostInput | InterestCreateOrConnectWithoutPostInput[]
-    upsert?: InterestUpsertWithWhereUniqueWithoutPostInput | InterestUpsertWithWhereUniqueWithoutPostInput[]
-    createMany?: InterestCreateManyPostInputEnvelope
-    set?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    disconnect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    delete?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
-    update?: InterestUpdateWithWhereUniqueWithoutPostInput | InterestUpdateWithWhereUniqueWithoutPostInput[]
-    updateMany?: InterestUpdateManyWithWhereWithoutPostInput | InterestUpdateManyWithWhereWithoutPostInput[]
-    deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
-  }
-
-  export type DealUpdateOneWithoutPostNestedInput = {
+  export type DealUncheckedUpdateOneWithoutPostNestedInput = {
     create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
     connectOrCreate?: DealCreateOrConnectWithoutPostInput
     upsert?: DealUpsertWithoutPostInput
@@ -11752,14 +11791,10 @@ export namespace Prisma {
     deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
   }
 
-  export type DealUncheckedUpdateOneWithoutPostNestedInput = {
-    create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
-    connectOrCreate?: DealCreateOrConnectWithoutPostInput
-    upsert?: DealUpsertWithoutPostInput
-    disconnect?: DealWhereInput | boolean
-    delete?: DealWhereInput | boolean
-    connect?: DealWhereUniqueInput
-    update?: XOR<XOR<DealUpdateToOneWithWhereWithoutPostInput, DealUpdateWithoutPostInput>, DealUncheckedUpdateWithoutPostInput>
+  export type PostCreateNestedOneWithoutInterestsInput = {
+    create?: XOR<PostCreateWithoutInterestsInput, PostUncheckedCreateWithoutInterestsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutInterestsInput
+    connect?: PostWhereUniqueInput
   }
 
   export type UserCreateNestedOneWithoutInterestsInput = {
@@ -11768,10 +11803,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type PostCreateNestedOneWithoutInterestsInput = {
+  export type PostUpdateOneRequiredWithoutInterestsNestedInput = {
     create?: XOR<PostCreateWithoutInterestsInput, PostUncheckedCreateWithoutInterestsInput>
     connectOrCreate?: PostCreateOrConnectWithoutInterestsInput
+    upsert?: PostUpsertWithoutInterestsInput
     connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutInterestsInput, PostUpdateWithoutInterestsInput>, PostUncheckedUpdateWithoutInterestsInput>
   }
 
   export type UserUpdateOneRequiredWithoutInterestsNestedInput = {
@@ -11780,14 +11817,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutInterestsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInterestsInput, UserUpdateWithoutInterestsInput>, UserUncheckedUpdateWithoutInterestsInput>
-  }
-
-  export type PostUpdateOneRequiredWithoutInterestsNestedInput = {
-    create?: XOR<PostCreateWithoutInterestsInput, PostUncheckedCreateWithoutInterestsInput>
-    connectOrCreate?: PostCreateOrConnectWithoutInterestsInput
-    upsert?: PostUpsertWithoutInterestsInput
-    connect?: PostWhereUniqueInput
-    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutInterestsInput, PostUpdateWithoutInterestsInput>, PostUncheckedUpdateWithoutInterestsInput>
   }
 
   export type PostCreateNestedOneWithoutDealInput = {
@@ -11956,6 +11985,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11968,17 +12008,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12009,6 +12038,20 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -12035,20 +12078,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumPostTypeFilter<$PrismaModel = never> = {
@@ -12201,74 +12230,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type PostCreateWithoutUserInput = {
-    id?: string
-    type: $Enums.PostType
-    title: string
-    caption: string
-    description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    price: number
-    priceUnit: string
-    location?: string | null
-    urgency?: $Enums.Urgency | null
-    createdAt?: Date | string
-    status?: $Enums.STATUS
-    category: CategoryCreateNestedOneWithoutPostsInput
-    interests?: InterestCreateNestedManyWithoutPostInput
-    deal?: DealCreateNestedOneWithoutPostInput
-  }
-
-  export type PostUncheckedCreateWithoutUserInput = {
-    id?: string
-    type: $Enums.PostType
-    title: string
-    caption: string
-    description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
-    price: number
-    priceUnit: string
-    location?: string | null
-    urgency?: $Enums.Urgency | null
-    createdAt?: Date | string
-    status?: $Enums.STATUS
-    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
-    deal?: DealUncheckedCreateNestedOneWithoutPostInput
-  }
-
-  export type PostCreateOrConnectWithoutUserInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput>
-  }
-
-  export type PostCreateManyUserInputEnvelope = {
-    data: PostCreateManyUserInput | PostCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type InterestCreateWithoutUserInput = {
-    id?: string
-    createdAt?: Date | string
-    post: PostCreateNestedOneWithoutInterestsInput
-  }
-
-  export type InterestUncheckedCreateWithoutUserInput = {
-    id?: string
-    postId: string
-    createdAt?: Date | string
-  }
-
-  export type InterestCreateOrConnectWithoutUserInput = {
-    where: InterestWhereUniqueInput
-    create: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput>
-  }
-
-  export type InterestCreateManyUserInputEnvelope = {
-    data: InterestCreateManyUserInput | InterestCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DealCreateWithoutSelectedUserInput = {
     id?: string
     status?: $Enums.DealStatus
@@ -12329,66 +12290,74 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PostUpsertWithWhereUniqueWithoutUserInput = {
-    where: PostWhereUniqueInput
-    update: XOR<PostUpdateWithoutUserInput, PostUncheckedUpdateWithoutUserInput>
-    create: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput>
+  export type InterestCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    description: string
+    post: PostCreateNestedOneWithoutInterestsInput
   }
 
-  export type PostUpdateWithWhereUniqueWithoutUserInput = {
-    where: PostWhereUniqueInput
-    data: XOR<PostUpdateWithoutUserInput, PostUncheckedUpdateWithoutUserInput>
+  export type InterestUncheckedCreateWithoutUserInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    description: string
   }
 
-  export type PostUpdateManyWithWhereWithoutUserInput = {
-    where: PostScalarWhereInput
-    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type PostScalarWhereInput = {
-    AND?: PostScalarWhereInput | PostScalarWhereInput[]
-    OR?: PostScalarWhereInput[]
-    NOT?: PostScalarWhereInput | PostScalarWhereInput[]
-    id?: StringFilter<"Post"> | string
-    type?: EnumPostTypeFilter<"Post"> | $Enums.PostType
-    title?: StringFilter<"Post"> | string
-    caption?: StringFilter<"Post"> | string
-    description?: StringFilter<"Post"> | string
-    imageUrl?: StringNullableListFilter<"Post">
-    categoryId?: StringFilter<"Post"> | string
-    price?: FloatFilter<"Post"> | number
-    priceUnit?: StringFilter<"Post"> | string
-    location?: StringNullableFilter<"Post"> | string | null
-    urgency?: EnumUrgencyNullableFilter<"Post"> | $Enums.Urgency | null
-    createdAt?: DateTimeFilter<"Post"> | Date | string
-    status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
-    userId?: StringFilter<"Post"> | string
-  }
-
-  export type InterestUpsertWithWhereUniqueWithoutUserInput = {
+  export type InterestCreateOrConnectWithoutUserInput = {
     where: InterestWhereUniqueInput
-    update: XOR<InterestUpdateWithoutUserInput, InterestUncheckedUpdateWithoutUserInput>
     create: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput>
   }
 
-  export type InterestUpdateWithWhereUniqueWithoutUserInput = {
-    where: InterestWhereUniqueInput
-    data: XOR<InterestUpdateWithoutUserInput, InterestUncheckedUpdateWithoutUserInput>
+  export type InterestCreateManyUserInputEnvelope = {
+    data: InterestCreateManyUserInput | InterestCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
-  export type InterestUpdateManyWithWhereWithoutUserInput = {
-    where: InterestScalarWhereInput
-    data: XOR<InterestUpdateManyMutationInput, InterestUncheckedUpdateManyWithoutUserInput>
+  export type PostCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.PostType
+    title: string
+    caption: string
+    description: string
+    price: number
+    priceUnit: string
+    location?: string | null
+    urgency?: $Enums.Urgency | null
+    createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    status?: $Enums.STATUS
+    deal?: DealCreateNestedOneWithoutPostInput
+    interests?: InterestCreateNestedManyWithoutPostInput
+    category: CategoryCreateNestedOneWithoutPostsInput
   }
 
-  export type InterestScalarWhereInput = {
-    AND?: InterestScalarWhereInput | InterestScalarWhereInput[]
-    OR?: InterestScalarWhereInput[]
-    NOT?: InterestScalarWhereInput | InterestScalarWhereInput[]
-    id?: StringFilter<"Interest"> | string
-    userId?: StringFilter<"Interest"> | string
-    postId?: StringFilter<"Interest"> | string
-    createdAt?: DateTimeFilter<"Interest"> | Date | string
+  export type PostUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.PostType
+    title: string
+    caption: string
+    description: string
+    price: number
+    priceUnit: string
+    location?: string | null
+    urgency?: $Enums.Urgency | null
+    createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
+    deal?: DealUncheckedCreateNestedOneWithoutPostInput
+    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutUserInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput>
+  }
+
+  export type PostCreateManyUserInputEnvelope = {
+    data: PostCreateManyUserInput | PostCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type DealUpsertWithWhereUniqueWithoutSelectedUserInput = {
@@ -12449,22 +12418,85 @@ export namespace Prisma {
     dealId?: StringNullableFilter<"Exchange"> | string | null
   }
 
+  export type InterestUpsertWithWhereUniqueWithoutUserInput = {
+    where: InterestWhereUniqueInput
+    update: XOR<InterestUpdateWithoutUserInput, InterestUncheckedUpdateWithoutUserInput>
+    create: XOR<InterestCreateWithoutUserInput, InterestUncheckedCreateWithoutUserInput>
+  }
+
+  export type InterestUpdateWithWhereUniqueWithoutUserInput = {
+    where: InterestWhereUniqueInput
+    data: XOR<InterestUpdateWithoutUserInput, InterestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type InterestUpdateManyWithWhereWithoutUserInput = {
+    where: InterestScalarWhereInput
+    data: XOR<InterestUpdateManyMutationInput, InterestUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type InterestScalarWhereInput = {
+    AND?: InterestScalarWhereInput | InterestScalarWhereInput[]
+    OR?: InterestScalarWhereInput[]
+    NOT?: InterestScalarWhereInput | InterestScalarWhereInput[]
+    id?: StringFilter<"Interest"> | string
+    userId?: StringFilter<"Interest"> | string
+    postId?: StringFilter<"Interest"> | string
+    createdAt?: DateTimeFilter<"Interest"> | Date | string
+    description?: StringFilter<"Interest"> | string
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutUserInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutUserInput, PostUncheckedUpdateWithoutUserInput>
+    create: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutUserInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutUserInput, PostUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutUserInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PostScalarWhereInput = {
+    AND?: PostScalarWhereInput | PostScalarWhereInput[]
+    OR?: PostScalarWhereInput[]
+    NOT?: PostScalarWhereInput | PostScalarWhereInput[]
+    id?: StringFilter<"Post"> | string
+    type?: EnumPostTypeFilter<"Post"> | $Enums.PostType
+    title?: StringFilter<"Post"> | string
+    caption?: StringFilter<"Post"> | string
+    description?: StringFilter<"Post"> | string
+    price?: FloatFilter<"Post"> | number
+    priceUnit?: StringFilter<"Post"> | string
+    location?: StringNullableFilter<"Post"> | string | null
+    urgency?: EnumUrgencyNullableFilter<"Post"> | $Enums.Urgency | null
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    userId?: StringFilter<"Post"> | string
+    imageUrl?: StringNullableListFilter<"Post">
+    categoryId?: StringFilter<"Post"> | string
+    status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
+  }
+
   export type PostCreateWithoutCategoryInput = {
     id?: string
     type: $Enums.PostType
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    user: UserCreateNestedOneWithoutPostsInput
-    interests?: InterestCreateNestedManyWithoutPostInput
     deal?: DealCreateNestedOneWithoutPostInput
+    interests?: InterestCreateNestedManyWithoutPostInput
+    user: UserCreateNestedOneWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutCategoryInput = {
@@ -12473,16 +12505,16 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
-    status?: $Enums.STATUS
     userId: string
-    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+    imageUrl?: PostCreateimageUrlInput | string[]
+    status?: $Enums.STATUS
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
+    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCategoryInput = {
@@ -12511,6 +12543,55 @@ export namespace Prisma {
     data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutCategoryInput>
   }
 
+  export type DealCreateWithoutPostInput = {
+    id?: string
+    status?: $Enums.DealStatus
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    selectedUser: UserCreateNestedOneWithoutDealsInput
+    exchange?: ExchangeCreateNestedOneWithoutDealInput
+    otp?: OTPCreateNestedOneWithoutDealInput
+  }
+
+  export type DealUncheckedCreateWithoutPostInput = {
+    id?: string
+    selectedUserId: string
+    status?: $Enums.DealStatus
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    exchange?: ExchangeUncheckedCreateNestedOneWithoutDealInput
+    otp?: OTPUncheckedCreateNestedOneWithoutDealInput
+  }
+
+  export type DealCreateOrConnectWithoutPostInput = {
+    where: DealWhereUniqueInput
+    create: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
+  }
+
+  export type InterestCreateWithoutPostInput = {
+    id?: string
+    createdAt?: Date | string
+    description: string
+    user: UserCreateNestedOneWithoutInterestsInput
+  }
+
+  export type InterestUncheckedCreateWithoutPostInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    description: string
+  }
+
+  export type InterestCreateOrConnectWithoutPostInput = {
+    where: InterestWhereUniqueInput
+    create: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput>
+  }
+
+  export type InterestCreateManyPostInputEnvelope = {
+    data: InterestCreateManyPostInput | InterestCreateManyPostInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CategoryCreateWithoutPostsInput = {
     id?: string
     name: string
@@ -12536,28 +12617,28 @@ export namespace Prisma {
 
   export type UserCreateWithoutPostsInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    interests?: InterestCreateNestedManyWithoutUserInput
+    upiId?: string | null
     deals?: DealCreateNestedManyWithoutSelectedUserInput
     exchanges?: ExchangeCreateNestedManyWithoutBuyerInput
+    interests?: InterestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    upiId?: string | null
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
     exchanges?: ExchangeUncheckedCreateNestedManyWithoutBuyerInput
+    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -12565,51 +12646,51 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
   }
 
-  export type InterestCreateWithoutPostInput = {
-    id?: string
-    createdAt?: Date | string
-    user: UserCreateNestedOneWithoutInterestsInput
+  export type DealUpsertWithoutPostInput = {
+    update: XOR<DealUpdateWithoutPostInput, DealUncheckedUpdateWithoutPostInput>
+    create: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
+    where?: DealWhereInput
   }
 
-  export type InterestUncheckedCreateWithoutPostInput = {
-    id?: string
-    userId: string
-    createdAt?: Date | string
+  export type DealUpdateToOneWithWhereWithoutPostInput = {
+    where?: DealWhereInput
+    data: XOR<DealUpdateWithoutPostInput, DealUncheckedUpdateWithoutPostInput>
   }
 
-  export type InterestCreateOrConnectWithoutPostInput = {
+  export type DealUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    selectedUser?: UserUpdateOneRequiredWithoutDealsNestedInput
+    exchange?: ExchangeUpdateOneWithoutDealNestedInput
+    otp?: OTPUpdateOneWithoutDealNestedInput
+  }
+
+  export type DealUncheckedUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    selectedUserId?: StringFieldUpdateOperationsInput | string
+    status?: EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exchange?: ExchangeUncheckedUpdateOneWithoutDealNestedInput
+    otp?: OTPUncheckedUpdateOneWithoutDealNestedInput
+  }
+
+  export type InterestUpsertWithWhereUniqueWithoutPostInput = {
     where: InterestWhereUniqueInput
+    update: XOR<InterestUpdateWithoutPostInput, InterestUncheckedUpdateWithoutPostInput>
     create: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput>
   }
 
-  export type InterestCreateManyPostInputEnvelope = {
-    data: InterestCreateManyPostInput | InterestCreateManyPostInput[]
-    skipDuplicates?: boolean
+  export type InterestUpdateWithWhereUniqueWithoutPostInput = {
+    where: InterestWhereUniqueInput
+    data: XOR<InterestUpdateWithoutPostInput, InterestUncheckedUpdateWithoutPostInput>
   }
 
-  export type DealCreateWithoutPostInput = {
-    id?: string
-    status?: $Enums.DealStatus
-    createdAt?: Date | string
-    completedAt?: Date | string | null
-    selectedUser: UserCreateNestedOneWithoutDealsInput
-    exchange?: ExchangeCreateNestedOneWithoutDealInput
-    otp?: OTPCreateNestedOneWithoutDealInput
-  }
-
-  export type DealUncheckedCreateWithoutPostInput = {
-    id?: string
-    selectedUserId: string
-    status?: $Enums.DealStatus
-    createdAt?: Date | string
-    completedAt?: Date | string | null
-    exchange?: ExchangeUncheckedCreateNestedOneWithoutDealInput
-    otp?: OTPUncheckedCreateNestedOneWithoutDealInput
-  }
-
-  export type DealCreateOrConnectWithoutPostInput = {
-    where: DealWhereUniqueInput
-    create: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
+  export type InterestUpdateManyWithWhereWithoutPostInput = {
+    where: InterestScalarWhereInput
+    data: XOR<InterestUpdateManyMutationInput, InterestUncheckedUpdateManyWithoutPostInput>
   }
 
   export type CategoryUpsertWithoutPostsInput = {
@@ -12654,106 +12735,28 @@ export namespace Prisma {
 
   export type UserUpdateWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    interests?: InterestUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
     exchanges?: ExchangeUpdateManyWithoutBuyerNestedInput
+    interests?: InterestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
     exchanges?: ExchangeUncheckedUpdateManyWithoutBuyerNestedInput
-  }
-
-  export type InterestUpsertWithWhereUniqueWithoutPostInput = {
-    where: InterestWhereUniqueInput
-    update: XOR<InterestUpdateWithoutPostInput, InterestUncheckedUpdateWithoutPostInput>
-    create: XOR<InterestCreateWithoutPostInput, InterestUncheckedCreateWithoutPostInput>
-  }
-
-  export type InterestUpdateWithWhereUniqueWithoutPostInput = {
-    where: InterestWhereUniqueInput
-    data: XOR<InterestUpdateWithoutPostInput, InterestUncheckedUpdateWithoutPostInput>
-  }
-
-  export type InterestUpdateManyWithWhereWithoutPostInput = {
-    where: InterestScalarWhereInput
-    data: XOR<InterestUpdateManyMutationInput, InterestUncheckedUpdateManyWithoutPostInput>
-  }
-
-  export type DealUpsertWithoutPostInput = {
-    update: XOR<DealUpdateWithoutPostInput, DealUncheckedUpdateWithoutPostInput>
-    create: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
-    where?: DealWhereInput
-  }
-
-  export type DealUpdateToOneWithWhereWithoutPostInput = {
-    where?: DealWhereInput
-    data: XOR<DealUpdateWithoutPostInput, DealUncheckedUpdateWithoutPostInput>
-  }
-
-  export type DealUpdateWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    status?: EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    selectedUser?: UserUpdateOneRequiredWithoutDealsNestedInput
-    exchange?: ExchangeUpdateOneWithoutDealNestedInput
-    otp?: OTPUpdateOneWithoutDealNestedInput
-  }
-
-  export type DealUncheckedUpdateWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    selectedUserId?: StringFieldUpdateOperationsInput | string
-    status?: EnumDealStatusFieldUpdateOperationsInput | $Enums.DealStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    exchange?: ExchangeUncheckedUpdateOneWithoutDealNestedInput
-    otp?: OTPUncheckedUpdateOneWithoutDealNestedInput
-  }
-
-  export type UserCreateWithoutInterestsInput = {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    upiId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutUserInput
-    deals?: DealCreateNestedManyWithoutSelectedUserInput
-    exchanges?: ExchangeCreateNestedManyWithoutBuyerInput
-  }
-
-  export type UserUncheckedCreateWithoutInterestsInput = {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    upiId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
-    exchanges?: ExchangeUncheckedCreateNestedManyWithoutBuyerInput
-  }
-
-  export type UserCreateOrConnectWithoutInterestsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutInterestsInput, UserUncheckedCreateWithoutInterestsInput>
+    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostCreateWithoutInterestsInput = {
@@ -12762,16 +12765,16 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
+    deal?: DealCreateNestedOneWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
-    deal?: DealCreateNestedOneWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutInterestsInput = {
@@ -12780,15 +12783,15 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
-    status?: $Enums.STATUS
     userId: string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
   }
 
@@ -12797,41 +12800,35 @@ export namespace Prisma {
     create: XOR<PostCreateWithoutInterestsInput, PostUncheckedCreateWithoutInterestsInput>
   }
 
-  export type UserUpsertWithoutInterestsInput = {
-    update: XOR<UserUpdateWithoutInterestsInput, UserUncheckedUpdateWithoutInterestsInput>
+  export type UserCreateWithoutInterestsInput = {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    upiId?: string | null
+    deals?: DealCreateNestedManyWithoutSelectedUserInput
+    exchanges?: ExchangeCreateNestedManyWithoutBuyerInput
+    posts?: PostCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutInterestsInput = {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    upiId?: string | null
+    deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
+    exchanges?: ExchangeUncheckedCreateNestedManyWithoutBuyerInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutInterestsInput = {
+    where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutInterestsInput, UserUncheckedCreateWithoutInterestsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutInterestsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutInterestsInput, UserUncheckedUpdateWithoutInterestsInput>
-  }
-
-  export type UserUpdateWithoutInterestsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutUserNestedInput
-    deals?: DealUpdateManyWithoutSelectedUserNestedInput
-    exchanges?: ExchangeUpdateManyWithoutBuyerNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutInterestsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
-    exchanges?: ExchangeUncheckedUpdateManyWithoutBuyerNestedInput
   }
 
   export type PostUpsertWithoutInterestsInput = {
@@ -12851,16 +12848,16 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    deal?: DealUpdateOneWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
-    deal?: DealUpdateOneWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutInterestsInput = {
@@ -12869,16 +12866,53 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     userId?: StringFieldUpdateOperationsInput | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
+  }
+
+  export type UserUpsertWithoutInterestsInput = {
+    update: XOR<UserUpdateWithoutInterestsInput, UserUncheckedUpdateWithoutInterestsInput>
+    create: XOR<UserCreateWithoutInterestsInput, UserUncheckedCreateWithoutInterestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutInterestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutInterestsInput, UserUncheckedUpdateWithoutInterestsInput>
+  }
+
+  export type UserUpdateWithoutInterestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    deals?: DealUpdateManyWithoutSelectedUserNestedInput
+    exchanges?: ExchangeUpdateManyWithoutBuyerNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutInterestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
+    exchanges?: ExchangeUncheckedUpdateManyWithoutBuyerNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostCreateWithoutDealInput = {
@@ -12887,16 +12921,16 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
+    interests?: InterestCreateNestedManyWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
-    interests?: InterestCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutDealInput = {
@@ -12905,15 +12939,15 @@ export namespace Prisma {
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
-    status?: $Enums.STATUS
     userId: string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
     interests?: InterestUncheckedCreateNestedManyWithoutPostInput
   }
 
@@ -12924,28 +12958,28 @@ export namespace Prisma {
 
   export type UserCreateWithoutDealsInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutUserInput
-    interests?: InterestCreateNestedManyWithoutUserInput
+    upiId?: string | null
     exchanges?: ExchangeCreateNestedManyWithoutBuyerInput
+    interests?: InterestCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDealsInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    upiId?: string | null
     exchanges?: ExchangeUncheckedCreateNestedManyWithoutBuyerInput
+    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDealsInput = {
@@ -13016,16 +13050,16 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    interests?: InterestUpdateManyWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
-    interests?: InterestUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutDealInput = {
@@ -13034,15 +13068,15 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     userId?: StringFieldUpdateOperationsInput | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
   }
 
@@ -13059,28 +13093,28 @@ export namespace Prisma {
 
   export type UserUpdateWithoutDealsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutUserNestedInput
-    interests?: InterestUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     exchanges?: ExchangeUpdateManyWithoutBuyerNestedInput
+    interests?: InterestUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDealsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     exchanges?: ExchangeUncheckedUpdateManyWithoutBuyerNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ExchangeUpsertWithoutDealInput = {
@@ -13143,28 +13177,28 @@ export namespace Prisma {
 
   export type UserCreateWithoutExchangesInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    posts?: PostCreateNestedManyWithoutUserInput
-    interests?: InterestCreateNestedManyWithoutUserInput
+    upiId?: string | null
     deals?: DealCreateNestedManyWithoutSelectedUserInput
+    interests?: InterestCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutExchangesInput = {
     id: string
+    email: string
     firstName: string
     lastName: string
-    email: string
-    upiId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    upiId?: string | null
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
+    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutExchangesInput = {
@@ -13210,28 +13244,28 @@ export namespace Prisma {
 
   export type UserUpdateWithoutExchangesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUpdateManyWithoutUserNestedInput
-    interests?: InterestUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
+    interests?: InterestUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExchangesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DealUpsertWithoutExchangeInput = {
@@ -13321,28 +13355,6 @@ export namespace Prisma {
     exchange?: ExchangeUncheckedUpdateOneWithoutDealNestedInput
   }
 
-  export type PostCreateManyUserInput = {
-    id?: string
-    type: $Enums.PostType
-    title: string
-    caption: string
-    description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
-    price: number
-    priceUnit: string
-    location?: string | null
-    urgency?: $Enums.Urgency | null
-    createdAt?: Date | string
-    status?: $Enums.STATUS
-  }
-
-  export type InterestCreateManyUserInput = {
-    id?: string
-    postId: string
-    createdAt?: Date | string
-  }
-
   export type DealCreateManySelectedUserInput = {
     id?: string
     postId: string
@@ -13361,74 +13373,27 @@ export namespace Prisma {
     dealId?: string | null
   }
 
-  export type PostUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
-    title?: StringFieldUpdateOperationsInput | string
-    caption?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    price?: FloatFieldUpdateOperationsInput | number
-    priceUnit?: StringFieldUpdateOperationsInput | string
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
-    interests?: InterestUpdateManyWithoutPostNestedInput
-    deal?: DealUpdateOneWithoutPostNestedInput
+  export type InterestCreateManyUserInput = {
+    id?: string
+    postId: string
+    createdAt?: Date | string
+    description: string
   }
 
-  export type PostUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
-    title?: StringFieldUpdateOperationsInput | string
-    caption?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    priceUnit?: StringFieldUpdateOperationsInput | string
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
-    deal?: DealUncheckedUpdateOneWithoutPostNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
-    title?: StringFieldUpdateOperationsInput | string
-    caption?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
-    price?: FloatFieldUpdateOperationsInput | number
-    priceUnit?: StringFieldUpdateOperationsInput | string
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-  }
-
-  export type InterestUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    post?: PostUpdateOneRequiredWithoutInterestsNestedInput
-  }
-
-  export type InterestUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type InterestUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type PostCreateManyUserInput = {
+    id?: string
+    type: $Enums.PostType
+    title: string
+    caption: string
+    description: string
+    price: number
+    priceUnit: string
+    location?: string | null
+    urgency?: $Enums.Urgency | null
+    createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
   }
 
   export type DealUpdateWithoutSelectedUserInput = {
@@ -13489,20 +13454,93 @@ export namespace Prisma {
     dealId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type InterestUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+    post?: PostUpdateOneRequiredWithoutInterestsNestedInput
+  }
+
+  export type InterestUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type InterestUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PostUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
+    title?: StringFieldUpdateOperationsInput | string
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    priceUnit?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    deal?: DealUpdateOneWithoutPostNestedInput
+    interests?: InterestUpdateManyWithoutPostNestedInput
+    category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
+    title?: StringFieldUpdateOperationsInput | string
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    priceUnit?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    deal?: DealUncheckedUpdateOneWithoutPostNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
+    title?: StringFieldUpdateOperationsInput | string
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    priceUnit?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+  }
+
   export type PostCreateManyCategoryInput = {
     id?: string
     type: $Enums.PostType
     title: string
     caption: string
     description: string
-    imageUrl?: PostCreateimageUrlInput | string[]
     price: number
     priceUnit: string
     location?: string | null
     urgency?: $Enums.Urgency | null
     createdAt?: Date | string
-    status?: $Enums.STATUS
     userId: string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    status?: $Enums.STATUS
   }
 
   export type PostUpdateWithoutCategoryInput = {
@@ -13511,16 +13549,16 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    user?: UserUpdateOneRequiredWithoutPostsNestedInput
-    interests?: InterestUpdateManyWithoutPostNestedInput
     deal?: DealUpdateOneWithoutPostNestedInput
+    interests?: InterestUpdateManyWithoutPostNestedInput
+    user?: UserUpdateOneRequiredWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCategoryInput = {
@@ -13529,16 +13567,16 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     userId?: StringFieldUpdateOperationsInput | string
-    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutCategoryInput = {
@@ -13547,25 +13585,27 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     caption?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
     userId?: StringFieldUpdateOperationsInput | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
   }
 
   export type InterestCreateManyPostInput = {
     id?: string
     userId: string
     createdAt?: Date | string
+    description: string
   }
 
   export type InterestUpdateWithoutPostInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutInterestsNestedInput
   }
 
@@ -13573,12 +13613,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type InterestUncheckedUpdateManyWithoutPostInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: StringFieldUpdateOperationsInput | string
   }
 
 

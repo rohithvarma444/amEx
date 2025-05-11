@@ -1,12 +1,19 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { uploadImages } from '@/lib/uploadImage';
 
 type PostType = 'listing' | 'request';
+
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+}
 
 interface FormData {
   type: PostType | null;
@@ -18,23 +25,26 @@ interface FormData {
   categories: string[];
   price: string;
   priceUnit: string;
+  location?: string;
+  urgency?: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
-const categories = [
-  { id: 'food', name: 'Food', icon: '/img1.png' },
-  { id: 'errands', name: 'Errands', icon: '/img2.png' },
-  { id: 'electronics', name: 'Electronics', icon: '/img3.png' },
-  { id: 'study-aids', name: 'Study Aids', icon: '/img4.png' },
-  { id: 'mutual-benefit', name: 'Mutual Benefit', icon: '/img5.jpeg' },
-  { id: 'skills', name: 'Skills', icon: '/img6.jpg' },
-  { id: 'travel', name: 'Travel', icon: '/img7.jpg' },
-  { id: 'hostel', name: 'Hostel', icon: '/img1.png' },
-  { id: 'stationery', name: 'Stationery', icon: '/img2.png' },
-  { id: 'games', name: 'Games', icon: '/img3.png' },
-  { id: 'art', name: 'Art', icon: '/img4.png' },
-];
+// Remove this hardcoded array
+// const categories = [
+//   { id: 'food', name: 'Food', icon: '/img1.png' },
+//   { id: 'errands', name: 'Errands', icon: '/img2.png' },
+//   { id: 'electronics', name: 'Electronics', icon: '/img3.png' },
+//   { id: 'study-aids', name: 'Study Aids', icon: '/img4.png' },
+//   { id: 'mutual-benefit', name: 'Mutual Benefit', icon: '/img5.jpeg' },
+//   { id: 'skills', name: 'Skills', icon: '/img6.jpg' },
+//   { id: 'travel', name: 'Travel', icon: '/img7.jpg' },
+//   { id: 'hostel', name: 'Hostel', icon: '/img1.png' },
+//   { id: 'stationery', name: 'Stationery', icon: '/img2.png' },
+//   { id: 'games', name: 'Games', icon: '/img3.png' },
+//   { id: 'art', name: 'Art', icon: '/img4.png' },
+// ];
 
-const priceUnits = ['minute', 'hour', 'day', 'week', 'month', 'unit', 'kg'];
+const priceUnits = ['minute', 'hour', 'day', 'week', 'month', 'unit', 'kg','item'];
 
 function CreatePost() {
   const [step, setStep] = useState(1);
@@ -47,15 +57,62 @@ function CreatePost() {
     previewImages: [],
     categories: [],
     price: '',
-    priceUnit: 'minute',
+    priceUnit: 'item',
+    location: '',
+    urgency: undefined
   });
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
 
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        // Check localStorage first
+        const cachedCategories = localStorage.getItem('categories');
+        if (cachedCategories) {
+          setCategories(JSON.parse(cachedCategories));
+          setIsLoadingCategories(false);
+          console.log('Categories from localStorage:', JSON.parse(cachedCategories));
+          return;
+        }
+
+        // If not in localStorage, fetch from API
+        const response = await fetch('/api/get-categories');
+        const data = await response.json();
+        
+        if (data.success) {
+          // Store in localStorage
+          localStorage.setItem('categories', JSON.stringify(data.categories));
+          setCategories(data.categories);
+          console.log('Categories from API:', data.categories);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      } finally {
+        setIsLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+    
+    // Add this line to log the current state of categories
+    console.log('Current categories state:', categories);
+  }, []);
+  
+  // Move this useEffect outside of the other useEffect
+  useEffect(() => {
+    console.log('Categories state updated:', categories);
+  }, [categories]);
+
+  // Fix the handleNext function to remove the problematic condition
   const handleNext = () => {
-    // If we're on step 4 (categories) and mutual benefit is selected, skip step 5 (price)
-    if (step === 4 && formData.categories.includes('mutual-benefit')) {
-      setStep(prev => prev + 2); // Skip to step 6
+    // The problem is here - checking for 'mutual-benefit' which might not exist in your new categories
+    // Remove this condition since we're using category IDs from the database now
+    if (step === 5 && formData.type !== 'request') {
+      setStep(prev => prev + 2); // Skip urgency step for listings
     } else {
       setStep(prev => prev + 1);
     }
@@ -154,45 +211,73 @@ function CreatePost() {
     e.preventDefault();
     
     try {
+      setIsUploading(true);
+      setUploadError(null);
+    
       // Upload images to Cloudinary
       const imageUrls = await uploadImagesToCloudinary();
       
-      // Log the image URLs (as requested)
-      console.log('Uploaded image URLs in order:', imageUrls);
+      if (uploadError) {
+        return;
+      }
+    
+      // Prepare the request payload
+      const payload = {
+        title: formData.title,
+        caption: formData.caption,
+        description: formData.description,
+        price: formData.price,
+        priceUnit: formData.priceUnit,
+        category: formData.categories[0], // Backend expects a single category
+        categoryId: formData.categories[0], // Add the categoryId to the payload
+        imageUrls,
+        location: formData.location,
+        ...(formData.type === 'request' && { urgency: formData.urgency })
+      };
       
-      // Send the form data along with image URLs to your API
-      const response = await fetch('/api/posts', {
+      // Log the final payload structure
+      console.log('Final form payload:', payload);
+    
+      // Send to the appropriate endpoint based on type
+      const endpoint = formData.type === 'listing' ? '/api/create-listing' : '/api/create-request';
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          imageUrls,
-        }),
+        body: JSON.stringify(payload),
       });
-      
-      // For now, just log the data that would be submitted
-      console.log('Form data to be submitted:', {
-        ...formData,
-        imageUrls,
-      });
-      
-      // Reset form or redirect
+    
+      const data = await response.json();
+    
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create post');
+      }
+    
+      // Handle success
+      console.log('Post created successfully:', data);
+      // Redirect to the dashboard or post view
       // router.push('/dashboard');
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    
+    } catch (error: any) {
+      console.error('Error creating post:', error);
+      setUploadError(error.message || 'Failed to create post. Please try again.');
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const renderStepIndicator = () => {
+    // Calculate total steps based on post type
+    const totalSteps = formData.type === 'request' ? 7 : 6;
+    
     return (
       <div className="flex items-center justify-center space-x-2 mb-8">
-        {Array.from({ length: 6 }).map((_, index) => (
+        {Array.from({ length: totalSteps }).map((_, index) => (
           <div 
             key={index} 
             className={`h-1 rounded-full ${index + 1 <= step ? 'bg-black w-8' : 'bg-gray-300 w-6'}`}
           />
         ))}
-        <span className="text-sm text-gray-500 ml-2">{step}/6</span>
+        <span className="text-sm text-gray-500 ml-2">{step}/{totalSteps}</span>
       </div>
     );
   };
@@ -432,32 +517,38 @@ function CreatePost() {
               </div>
             </div>
             
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              {categories.map(category => (
-                <div 
-                  key={category.id} 
-                  className="flex flex-col items-center"
-                  onClick={() => handleCategoryToggle(category.id)}
-                >
-                  <div className={`relative w-16 h-16 rounded-full overflow-hidden ${formData.categories.includes(category.id) ? 'ring-2 ring-black' : ''}`}>
-                    <Image 
-                      src={category.icon} 
-                      alt={category.name} 
-                      fill 
-                      className="object-cover" 
-                    />
-                    {formData.categories.includes(category.id) && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                    )}
+            {isLoadingCategories ? (
+              <div className="text-center py-8">
+                <p>Loading categories...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                {categories.map(category => (
+                  <div 
+                    key={category.id} 
+                    className="flex flex-col items-center"
+                    onClick={() => handleCategoryToggle(category.id)}
+                  >
+                    <div className={`relative w-16 h-16 rounded-full overflow-hidden ${formData.categories.includes(category.id) ? 'ring-2 ring-black' : ''}`}>
+                      <Image 
+                        src={category.imageUrl.trim()} 
+                        alt={category.name} 
+                        fill 
+                        className="object-cover" 
+                      />
+                      {formData.categories.includes(category.id) && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-sm mt-1">{category.name}</span>
                   </div>
-                  <span className="text-sm mt-1">{category.name}</span>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
             
             <div className="flex justify-between">
               <button
@@ -540,7 +631,59 @@ function CreatePost() {
           </div>
         );
       
+      // Add this case in the renderStep switch statement before the preview step
       case 6:
+        if (formData.type === 'request') {
+          return (
+            <div className="max-w-md mx-auto bg-white">
+              <div className="flex items-start mb-8">
+                <button 
+                  onClick={handleBack}
+                  className="mr-4 mt-1"
+                  aria-label="Go back"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 19L5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                
+                <div className="flex-1">
+                  <div className="flex items-center mb-2">
+                    <div className="bg-black text-white rounded-full w-8 h-8 flex items-center justify-center mr-4">
+                      6
+                    </div>
+                    <h2 className="text-xl font-semibold">Set urgency level</h2>
+                  </div>
+                  <p className="text-sm text-gray-500 mb-4">How urgent is your request?</p>
+                </div>
+              </div>
+              
+              <div className="space-y-4 mb-8">
+                {['LOW', 'MEDIUM', 'HIGH'].map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, urgency: level as 'LOW' | 'MEDIUM' | 'HIGH' }));
+                      handleNext();
+                    }}
+                    className={`w-full p-4 border rounded-lg text-left ${formData.urgency === level ? 'border-black' : 'border-gray-300'}`}
+                  >
+                    <div className="font-semibold">{level}</div>
+                    <div className="text-sm text-gray-600">
+                      {level === 'LOW' && 'Not time-sensitive, flexible timeline'}
+                      {level === 'MEDIUM' && 'Needed soon, but can wait'}
+                      {level === 'HIGH' && 'Urgent, needed as soon as possible'}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        }
+        // Fall through to preview step if not a request
+      
+      case 7: // Change from case 6 to case 7 for the preview step
         return (
           <div className="max-w-md mx-auto">
             <div className="flex items-start mb-8">
@@ -558,7 +701,7 @@ function CreatePost() {
               <div className="flex-1">
                 <div className="flex items-center mb-2">
                   <div className="bg-black text-white rounded-full w-8 h-8 flex items-center justify-center mr-4">
-                    6
+                    {formData.type === 'request' ? 7 : 6}
                   </div>
                   <h2 className="text-xl font-semibold">Preview your post</h2>
                 </div>
