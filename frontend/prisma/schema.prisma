@@ -95,6 +95,7 @@ model Interest {
   post      Post     @relation(fields: [postId], references: [id])
   postId    String
   createdAt DateTime @default(now())
+  description String
 
   @@unique([userId, postId]) // Prevent duplicate interests
 }
