@@ -224,7 +224,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/r0h17h/Documents/dev/amEx/frontend/src/app/generated/prisma",
+      "value": "/Users/rohit/amEx2/amEx/frontend/src/app/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -238,11 +238,12 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/r0h17h/Documents/dev/amEx/frontend/prisma/schema.prisma",
+    "sourceFilePath": "/Users/rohit/amEx2/amEx/frontend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": "../../../../.env",
+    "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../../../prisma",
   "clientVersion": "6.6.0",
@@ -251,11 +252,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://neondb_owner:npg_gwo3F6jWnBeJ@ep-royal-star-a45inhn5-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require"
+        "value": null
       }
     }
   },
