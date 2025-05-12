@@ -18,7 +18,12 @@ export async function GET(req: NextRequest) {
         description: true,
         price: true,
         priceUnit: true,
-        category: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         imageUrl: true,
         createdAt: true,
         user: {
@@ -30,6 +35,9 @@ export async function GET(req: NextRequest) {
         }
       }
     });
+
+    console.log("Fetched listings:", listings);
+
 
     return NextResponse.json({
       success: true,
