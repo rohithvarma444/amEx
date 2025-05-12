@@ -1,12 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import { db } from "@/lib/db";
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const listings = await db.post.findMany({
       where: {
         type: "LISTING",
-        status: "ACTIVE"
+        status: "ACTIVE",
       },
       orderBy: {
         createdAt: "desc"
@@ -25,14 +25,16 @@ export async function GET(req: NextRequest) {
           },
         },
         imageUrl: true,
+
         createdAt: true,
         user: {
           select: {
             id: true,
             firstName: true,
-            lastName: true
+            lastName: true,
           }
-        }
+        },
+        status: true,
       }
     });
 

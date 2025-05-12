@@ -32,30 +32,51 @@ interface Interest {
 }
 
 // Dummy function to simulate API call for fetching a post
+// Update the fetchPostById function to use the real API
 const fetchPostById = async (postId: string): Promise<Post | null> => {
-  console.log(`Fetching post with ID: ${postId}`);
-  // Replace with actual API call
-  
-  if (postId === "123") { 
-    return {
-      id: "123",
-      title: "Maggi Cooked to Order",
-      description: "Perfect for midnight munchies. Only in Nila hostel. Pre-fill dropdown with 5-6 common units based on categories (time, quantity, event). Use smart defaults based on category (e.g., food: “packet”, service: “hour”). Validate custom unit to avoid weird inputs like emojis or paragraphs. Let the field auto-hide or collapse if they don’t want to use it for a cleaner look.",
-      price: "₹40/pack",
-      category: "Food",
-      tags: ["Food", "Hostel", "Skills"],
-      imageUrls: [ 
-        "/img1.png", 
-        "/placeholder-image-2.png", 
-        "/placeholder-image-3.png"
-      ], 
-      author: {
-        name: "Seller Name", 
+  try {
+    const response = await fetch('/api/get-myPostById', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      authorId: "user_2fxCEXAMPLEclerkID12345", // Example Clerk User ID
-    };
+      body: JSON.stringify({ postId })
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.success ? data.data : null;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
   }
-  return null;
+};
+
+// Update the handleConfirmInterest function
+const handleConfirmInterest = async () => {
+  try {
+    const response = await fetch(`/api/posts/${postId}/interest`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: interestMessage })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      throw new Error(data.error || 'Failed to submit interest');
+    }
+
+    setShowConfirmInterestModal(false);
+    setShowInterestSubmittedModal(true);
+    setInterestMessage('');
+  } catch (error) {
+    console.error('Error submitting interest:', error);
+    alert(error instanceof Error ? error.message : 'Failed to submit interest');
+  }
 };
 
 // Dummy function to simulate API call for fetching interests

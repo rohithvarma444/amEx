@@ -57,7 +57,7 @@ function Dashboard() {
           setDashboardData({
             listings: response.data.listings.map((item: Post) => ({
               ...item,
-              href: `/listings/${item.id}`,
+              href: `/post/${item.id}`,
               image: item.imageUrl,
               user: {
                 ...item.user,
@@ -66,7 +66,7 @@ function Dashboard() {
             })),
             requests: response.data.requests.map((item: Post) => ({
               ...item,
-              href: `/requests/${item.id}`,
+              href: `/post/${item.id}`,
               image: item.imageUrl,
               user: {
                 ...item.user,
@@ -75,7 +75,7 @@ function Dashboard() {
             })),
             urgentRequests: response.data.urgentRequests.map((item: Post) => ({
               ...item,
-              href: `/requests/${item.id}`,
+              href: `/post/${item.id}`,
               image: item.imageUrl,
               user: {
                 ...item.user,
