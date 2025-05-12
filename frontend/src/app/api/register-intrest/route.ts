@@ -1,10 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
-        const { userId, message, postId } = body;
+        const {postId, message} = await req.json();
+        const { userId } = await auth(); 
 
         if (!userId || !message || !postId) {
             return NextResponse.json(
@@ -37,7 +38,6 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Create interest record
         const interest = await db.interest.create({
             data: {
                 userId,
@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             success: true,
             message: "Interest registered successfully",
-            data: interest
         }, { status: 201 });
 
     } catch (error) {

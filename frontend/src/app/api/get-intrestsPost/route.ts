@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
     try {
+        const { userId } = await auth();
+        if (!userId) {
+            return NextResponse.json(
+                { success: false, message: "Unauthorized" },
+                { status: 401 }
+            );
+        }
+
         const body = await req.json();
         const { postId } = body;
 
@@ -13,9 +22,11 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Check if post exists
+        // Check if post exists and belongs to the requesting user
         const post = await db.post.findUnique({
-            where: { id: postId }
+            where: { 
+                id: postId
+            }
         });
 
         if (!post) {
@@ -25,9 +36,21 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Get all interests for the post with user information
+        if (userId !== post.userId) {
+            return NextResponse.json(
+                { success: false, message: "You don't have permission to view this post's interests" },
+                { status: 403 }
+            );
+        }
+
+        // Get all interests from other users for the post
         const interests = await db.interest.findMany({
-            where: { postId },
+            where: { 
+                postId,
+                NOT: {
+                    userId: userId
+                }
+            },
             include: {
                 user: {
                     select: {

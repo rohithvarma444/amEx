@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import PostGrid, { PostItem } from '@/components/PostGrid';
-import { getMyListings } from '@/lib/dummyData';
 
 export default function MyListingsPage() {
   const [myListings, setMyListings] = useState<PostItem[]>([]);
