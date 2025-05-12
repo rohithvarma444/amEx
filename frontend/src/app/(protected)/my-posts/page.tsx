@@ -133,10 +133,10 @@ export default function MyPosts() {
             return (
               <CardItem
                 key={post.id}
-                href={`/post/${post.id}`}
+                href={`/my-posts/${post.id}`}
                 title={post.title}
                 description={post.description}
-                imageUrl={post.imageUrl?.[0] || '/img1.png'} // Add fallback image
+                imageUrl={post.imageUrl?.[0] || '/img1.png'}
                 price={post.price}
                 priceUnit={post.priceUnit}
                 category={post.category}
