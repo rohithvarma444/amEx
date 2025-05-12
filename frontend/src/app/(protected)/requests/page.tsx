@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import PostGrid, { PostItem } from '@/components/PostGrid';
-import { getAllRequests } from '@/lib/dummyData';
+//import { getAllRequests } from '@/lib/dummyData';
 
 export default function RequestsPage() {
   const [requests, setRequests] = useState<PostItem[]>([]);
