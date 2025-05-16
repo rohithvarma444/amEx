@@ -18,12 +18,7 @@ export async function GET(request: NextRequest) {
         description: true,
         price: true,
         priceUnit: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        category: true,
         createdAt: true,
         user: {
             select: {

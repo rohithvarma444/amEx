@@ -9,17 +9,20 @@ datasource db {
 }
 
 model User {
-  id        String     @id
-  email     String     @unique
-  firstName String
-  lastName  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  upiId     String?
-  deals     Deal[]     @relation("UserDeals")
-  exchanges Exchange[] @relation("ExchangeBuyer")
-  interests Interest[]
-  posts     Post[]     @relation("UserPosts")
+  id                            String     @id
+  email                         String     @unique
+  firstName                     String
+  lastName                      String
+  createdAt                     DateTime   @default(now())
+  updatedAt                     DateTime   @updatedAt
+  upiId                         String?
+  Chat_Chat_ownerIdToUser       Chat[]     @relation("Chat_ownerIdToUser")
+  Chat_Chat_participantIdToUser Chat[]     @relation("Chat_participantIdToUser")
+  deals                         Deal[]     @relation("UserDeals")
+  exchanges                     Exchange[] @relation("ExchangeBuyer")
+  interests                     Interest[]
+  Message                       Message[]
+  posts                         Post[]     @relation("UserPosts")
 }
 
 model Category {
@@ -36,8 +39,8 @@ model Post {
   id          String     @id @default(uuid())
   type        PostType
   title       String
-  caption     String
-  description String
+  caption     String?
+  description String?
   price       Float
   priceUnit   String
   location    String?
@@ -47,6 +50,7 @@ model Post {
   imageUrl    String[]
   categoryId  String
   status      STATUS     @default(ACTIVE)
+  Chat        Chat[]
   deal        Deal?
   interests   Interest[]
   category    Category   @relation(fields: [categoryId], references: [id])
@@ -110,6 +114,33 @@ model OTP {
 
   @@index([code])
   @@index([expiresAt])
+}
+
+model Chat {
+  id                            String    @id
+  postId                        String
+  ownerId                       String
+  participantId                 String
+  createdAt                     DateTime  @default(now())
+  updatedAt                     DateTime
+  User_Chat_ownerIdToUser       User      @relation("Chat_ownerIdToUser", fields: [ownerId], references: [id])
+  User_Chat_participantIdToUser User      @relation("Chat_participantIdToUser", fields: [participantId], references: [id])
+  Post                          Post      @relation(fields: [postId], references: [id])
+  Message                       Message[]
+
+  @@unique([postId, participantId])
+}
+
+model Message {
+  id        String   @id
+  chatId    String
+  senderId  String
+  content   String
+  createdAt DateTime @default(now())
+  Chat      Chat     @relation(fields: [chatId], references: [id])
+  User      User     @relation(fields: [senderId], references: [id])
+
+  @@index([chatId])
 }
 
 enum PostType {

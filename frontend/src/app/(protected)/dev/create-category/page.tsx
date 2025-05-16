@@ -61,8 +61,9 @@ export default function CreateCategory() {
         body: JSON.stringify(categoryData),
       });
 
+      console.log('Response:', response);
       if (!response.ok) {
-        throw new Error('Failed to create category');
+        throw new Error('Failed to create category.');
       }
 
       // Clear form and images

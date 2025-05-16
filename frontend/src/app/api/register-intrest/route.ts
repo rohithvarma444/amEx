@@ -38,6 +38,13 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        if(post.userId === userId){
+            return NextResponse.json(
+                { success: false, message: "You cannot register interest for your own post" },
+                { status: 400 }
+            );
+        }
+
         const interest = await db.interest.create({
             data: {
                 userId,

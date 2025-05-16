@@ -16,7 +16,7 @@ interface Category {
 }
 
 interface FormData {
-  type: PostType | null;
+  type: PostType;
   title: string;
   caption: string;
   description: string;
@@ -49,7 +49,7 @@ const priceUnits = ['minute', 'hour', 'day', 'week', 'month', 'unit', 'kg','item
 function CreatePost() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
-    type: null,
+    type: "listing",
     title: '',
     caption: '',
     description: '',
@@ -70,22 +70,10 @@ function CreatePost() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Check localStorage first
-        const cachedCategories = localStorage.getItem('categories');
-        if (cachedCategories) {
-          setCategories(JSON.parse(cachedCategories));
-          setIsLoadingCategories(false);
-          console.log('Categories from localStorage:', JSON.parse(cachedCategories));
-          return;
-        }
-
-        // If not in localStorage, fetch from API
         const response = await fetch('/api/get-categories');
         const data = await response.json();
         
         if (data.success) {
-          // Store in localStorage
-          localStorage.setItem('categories', JSON.stringify(data.categories));
           setCategories(data.categories);
           console.log('Categories from API:', data.categories);
         }
@@ -97,15 +85,12 @@ function CreatePost() {
     };
 
     fetchCategories();
-    
-    // Add this line to log the current state of categories
-    console.log('Current categories state:', categories);
   }, []);
   
-  // Move this useEffect outside of the other useEffect
-  useEffect(() => {
-    console.log('Categories state updated:', categories);
-  }, [categories]);
+  // Remove this useEffect as it's no longer needed
+  // useEffect(() => {
+  //   console.log('Categories state updated:', categories);
+  // }, [categories]);
 
   // Fix the handleNext function to remove the problematic condition
   const handleNext = () => {
@@ -207,7 +192,7 @@ function CreatePost() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     
     try {
@@ -223,13 +208,13 @@ function CreatePost() {
     
       // Prepare the request payload
       const payload = {
+        type: formData.type?.toUpperCase(),
         title: formData.title,
         caption: formData.caption,
         description: formData.description,
         price: formData.price,
         priceUnit: formData.priceUnit,
-        category: formData.categories[0], // Backend expects a single category
-        categoryId: formData.categories[0], // Add the categoryId to the payload
+        categoryId: formData.categories[0], // Only need categoryId
         imageUrls,
         location: formData.location,
         ...(formData.type === 'request' && { urgency: formData.urgency })
@@ -239,7 +224,7 @@ function CreatePost() {
       console.log('Final form payload:', payload);
     
       // Send to the appropriate endpoint based on type
-      const endpoint = formData.type === 'listing' ? '/api/create-listing' : '/api/create-request';
+      const endpoint = "/api/create-post"
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -247,6 +232,7 @@ function CreatePost() {
       });
     
       const data = await response.json();
+      console.log('Response from server:', data);
     
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create post');

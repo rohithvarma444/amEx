@@ -17,15 +17,12 @@ export async function GET(req: NextRequest) {
             where: { 
                 userId: userId
             },
-            select: {
+            include: {
                 id: true,
                 title: true,
                 description: true,
                 imageUrl: true,
-                type: true,
-                price: true,
-                priceUnit: true,
-                createdAt: true,
+                
                 category: {
                     select: {
                         id: true,

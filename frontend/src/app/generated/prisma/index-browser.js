@@ -190,6 +190,23 @@ exports.Prisma.OTPScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ChatScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  ownerId: 'ownerId',
+  participantId: 'participantId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  chatId: 'chatId',
+  senderId: 'senderId',
+  content: 'content',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -240,7 +257,9 @@ exports.Prisma.ModelName = {
   Interest: 'Interest',
   Deal: 'Deal',
   Exchange: 'Exchange',
-  OTP: 'OTP'
+  OTP: 'OTP',
+  Chat: 'Chat',
+  Message: 'Message'
 };
 
 /**
