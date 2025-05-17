@@ -19,7 +19,6 @@ model User {
   Chat_Chat_ownerIdToUser       Chat[]     @relation("Chat_ownerIdToUser")
   Chat_Chat_participantIdToUser Chat[]     @relation("Chat_participantIdToUser")
   deals                         Deal[]     @relation("UserDeals")
-  exchanges                     Exchange[] @relation("ExchangeBuyer")
   interests                     Interest[]
   Message                       Message[]
   posts                         Post[]     @relation("UserPosts")
@@ -73,47 +72,46 @@ model Interest {
 }
 
 model Deal {
-  id             String     @id @default(uuid())
-  postId         String     @unique
-  selectedUserId String
-  status         DealStatus @default(PENDING)
-  createdAt      DateTime   @default(now())
-  completedAt    DateTime?
-  post           Post       @relation(fields: [postId], references: [id])
-  selectedUser   User       @relation("UserDeals", fields: [selectedUserId], references: [id])
-  exchange       Exchange?
-  otp            OTP?
+  id               String       @id @default(uuid())
+  postId           String
+  selectedUserId   String
+  status           DealStatus   @default(PENDING) // ACTIVE, DECLINED, COMPLETED
+  createdAt        DateTime     @default(now())
+  completedAt      DateTime?
+
+  // OTP Details
+  otpCode          String?
+  otpExpiresAt     DateTime?
+  otpUsed          Boolean      @default(false)
+
+  // Payment Details
+  buyerUpiId       String?
+  amountPaid       Float?
+  paymentStatus    PaymentStatus @default(PENDING)
+  qrCodeUrl        String?
+
+  // Relations
+  post             Post         @relation(fields: [postId], references: [id])
+  selectedUser     User         @relation("UserDeals", fields: [selectedUserId], references: [id])
 
   @@index([selectedUserId])
   @@index([postId])
+  @@index([otpCode])
+  @@unique([postId], name: "OnlyOneDealPerPost") // allows only one deal per post if not filtered
+
+  // For business logic, enforce only one ACTIVE manually via query-level logic
 }
 
-model Exchange {
-  id        String         @id @default(uuid())
-  buyerId   String
-  upiId     String
-  amount    Float
-  status    ExchangeStatus @default(PENDING)
-  qrCodeUrl String?
-  createdAt DateTime       @default(now())
-  dealId    String?        @unique
-  buyer     User           @relation("ExchangeBuyer", fields: [buyerId], references: [id])
-  deal      Deal?          @relation(fields: [dealId], references: [id])
-
-  @@index([buyerId])
+enum DealStatus {
+  PENDING     
+  ACTIVE      
+  DECLINED    
+  COMPLETED   
 }
 
-model OTP {
-  id        String   @id @default(uuid())
-  code      String
-  dealId    String   @unique
-  expiresAt DateTime
-  used      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  deal      Deal     @relation(fields: [dealId], references: [id])
-
-  @@index([code])
-  @@index([expiresAt])
+enum PaymentStatus {
+  PENDING
+  RECEIVED
 }
 
 model Chat {
@@ -148,12 +146,7 @@ enum PostType {
   REQUEST
 }
 
-enum DealStatus {
-  PENDING
-  CONFIRMED
-  COMPLETED
-  CANCELLED
-}
+
 
 enum Urgency {
   LOW

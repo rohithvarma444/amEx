@@ -77,8 +77,14 @@ export async function POST(request: Request) {
       }
     });
 
+    // Return success response with redirect URL
     return NextResponse.json(
-      { success: true, message: 'Post created successfully', post },
+      { 
+        success: true, 
+        message: 'Post created successfully', 
+        post,
+        redirectUrl: '/dashboard' // Add redirect URL for the client to use
+      },
       { status: 201 }
     );
   } catch (error) {

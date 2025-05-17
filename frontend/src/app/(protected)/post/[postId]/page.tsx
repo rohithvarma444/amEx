@@ -8,7 +8,8 @@ import { useUser } from "@clerk/nextjs";
 interface Post {
   id: string;
   title: string;
-  description: string;
+  caption?: string;
+  description?: string;
   price: string;
   priceUnit: string;
   location?: string;
@@ -16,7 +17,7 @@ interface Post {
   category: {
     id: string;
     name: string;
-    description: string;
+    description?: string;
   };
   imageUrl: string[];
   status: string;
@@ -53,7 +54,8 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
 export default function PostPage({ params }: { params: { postId: string } }) {
   const router = useRouter(); 
   const { user } = useUser(); 
-  const { postId } = params;
+  const unwrappedParams = use(params);
+  const { postId } = unwrappedParams;
 
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,9 +73,15 @@ export default function PostPage({ params }: { params: { postId: string } }) {
       setPost(fetchedPost);
       setCurrentImageIndex(0); 
       setIsLoading(false);
+      
+      // Check if the logged-in user is the author of the post
+      if (fetchedPost && user && user.id === fetchedPost.user.id) {
+        // Redirect to my-posts/[postId] if the user is the author
+        router.push(`/my-posts/${postId}`);
+      }
     };
     loadPost();
-  }, [postId]);
+  }, [postId, user, router]);
 
   const handleConfirmInterest = async () => {
     try {

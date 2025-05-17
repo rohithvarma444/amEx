@@ -55,6 +55,27 @@ function AuthDashboard() {
     window.location.href = '/';
   };
 
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Handle keyboard navigation for accessibility
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setIsDropdownOpen(false);
+    }
+  };
+
   if (!isLoaded || loading) {
     return (
       <div className="bg-transparent text-black p-4 flex items-center justify-between">
@@ -118,6 +139,8 @@ function AuthDashboard() {
           <div className="flex space-x-6">
             <Link href="/listings" className="text-black hover:text-gray-600 font-bold">Listings</Link>
             <Link href="/requests" className="text-black hover:text-gray-600 font-bold">Requests</Link>
+            <Link href="/my-posts" className="text-black hover:text-gray-600 font-bold">My Posts</Link>
+            <Link href="/my-activity" className="text-black hover:text-gray-600 font-bold">My Activity</Link>
           </div>
           <div className="relative flex-1 mx-4">
             <input 
@@ -145,31 +168,48 @@ function AuthDashboard() {
           <div 
             className="relative" 
             ref={dropdownRef}
-            onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
+            onKeyDown={handleKeyDown}
           >
-            <div className="flex items-center space-x-2 cursor-pointer">
+            <button
+              aria-haspopup="true"
+              aria-expanded={isDropdownOpen}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full"
+            >
               <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-white font-medium">
                 {firstInitial}
               </div>
-            </div>
+            </button>
             
             {isDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white text-black rounded-md shadow-lg z-10">
+              <div 
+                className="absolute right-0 top-full mt-2 w-64 bg-white text-black rounded-md shadow-lg z-10"
+                role="menu"
+                aria-orientation="vertical"
+              >
                 <div className="p-3 border-b border-gray-200">
                   <p className="font-bold">{fullName}</p>
                   <p className="text-sm text-gray-500 truncate" title={email}>{email}</p>
                 </div>
                 <div className="p-2">
-                  <Link href="/profile" className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left font-medium">
+                  <Link 
+                    href="/profile" 
+                    className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left font-medium"
+                    role="menuitem"
+                  >
                     Profile
                   </Link>
-                  <Link href="/settings" className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left font-medium">
+                  <Link 
+                    href="/settings" 
+                    className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left font-medium"
+                    role="menuitem"
+                  >
                     Settings
                   </Link>
                   <button 
                     onClick={handleSignOut}
                     className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left text-red-600 font-medium"
+                    role="menuitem"
                   >
                     Sign Out
                   </button>

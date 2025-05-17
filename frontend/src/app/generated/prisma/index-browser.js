@@ -167,27 +167,14 @@ exports.Prisma.DealScalarFieldEnum = {
   selectedUserId: 'selectedUserId',
   status: 'status',
   createdAt: 'createdAt',
-  completedAt: 'completedAt'
-};
-
-exports.Prisma.ExchangeScalarFieldEnum = {
-  id: 'id',
-  buyerId: 'buyerId',
-  upiId: 'upiId',
-  amount: 'amount',
-  status: 'status',
-  qrCodeUrl: 'qrCodeUrl',
-  createdAt: 'createdAt',
-  dealId: 'dealId'
-};
-
-exports.Prisma.OTPScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  dealId: 'dealId',
-  expiresAt: 'expiresAt',
-  used: 'used',
-  createdAt: 'createdAt'
+  completedAt: 'completedAt',
+  otpCode: 'otpCode',
+  otpExpiresAt: 'otpExpiresAt',
+  otpUsed: 'otpUsed',
+  buyerUpiId: 'buyerUpiId',
+  amountPaid: 'amountPaid',
+  paymentStatus: 'paymentStatus',
+  qrCodeUrl: 'qrCodeUrl'
 };
 
 exports.Prisma.ChatScalarFieldEnum = {
@@ -240,14 +227,14 @@ exports.STATUS = exports.$Enums.STATUS = {
 
 exports.DealStatus = exports.$Enums.DealStatus = {
   PENDING: 'PENDING',
-  CONFIRMED: 'CONFIRMED',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
+  ACTIVE: 'ACTIVE',
+  DECLINED: 'DECLINED',
+  COMPLETED: 'COMPLETED'
 };
 
-exports.ExchangeStatus = exports.$Enums.ExchangeStatus = {
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
   PENDING: 'PENDING',
-  COMPLETED: 'COMPLETED'
+  RECEIVED: 'RECEIVED'
 };
 
 exports.Prisma.ModelName = {
@@ -256,8 +243,6 @@ exports.Prisma.ModelName = {
   Post: 'Post',
   Interest: 'Interest',
   Deal: 'Deal',
-  Exchange: 'Exchange',
-  OTP: 'OTP',
   Chat: 'Chat',
   Message: 'Message'
 };

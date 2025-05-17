@@ -52,6 +52,7 @@ export default function MyPosts() {
         setIsLoading(true);
         setError(null);
         const response = await fetch('/api/get-myPosts');
+        console.log('API Response:', response);
         const data = await response.json();
 
         if (!data.success) {
@@ -59,11 +60,21 @@ export default function MyPosts() {
         }
 
         console.log('API Response:', data);
-        console.log('Listings:', data.data.listings);
-        console.log('Requests:', data.data.requests);
-
-        setPosts(data.data);
+        
+        // Process the array of posts into listings and requests
+        const allPosts = Array.isArray(data.data) ? data.data : [];
+        const listings = allPosts.filter(post => post.type === 'LISTING');
+        const requests = allPosts.filter(post => post.type === 'REQUEST');
+        
+        console.log('Processed Listings:', listings);
+        console.log('Processed Requests:', requests);
+        
+        setPosts({
+          listings,
+          requests
+        });
       } catch (err) {
+        console.error('Error fetching posts:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch posts');
       } finally {
         setIsLoading(false);
@@ -73,7 +84,7 @@ export default function MyPosts() {
     fetchPosts();
   }, []);
 
-  const activePosts = activeTab === 'LISTING' ? posts.listings : posts.requests;
+  const activePosts = activeTab === 'LISTING' ? posts?.listings || [] : posts?.requests || [];
   
   console.log('Active Posts:', activePosts);
 
@@ -119,7 +130,7 @@ export default function MyPosts() {
         </div>
       </div>
 
-      {activePosts.length === 0 ? (
+      {(activePosts && activePosts.length === 0) ? (
         <div className="text-center py-12">
           <p className="text-gray-500">
             No {activeTab.toLowerCase()}s found. Create your first {activeTab.toLowerCase()}!
