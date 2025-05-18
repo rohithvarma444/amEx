@@ -50,7 +50,6 @@ export default function MyActivity() {
   const [upiId, setUpiId] = useState('');
   const [isEditingUpi, setIsEditingUpi] = useState(false);
   const [qrCode, setQrCode] = useState('');
-  const [isSliding, setIsSliding] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -137,8 +136,10 @@ export default function MyActivity() {
       alert('Failed to generate QR code');
     }
   };
-  
-  const handlePaymentComplete = async (deal: Deal) => {
+
+
+  console.log(selectedDeal);
+  const handleConfirmPayment = async (deal: Deal) => {
     try {
       const response = await fetch('/api/complete-payment', {
         method: 'POST',
@@ -150,8 +151,10 @@ export default function MyActivity() {
   
       if (data.success) {
         setShowDealDialog(false);
-        // Refresh deals
-        fetchDeals();
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
+      } else {
+        alert(data.message || 'Failed to complete payment');
       }
     } catch (error) {
       console.error('Error completing payment:', error);
@@ -178,27 +181,22 @@ export default function MyActivity() {
     );
   }
 
-  console.log(selectedDeal?.post.userId);
-  console.log(user?.id);
-
-  console.log(selectedDeal);
-
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">My Activity</h1>
           
-          {/* Slider Toggle Button */}
-          <div className="relative inline-flex items-center p-1 bg-gray-100 rounded-full">
+          {/* Regular Tab Buttons */}
+          <div className="flex space-x-2">
             <button
-              className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${activeTab === 'myDeals' ? 'bg-black text-white' : 'text-gray-700'}`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${activeTab === 'myDeals' ? 'bg-black text-white' : 'bg-gray-100 text-gray-700'}`}
               onClick={() => setActiveTab('myDeals')}
             >
               My Deals
             </button>
             <button
-              className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 ${activeTab === 'selectedForDeals' ? 'bg-black text-white' : 'text-gray-700'}`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${activeTab === 'selectedForDeals' ? 'bg-black text-white' : 'bg-gray-100 text-gray-700'}`}
               onClick={() => setActiveTab('selectedForDeals')}
             >
               Selected For
@@ -348,7 +346,7 @@ export default function MyActivity() {
                     )}
                     {selectedDeal.otpUsed && (
                       <span className="inline-block px-2 py-1 bg-blue-500 text-white text-xs rounded-full">
-                        OTP Used
+                        OTP Verified
                       </span>
                     )}
                   </div>
@@ -415,88 +413,56 @@ export default function MyActivity() {
               {/* UPI Payment section - only show when OTP has been used */}
               {selectedDeal.selectedUser.id === user?.id && selectedDeal.otpUsed && selectedDeal.paymentStatus === 'PENDING' && (
                 <div className="space-y-4 mb-6">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={upiId || selectedDeal.selectedUser.upiId || ''}
-                      onChange={(e) => setUpiId(e.target.value)}
-                      disabled={!isEditingUpi}
-                      placeholder="Enter UPI ID"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-                    />
-                    <button
-                      onClick={() => setIsEditingUpi(!isEditingUpi)}
-                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
-                      {isEditingUpi ? 'Save' : 'Edit'}
-                    </button>
-                  </div>
-          
-                  {upiId && (
-                    <button
-                      onClick={() => generatePaymentQR(selectedDeal)}
-                      className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
-                    >
-                      Generate QR Code
-                    </button>
-                  )}
-          
-                  {qrCode && (
-                    <div className="space-y-4">
-                      <div className="relative h-64 w-64 mx-auto">
-                        <Image
-                          src={qrCode}
-                          alt="Payment QR Code"
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-          
-                      <div
-                        className="relative w-full h-14 bg-gray-200 rounded-full overflow-hidden cursor-pointer"
-                        onMouseDown={() => setIsSliding(true)}
-                        onMouseUp={() => {
-                          setIsSliding(false);
-                          if (sliderRef.current && sliderRef.current.offsetLeft > 200) {
-                            handlePaymentComplete(selectedDeal);
-                          }
-                        }}
-                        onMouseLeave={() => setIsSliding(false)}
-                        onTouchStart={() => setIsSliding(true)}
-                        onTouchEnd={() => {
-                          setIsSliding(false);
-                          if (sliderRef.current && sliderRef.current.offsetLeft > 200) {
-                            handlePaymentComplete(selectedDeal);
-                          }
-                        }}
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm font-medium mb-4">Payment Details</p>
+                    <div className="flex items-center gap-2 mb-4">
+                      <input
+                        type="text"
+                        value={upiId || selectedDeal.selectedUser.upiId || ''}
+                        onChange={(e) => setUpiId(e.target.value)}
+                        disabled={!isEditingUpi}
+                        placeholder="Enter UPI ID"
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                      />
+                      <button
+                        onClick={() => setIsEditingUpi(!isEditingUpi)}
+                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                       >
-                        <div
-                          ref={sliderRef}
-                          className={`absolute left-0 h-full w-14 bg-green-500 rounded-full flex items-center justify-center transition-transform ${isSliding ? '' : 'transform translate-x-0'}`}
-                          style={{
-                            transform: isSliding ? `translateX(${Math.min(sliderRef.current?.offsetLeft || 0, 250)}px)` : 'translateX(0)'
-                          }}
-                        >
-                          <svg
-                            className="w-6 h-6 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M14 5l7 7m0 0l-7 7m7-7H3"
-                            />
-                          </svg>
-                        </div>
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <span className="text-gray-600">Slide to Complete Payment</span>
-                        </div>
-                      </div>
+                        {isEditingUpi ? 'Save' : 'Edit'}
+                      </button>
                     </div>
-                  )}
+              
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => generatePaymentQR(selectedDeal)}
+                        className="flex-1 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                      >
+                        Generate QR Code
+                      </button>
+                      <button
+                        onClick={() => handleConfirmPayment(selectedDeal)}
+                        className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      >
+                        Confirm Payment Received
+                      </button>
+                    </div>
+              
+                    {qrCode && (
+                      <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+                        <div className="relative h-64 w-64 mx-auto">
+                          <Image
+                            src={qrCode}
+                            alt="Payment QR Code"
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                        <p className="text-center text-sm text-gray-500 mt-2">
+                          Scan this QR code to pay ₹{selectedDeal.post.price}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
               
