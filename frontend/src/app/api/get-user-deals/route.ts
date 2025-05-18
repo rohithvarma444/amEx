@@ -28,6 +28,9 @@ export async function GET(req: NextRequest) {
         status: true,
         createdAt: true,
         completedAt: true,
+        otpCode: true,      
+        otpExpiresAt: true, 
+        otpUsed: true,      
         post: {
           select: {
             id: true,
@@ -40,6 +43,16 @@ export async function GET(req: NextRequest) {
             category: {
               select: {
                 name: true,
+              },
+            },
+            userId: true,
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                upiId: true,
               },
             },
           },
@@ -71,6 +84,9 @@ export async function GET(req: NextRequest) {
         status: true,
         createdAt: true,
         completedAt: true,
+        otpUsed: true,
+        paymentStatus: true,
+        // Do not include OTP fields for selectedUser
         post: {
           select: {
             id: true,
@@ -85,6 +101,7 @@ export async function GET(req: NextRequest) {
                 name: true,
               },
             },
+            userId: true,
           },
         },
         selectedUser: {
@@ -93,6 +110,7 @@ export async function GET(req: NextRequest) {
             firstName: true,
             lastName: true,
             email: true,
+            upiId: true,
           },
         },
       },

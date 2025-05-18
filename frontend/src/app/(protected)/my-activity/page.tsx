@@ -1,15 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
+import generateQR from "@omkarbhosale/upiqr";
 
+// Update the Deal interface to include userId in the post object
 interface Deal {
   id: string;
   status: 'PENDING' | 'ACTIVE' | 'DECLINED' | 'COMPLETED';
   createdAt: string;
   completedAt?: string;
+  otpCode?: string;
+  otpUsed: boolean;
+  paymentStatus: 'PENDING' | 'RECEIVED';
   post: {
     id: string;
     title: string;
@@ -18,6 +23,7 @@ interface Deal {
     priceUnit: string;
     imageUrl: string[];
     type: 'LISTING' | 'REQUEST';
+    userId: string;  // Add this field
     category: {
       name: string;
     };
@@ -27,6 +33,7 @@ interface Deal {
     firstName: string;
     lastName: string;
     email: string;
+    upiId?: string
   };
 }
 
@@ -39,47 +46,117 @@ export default function MyActivity() {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [showDealDialog, setShowDealDialog] = useState(false);
   const [activeTab, setActiveTab] = useState<'myDeals' | 'selectedForDeals'>('myDeals');
+  const [otpInput, setOtpInput] = useState('');
+  const [upiId, setUpiId] = useState('');
+  const [isEditingUpi, setIsEditingUpi] = useState(false);
+  const [qrCode, setQrCode] = useState('');
+  const [isSliding, setIsSliding] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isLoaded || !user) return;
     
-    const fetchDeals = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/get-user-deals');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (!data.success) {
-          throw new Error(data.message || 'Failed to fetch deals');
-        }
-        
-        setMyDeals(data.data.myDeals || []);
-        setSelectedForDeals(data.data.selectedForDeals || []);
-      } catch (err) {
-        console.error('Error fetching deals:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch deals');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
     fetchDeals();
   }, [user, isLoaded]);
+
+  const fetchDeals = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/get-user-deals');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.message || 'Failed to fetch deals');
+      }
+      
+      setMyDeals(data.data.myDeals || []);
+      setSelectedForDeals(data.data.selectedForDeals || []);
+    } catch (err) {
+      console.error('Error fetching deals:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch deals');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOpenDealDialog = (deal: Deal) => {
     setSelectedDeal(deal);
     setShowDealDialog(true);
+    // Load user's UPI ID if available
+    if (user?.publicMetadata?.upiId) {
+      setUpiId(user.publicMetadata.upiId as string);
+    }
   };
 
   const handleStartChat = (deal: Deal) => {
     // Navigate to chat with the other user
     const chatPartnerId = deal.selectedUser.id;
     window.location.href = `/chat/${deal.post.id}?partner=${chatPartnerId}`;
+  };
+
+  const handleVerifyOtp = async (deal: Deal) => {
+    try {
+        console.log('OTP:', otpInput);
+        console.log(deal.id); // Log the OTP input
+      const response = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dealId: deal.id, otpCode: otpInput })
+      });
+  
+      const data = await response.json();
+      console.log(data);
+  
+      if (data.success) {
+        setOtpInput('');
+        // Refresh deals to get updated status
+        fetchDeals();
+      } else {
+        alert('Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      alert('Failed to verify OTP');
+    }
+  };
+  
+  const generatePaymentQR = async (deal: Deal) => {
+    try {
+      const qrData = await generateQR({
+        UPI_ID: upiId || selectedDeal?.selectedUser.upiId || '',
+        AMOUNT: deal.post.price
+      });
+      setQrCode(qrData);
+    } catch (error) {
+      console.error('Error generating QR:', error);
+      alert('Failed to generate QR code');
+    }
+  };
+  
+  const handlePaymentComplete = async (deal: Deal) => {
+    try {
+      const response = await fetch('/api/complete-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dealId: deal.id })
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        setShowDealDialog(false);
+        // Refresh deals
+        fetchDeals();
+      }
+    } catch (error) {
+      console.error('Error completing payment:', error);
+      alert('Failed to complete payment');
+    }
   };
 
   if (isLoading) {
@@ -100,6 +177,11 @@ export default function MyActivity() {
       </div>
     );
   }
+
+  console.log(selectedDeal?.post.userId);
+  console.log(user?.id);
+
+  console.log(selectedDeal);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -147,8 +229,20 @@ export default function MyActivity() {
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-full">
-                        {deal.status}
+                      <div className="absolute top-2 right-2 flex gap-2">
+                        <span className="bg-black text-white text-xs px-2 py-1 rounded-full">
+                          {deal.status}
+                        </span>
+                        {deal.otpUsed && (
+                          <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                            OTP Verified
+                          </span>
+                        )}
+                        {deal.paymentStatus === 'RECEIVED' && (
+                          <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                            Paid
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="p-4">
@@ -239,13 +333,24 @@ export default function MyActivity() {
                 </div>
                 
                 <div>
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-500 mb-1">Status</p>
-                    <p className="font-medium">
-                      <span className="inline-block px-2 py-1 bg-black text-white text-xs rounded-full">
-                        {selectedDeal.status}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <span className="inline-block px-2 py-1 bg-black text-white text-xs rounded-full">
+                      {selectedDeal.status}
+                    </span>
+                    {selectedDeal.paymentStatus && (
+                      <span className={`inline-block px-2 py-1 text-xs rounded-full ${
+                        selectedDeal.paymentStatus === 'RECEIVED' 
+                          ? 'bg-green-500 text-white'
+                          : 'bg-yellow-500 text-white'
+                      }`}>
+                        Payment: {selectedDeal.paymentStatus}
                       </span>
-                    </p>
+                    )}
+                    {selectedDeal.otpUsed && (
+                      <span className="inline-block px-2 py-1 bg-blue-500 text-white text-xs rounded-full">
+                        OTP Used
+                      </span>
+                    )}
                   </div>
                   
                   <div className="mb-4">
@@ -276,6 +381,125 @@ export default function MyActivity() {
                 </div>
               )}
               
+              {selectedDeal.post.userId === user?.id && selectedDeal.otpCode && !selectedDeal.otpUsed && (
+                <div className="mb-6 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
+                  <p className="text-sm font-medium mb-2">Share this OTP with the selected user to complete the deal:</p>
+                  <p className="text-2xl font-mono bg-gray-100 p-3 rounded text-center mb-2">{selectedDeal.otpCode}</p>
+                  <p className="text-sm text-gray-500">
+                    Status: <span className="font-medium text-blue-600">Waiting for verification</span>
+                  </p>
+                </div>
+              )}
+              
+              {/* Show OTP input for selected users */}
+              {selectedDeal.selectedUser.id === user?.id && !selectedDeal.otpUsed && (
+                <div className="mb-6">
+                  <div className="flex gap-2 mb-4">
+                    <input
+                      type="text"
+                      value={otpInput}
+                      onChange={(e) => setOtpInput(e.target.value)}
+                      placeholder="Enter OTP"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <button
+                      onClick={() => handleVerifyOtp(selectedDeal)}
+                      className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                    >
+                      Verify OTP
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* UPI Payment section - only show when OTP has been used */}
+              {selectedDeal.selectedUser.id === user?.id && selectedDeal.otpUsed && selectedDeal.paymentStatus === 'PENDING' && (
+                <div className="space-y-4 mb-6">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={upiId || selectedDeal.selectedUser.upiId || ''}
+                      onChange={(e) => setUpiId(e.target.value)}
+                      disabled={!isEditingUpi}
+                      placeholder="Enter UPI ID"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                    <button
+                      onClick={() => setIsEditingUpi(!isEditingUpi)}
+                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    >
+                      {isEditingUpi ? 'Save' : 'Edit'}
+                    </button>
+                  </div>
+          
+                  {upiId && (
+                    <button
+                      onClick={() => generatePaymentQR(selectedDeal)}
+                      className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+                    >
+                      Generate QR Code
+                    </button>
+                  )}
+          
+                  {qrCode && (
+                    <div className="space-y-4">
+                      <div className="relative h-64 w-64 mx-auto">
+                        <Image
+                          src={qrCode}
+                          alt="Payment QR Code"
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+          
+                      <div
+                        className="relative w-full h-14 bg-gray-200 rounded-full overflow-hidden cursor-pointer"
+                        onMouseDown={() => setIsSliding(true)}
+                        onMouseUp={() => {
+                          setIsSliding(false);
+                          if (sliderRef.current && sliderRef.current.offsetLeft > 200) {
+                            handlePaymentComplete(selectedDeal);
+                          }
+                        }}
+                        onMouseLeave={() => setIsSliding(false)}
+                        onTouchStart={() => setIsSliding(true)}
+                        onTouchEnd={() => {
+                          setIsSliding(false);
+                          if (sliderRef.current && sliderRef.current.offsetLeft > 200) {
+                            handlePaymentComplete(selectedDeal);
+                          }
+                        }}
+                      >
+                        <div
+                          ref={sliderRef}
+                          className={`absolute left-0 h-full w-14 bg-green-500 rounded-full flex items-center justify-center transition-transform ${isSliding ? '' : 'transform translate-x-0'}`}
+                          style={{
+                            transform: isSliding ? `translateX(${Math.min(sliderRef.current?.offsetLeft || 0, 250)}px)` : 'translateX(0)'
+                          }}
+                        >
+                          <svg
+                            className="w-6 h-6 text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <span className="text-gray-600">Slide to Complete Payment</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              
               <div className="flex justify-end space-x-4">
                 <button
                   onClick={() => setShowDealDialog(false)}
@@ -287,7 +511,7 @@ export default function MyActivity() {
                   onClick={() => handleStartChat(selectedDeal)}
                   className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
                 >
-                  Chat with {selectedDeal.selectedUser.id === user?.id ? 'Post Owner' : 'User'}
+                  Chat with {selectedDeal.post.userId === user?.id ? 'Selected User' : 'Post Owner'}
                 </button>
               </div>
             </div>
