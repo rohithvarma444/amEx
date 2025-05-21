@@ -1,161 +1,106 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
+import PostGrid, { PostItem } from '@/components/PostGrid';
 
-interface Category {
-  id: string;
-  name: string;
-  icon: string;
-  href: string;
-}
+export default function CategoryPage() {
+  const rawParams = useParams();
+  const searchParams = useSearchParams();
 
-const categories: Category[] = [
-  { id: '1', name: 'Food', icon: '/img1.png', href: '/categories/food' },
-  { id: '2', name: 'Errands', icon: '/img2.png', href: '/categories/errands' },
-  { id: '3', name: 'Electronics', icon: '/img3.png', href: '/categories/electronics' },
-  { id: '4', name: 'Study Aids', icon: '/img4.png', href: '/categories/study-aids' },
-  { id: '5', name: 'Mutual Benefit', icon: '/img5.jpeg', href: '/categories/mutual-benefit' },
-  { id: '6', name: 'Skills', icon: '/img6.jpg', href: '/categories/skills' },
-  { id: '7', name: 'Travel', icon: '/img7.jpg', href: '/categories/travel' },
-  { id: '8', name: 'Hostel', icon: '/img1.png', href: '/categories/hostel' },
-  { id: '9', name: 'Study', icon: '/img2.png', href: '/categories/study' },
-];
+  // Safely extract the dynamic [category] param
+  const categoryName = Array.isArray(rawParams.category)
+    ? rawParams.category[0]
+    : rawParams.category;
 
-export default function CategoriesSlider() {
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(true);
+  const categoryId = searchParams.get('id');
 
-  const scrollLeft = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-    }
-  };
-
-  const checkScrollPosition = () => {
-    if (sliderRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-      setShowLeftArrow(scrollLeft > 0);
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
+  const [posts, setPosts] = useState<PostItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [viewType, setViewType] = useState<'listings' | 'requests'>('listings');
 
   useEffect(() => {
-    const slider = sliderRef.current;
-    if (slider) {
-      slider.addEventListener('scroll', checkScrollPosition);
-      // Initial check
-      checkScrollPosition();
-      return () => slider.removeEventListener('scroll', checkScrollPosition);
+    const fetchCategoryPosts = async () => {
+      if (!categoryId) return;
+
+      setIsLoading(true);
+      try {
+        const res = await fetch(
+          viewType === 'listings' ? '/api/get-listings' : '/api/get-requests'
+        );
+        const data = await res.json();
+        console.log("Raw data from API:", JSON.stringify(data, null, 2));
+        const allPosts: PostItem[] = (data?.listings || data?.requests || []).map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          description: post.description,
+          price: post.price.toString(),
+          category: post.category.id, // flattening here
+          tags: [],
+          imageUrls: post.imageUrl || [],
+          author: {
+            name: `${post.user.firstName} ${post.user.lastName}`,
+          },
+          authorId: post.user.id,
+          type: viewType === "listings" ? "listing" : "request",
+          createdAt: post.createdAt,
+        }));
+
+        console.log("Example post:", allPosts);
+
+        // Filter posts using only categoryId (no need to match name too)
+        const filteredPosts = allPosts.filter(
+          (post) => post.category === categoryId
+        );
+
+        setPosts(filteredPosts);
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+        setPosts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (categoryId) {
+      fetchCategoryPosts();
     }
-  }, []);
+  }, [categoryId, viewType]);
+
+  const toggleViewType = () => {
+    setViewType((prev) => (prev === 'listings' ? 'requests' : 'listings'));
+  };
+  
+  console.log("categoryId:", categoryId, "categoryName:", categoryName);
+
+  if (!categoryName || !categoryId) {
+    return <div className="text-center py-12">Category not found</div>;
+  }
+ console.log("control reached here"); 
+  console.log(posts);
 
   return (
-    <div className="w-full px-4 py-6">
-      <div className="flex items-center mb-4 ml-2">
-        <h2 className="text-xl font-bold">Explore Categories</h2>
-        <div className="ml-2">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 pt-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800 capitalize">
+            {categoryName} {viewType === 'listings' ? 'Listings' : 'Requests'}
+          </h1>
+          <button
+            onClick={toggleViewType}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition"
           >
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
+            Switch to {viewType === 'listings' ? 'Requests' : 'Listings'}
+          </button>
         </div>
       </div>
 
-      <div className="relative">
-        {showLeftArrow && (
-          <button 
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2"
-            aria-label="Scroll left"
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-        )}
-
-        <div 
-          ref={sliderRef}
-          className="flex overflow-x-auto scrollbar-hide gap-6 py-4 px-2 w-full"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {categories.map((category) => (
-            <Link 
-              key={category.id} 
-              href={category.href}
-              className="flex flex-col items-center flex-shrink-0"
-            >
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 mb-2">
-                <Image 
-                  src={category.icon} 
-                  alt={category.name}
-                  width={96}
-                  height={96}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              <span className="text-sm font-medium text-center">{category.name}</span>
-            </Link>
-          ))}
-        </div>
-
-        {showRightArrow && (
-          <button 
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2"
-            aria-label="Scroll right"
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        )}
-      </div>
-
-      <style jsx>{`
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+      <PostGrid
+        posts={posts}
+        title={`${categoryName} ${viewType === 'listings' ? 'Listings' : 'Requests'}`}
+        emptyMessage={`No ${viewType} found in this category.`}
+        isLoading={isLoading}
+      />
     </div>
   );
 }

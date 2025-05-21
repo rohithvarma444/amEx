@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Content } from 'next/font/google';
 
 const TestimonialsSection = () => {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -21,6 +22,10 @@ const TestimonialsSection = () => {
     {
       name: "Haridev A V",
       content : "Bought a scooty through this website. Now I can leave hostel at 8:55 without facing any consequences. amEx for the win."
+    },
+    {
+      name : "Sidharth Mohan",
+      content : "The experience is peak. I love the ui"
     }
   ];
 

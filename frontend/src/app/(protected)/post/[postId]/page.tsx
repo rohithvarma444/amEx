@@ -54,8 +54,8 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
 export default function PostPage({ params }: { params: { postId: string } }) {
   const router = useRouter(); 
   const { user } = useUser(); 
-  const unwrappedParams = use(params);
-  const { postId } = unwrappedParams;
+  //const unwrappedParams = use(params);
+  const { postId } = params;
 
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
