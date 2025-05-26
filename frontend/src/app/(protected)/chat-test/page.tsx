@@ -12,8 +12,8 @@ export default function ChatTestPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-    "postId" : "884c1816-f1be-4272-91bb-f4a93278a18c" , 
-    "participantId" : "user_2xBLWgsnhtDsHo7q1VS4oJyBLRJ" // replace with real current user id
+    "postId" : "f2999e20-56c1-4211-bedd-b1918740eb62" , 
+    "participantId" : "user_2xOo5hdTFfEkOgENKo1p0k2wXK2" // replace with real current user id
       }),
     });
 
@@ -22,6 +22,7 @@ export default function ChatTestPage() {
 
     if (res.ok) {
       alert(`Chat created/found! id = ${data.chatId}`);
+      alert(JSON.stringify(data, null, 2));
       router.push(`/chat/${data.chatId}`); // optional redirect
     } else {
       alert(`Error: ${data.error || res.statusText}`);

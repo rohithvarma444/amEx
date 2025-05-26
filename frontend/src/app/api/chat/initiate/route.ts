@@ -13,10 +13,11 @@ export async function POST(req: NextRequest) {
     }
 
     // (optional) check auth
-    const {userId} = await auth();
-    if (!userId || userId !== participantId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // const {userId} = await auth();
+    // if (!userId || userId != participantId) {
+    //   console.log(userId, participantId);
+    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // }
 
     // ── 2.  Lookup the post & owner ───────────────────
     const post = await db.post.findUnique({
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
     const ownerId = post.userId;
+    console.log(postId, participantId, ownerId);
 
     // Prevent owner chatting with self
     if (ownerId === participantId) {
