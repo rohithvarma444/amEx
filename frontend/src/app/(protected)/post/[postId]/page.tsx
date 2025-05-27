@@ -54,9 +54,8 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
 export default function PostPage({ params }: { params: { postId: string } }) {
   const router = useRouter(); 
   const { user } = useUser(); 
-  const unwrappedParams = use(params);
-  const { postId } = unwrappedParams;
-
+  // alert(JSON.stringify(user));
+  const { postId } = params;
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showConfirmInterestModal, setShowConfirmInterestModal] = useState(false);
@@ -175,12 +174,42 @@ export default function PostPage({ params }: { params: { postId: string } }) {
             </div>
 
             {!isAuthor && (
+              <div className='space-y-3'>
               <button
                 onClick={() => setShowConfirmInterestModal(true)}
                 className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-900 transition-colors"
               >
                 I'm interested
               </button>
+              <button
+              onClick={async () => {
+                try {
+                  const res = await fetch("/api/chat/initiate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      postId,
+                      participantId: user?.id, // seller's ID
+                    }),
+                  });
+
+                  const data = await res.json();
+
+                  if (res.ok) {
+                    router.push(`/chat/${data.chatId}`);
+                  } else {
+                    alert(`Error: ${data.error || res.statusText}`);
+                  }
+                } catch (error) {
+                  console.error("Chat error:", error);
+                  alert("Something went wrong starting chat");
+                }
+              }}
+              className="w-full bg-white border border-black text-black py-3 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              Message Seller
+            </button>
+            </div>
             )}
           </div>
         </div>

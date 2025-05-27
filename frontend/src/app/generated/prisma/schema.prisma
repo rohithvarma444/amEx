@@ -9,19 +9,20 @@ datasource db {
 }
 
 model User {
-  id                            String     @id
-  email                         String     @unique
-  firstName                     String
-  lastName                      String
-  createdAt                     DateTime   @default(now())
-  updatedAt                     DateTime   @updatedAt
-  upiId                         String?
-  Chat_Chat_ownerIdToUser       Chat[]     @relation("Chat_ownerIdToUser")
-  Chat_Chat_participantIdToUser Chat[]     @relation("Chat_participantIdToUser")
-  deals                         Deal[]     @relation("UserDeals")
-  interests                     Interest[]
-  Message                       Message[]
-  posts                         Post[]     @relation("UserPosts")
+  id                String     @id
+  email             String     @unique
+  firstName         String
+  lastName          String
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  upiId             String?
+  deals             Deal[]     @relation("UserDeals")
+  // exchanges Exchange[] @relation("ExchangeBuyer")
+  interests         Interest[]
+  posts             Post[]     @relation("UserPosts")
+  messagesSent      Message[]  @relation("UserMessages")
+  chatsOwned        Chat[]     @relation("ChatOwner")
+  chatsParticipated Chat[]     @relation("ChatParticipant")
 }
 
 model Category {
@@ -38,8 +39,8 @@ model Post {
   id          String     @id @default(uuid())
   type        PostType
   title       String
-  caption     String?
-  description String?
+  caption     String
+  description String
   price       Float
   priceUnit   String
   location    String?
@@ -49,11 +50,11 @@ model Post {
   imageUrl    String[]
   categoryId  String
   status      STATUS     @default(ACTIVE)
-  Chat        Chat[]
   deal        Deal?
   interests   Interest[]
   category    Category   @relation(fields: [categoryId], references: [id])
   user        User       @relation("UserPosts", fields: [userId], references: [id])
+  chats       Chat[]
 
   @@index([userId])
   @@index([categoryId])
@@ -102,41 +103,59 @@ model Deal {
   @@index([otpCode])
 }
 
-enum DealStatus {
-  PENDING
-  ACTIVE
-  DECLINED
-  COMPLETED
-}
+// model Exchange {
+//   id        String         @id @default(uuid())
+//   buyerId   String
+//   upiId     String
+//   amount    Float
+//   status    ExchangeStatus @default(PENDING)
+//   qrCodeUrl String?
+//   createdAt DateTime       @default(now())
+//   dealId    String?        @unique
+//   buyer     User           @relation("ExchangeBuyer", fields: [buyerId], references: [id])
+//   deal      Deal?          @relation(fields: [dealId], references: [id])
 
-enum PaymentStatus {
-  PENDING
-  RECEIVED
-}
+//   @@index([buyerId])
+// }
+
+// model OTP {
+//   id        String   @id @default(uuid())
+//   code      String
+//   dealId    String   @unique
+//   expiresAt DateTime
+//   used      Boolean  @default(false)
+//   createdAt DateTime @default(now())
+//   deal      Deal     @relation(fields: [dealId], references: [id])
+
+//   @@index([code])
+//   @@index([expiresAt])
+// }
 
 model Chat {
-  id                            String    @id
-  postId                        String
-  ownerId                       String
-  participantId                 String
-  createdAt                     DateTime  @default(now())
-  updatedAt                     DateTime
-  User_Chat_ownerIdToUser       User      @relation("Chat_ownerIdToUser", fields: [ownerId], references: [id])
-  User_Chat_participantIdToUser User      @relation("Chat_participantIdToUser", fields: [participantId], references: [id])
-  Post                          Post      @relation(fields: [postId], references: [id])
-  Message                       Message[]
+  id            String    @id @default(uuid())
+  postId        String
+  ownerId       String
+  participantId String // interested user (not the owner)
+  messages      Message[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  @@unique([postId, participantId])
+  post        Post @relation(fields: [postId], references: [id])
+  owner       User @relation("ChatOwner", fields: [ownerId], references: [id])
+  participant User @relation("ChatParticipant", fields: [participantId], references: [id])
+
+  @@unique([postId, participantId]) // ensures one chat per user-post combo
 }
 
 model Message {
-  id        String   @id
+  id        String   @id @default(uuid())
   chatId    String
   senderId  String
   content   String
   createdAt DateTime @default(now())
-  Chat      Chat     @relation(fields: [chatId], references: [id])
-  User      User     @relation(fields: [senderId], references: [id])
+
+  chat   Chat @relation(fields: [chatId], references: [id])
+  sender User @relation("UserMessages", fields: [senderId], references: [id])
 
   @@index([chatId])
 }
@@ -144,6 +163,13 @@ model Message {
 enum PostType {
   LISTING
   REQUEST
+}
+
+enum DealStatus {
+  PENDING
+  ACTIVE
+  DECLINED
+  COMPLETED
 }
 
 enum Urgency {
@@ -161,4 +187,9 @@ enum STATUS {
   ACTIVE
   DELETED
   FULLFILLED
+}
+
+enum PaymentStatus {
+  PENDING
+  RECEIVED
 }

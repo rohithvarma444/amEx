@@ -53,7 +53,15 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  * Enums
  */
 export namespace $Enums {
-  export const DealStatus: {
+  export const PostType: {
+  LISTING: 'LISTING',
+  REQUEST: 'REQUEST'
+};
+
+export type PostType = (typeof PostType)[keyof typeof PostType]
+
+
+export const DealStatus: {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',
   DECLINED: 'DECLINED',
@@ -61,22 +69,6 @@ export namespace $Enums {
 };
 
 export type DealStatus = (typeof DealStatus)[keyof typeof DealStatus]
-
-
-export const PaymentStatus: {
-  PENDING: 'PENDING',
-  RECEIVED: 'RECEIVED'
-};
-
-export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
-
-
-export const PostType: {
-  LISTING: 'LISTING',
-  REQUEST: 'REQUEST'
-};
-
-export type PostType = (typeof PostType)[keyof typeof PostType]
 
 
 export const Urgency: {
@@ -104,19 +96,23 @@ export const STATUS: {
 
 export type STATUS = (typeof STATUS)[keyof typeof STATUS]
 
+
+export const PaymentStatus: {
+  PENDING: 'PENDING',
+  RECEIVED: 'RECEIVED'
+};
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
 }
-
-export type DealStatus = $Enums.DealStatus
-
-export const DealStatus: typeof $Enums.DealStatus
-
-export type PaymentStatus = $Enums.PaymentStatus
-
-export const PaymentStatus: typeof $Enums.PaymentStatus
 
 export type PostType = $Enums.PostType
 
 export const PostType: typeof $Enums.PostType
+
+export type DealStatus = $Enums.DealStatus
+
+export const DealStatus: typeof $Enums.DealStatus
 
 export type Urgency = $Enums.Urgency
 
@@ -129,6 +125,10 @@ export const ExchangeStatus: typeof $Enums.ExchangeStatus
 export type STATUS = $Enums.STATUS
 
 export const STATUS: typeof $Enums.STATUS
+
+export type PaymentStatus = $Enums.PaymentStatus
+
+export const PaymentStatus: typeof $Enums.PaymentStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1496,21 +1496,21 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    Chat_Chat_ownerIdToUser: number
-    Chat_Chat_participantIdToUser: number
     deals: number
     interests: number
-    Message: number
     posts: number
+    messagesSent: number
+    chatsOwned: number
+    chatsParticipated: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat_Chat_ownerIdToUser?: boolean | UserCountOutputTypeCountChat_Chat_ownerIdToUserArgs
-    Chat_Chat_participantIdToUser?: boolean | UserCountOutputTypeCountChat_Chat_participantIdToUserArgs
     deals?: boolean | UserCountOutputTypeCountDealsArgs
     interests?: boolean | UserCountOutputTypeCountInterestsArgs
-    Message?: boolean | UserCountOutputTypeCountMessageArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
+    messagesSent?: boolean | UserCountOutputTypeCountMessagesSentArgs
+    chatsOwned?: boolean | UserCountOutputTypeCountChatsOwnedArgs
+    chatsParticipated?: boolean | UserCountOutputTypeCountChatsParticipatedArgs
   }
 
   // Custom InputTypes
@@ -1522,20 +1522,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the UserCountOutputType
      */
     select?: UserCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountChat_Chat_ownerIdToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ChatWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountChat_Chat_participantIdToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ChatWhereInput
   }
 
   /**
@@ -1555,15 +1541,29 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMessagesSentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageWhereInput
   }
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostWhereInput
+  export type UserCountOutputTypeCountChatsOwnedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChatWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountChatsParticipatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChatWhereInput
   }
 
 
@@ -1603,13 +1603,13 @@ export namespace Prisma {
    */
 
   export type PostCountOutputType = {
-    Chat: number
     interests: number
+    chats: number
   }
 
   export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat?: boolean | PostCountOutputTypeCountChatArgs
     interests?: boolean | PostCountOutputTypeCountInterestsArgs
+    chats?: boolean | PostCountOutputTypeCountChatsArgs
   }
 
   // Custom InputTypes
@@ -1626,15 +1626,15 @@ export namespace Prisma {
   /**
    * PostCountOutputType without action
    */
-  export type PostCountOutputTypeCountChatArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ChatWhereInput
+  export type PostCountOutputTypeCountInterestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InterestWhereInput
   }
 
   /**
    * PostCountOutputType without action
    */
-  export type PostCountOutputTypeCountInterestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: InterestWhereInput
+  export type PostCountOutputTypeCountChatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChatWhereInput
   }
 
 
@@ -1643,11 +1643,11 @@ export namespace Prisma {
    */
 
   export type ChatCountOutputType = {
-    Message: number
+    messages: number
   }
 
   export type ChatCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Message?: boolean | ChatCountOutputTypeCountMessageArgs
+    messages?: boolean | ChatCountOutputTypeCountMessagesArgs
   }
 
   // Custom InputTypes
@@ -1664,7 +1664,7 @@ export namespace Prisma {
   /**
    * ChatCountOutputType without action
    */
-  export type ChatCountOutputTypeCountMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ChatCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MessageWhereInput
   }
 
@@ -1853,12 +1853,12 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     upiId?: boolean
-    Chat_Chat_ownerIdToUser?: boolean | User$Chat_Chat_ownerIdToUserArgs<ExtArgs>
-    Chat_Chat_participantIdToUser?: boolean | User$Chat_Chat_participantIdToUserArgs<ExtArgs>
     deals?: boolean | User$dealsArgs<ExtArgs>
     interests?: boolean | User$interestsArgs<ExtArgs>
-    Message?: boolean | User$MessageArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
+    messagesSent?: boolean | User$messagesSentArgs<ExtArgs>
+    chatsOwned?: boolean | User$chatsOwnedArgs<ExtArgs>
+    chatsParticipated?: boolean | User$chatsParticipatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1894,12 +1894,12 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "createdAt" | "updatedAt" | "upiId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat_Chat_ownerIdToUser?: boolean | User$Chat_Chat_ownerIdToUserArgs<ExtArgs>
-    Chat_Chat_participantIdToUser?: boolean | User$Chat_Chat_participantIdToUserArgs<ExtArgs>
     deals?: boolean | User$dealsArgs<ExtArgs>
     interests?: boolean | User$interestsArgs<ExtArgs>
-    Message?: boolean | User$MessageArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
+    messagesSent?: boolean | User$messagesSentArgs<ExtArgs>
+    chatsOwned?: boolean | User$chatsOwnedArgs<ExtArgs>
+    chatsParticipated?: boolean | User$chatsParticipatedArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1908,12 +1908,12 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      Chat_Chat_ownerIdToUser: Prisma.$ChatPayload<ExtArgs>[]
-      Chat_Chat_participantIdToUser: Prisma.$ChatPayload<ExtArgs>[]
       deals: Prisma.$DealPayload<ExtArgs>[]
       interests: Prisma.$InterestPayload<ExtArgs>[]
-      Message: Prisma.$MessagePayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
+      messagesSent: Prisma.$MessagePayload<ExtArgs>[]
+      chatsOwned: Prisma.$ChatPayload<ExtArgs>[]
+      chatsParticipated: Prisma.$ChatPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2317,12 +2317,12 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Chat_Chat_ownerIdToUser<T extends User$Chat_Chat_ownerIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, User$Chat_Chat_ownerIdToUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Chat_Chat_participantIdToUser<T extends User$Chat_Chat_participantIdToUserArgs<ExtArgs> = {}>(args?: Subset<T, User$Chat_Chat_participantIdToUserArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deals<T extends User$dealsArgs<ExtArgs> = {}>(args?: Subset<T, User$dealsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DealPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     interests<T extends User$interestsArgs<ExtArgs> = {}>(args?: Subset<T, User$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    Message<T extends User$MessageArgs<ExtArgs> = {}>(args?: Subset<T, User$MessageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messagesSent<T extends User$messagesSentArgs<ExtArgs> = {}>(args?: Subset<T, User$messagesSentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    chatsOwned<T extends User$chatsOwnedArgs<ExtArgs> = {}>(args?: Subset<T, User$chatsOwnedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    chatsParticipated<T extends User$chatsParticipatedArgs<ExtArgs> = {}>(args?: Subset<T, User$chatsParticipatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2747,54 +2747,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.Chat_Chat_ownerIdToUser
-   */
-  export type User$Chat_Chat_ownerIdToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chat
-     */
-    select?: ChatSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chat
-     */
-    omit?: ChatOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChatInclude<ExtArgs> | null
-    where?: ChatWhereInput
-    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
-    cursor?: ChatWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
-  }
-
-  /**
-   * User.Chat_Chat_participantIdToUser
-   */
-  export type User$Chat_Chat_participantIdToUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chat
-     */
-    select?: ChatSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chat
-     */
-    omit?: ChatOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChatInclude<ExtArgs> | null
-    where?: ChatWhereInput
-    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
-    cursor?: ChatWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
-  }
-
-  /**
    * User.deals
    */
   export type User$dealsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2843,30 +2795,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.Message
-   */
-  export type User$MessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    where?: MessageWhereInput
-    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
-    cursor?: MessageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
    * User.posts
    */
   export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2888,6 +2816,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * User.messagesSent
+   */
+  export type User$messagesSentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    cursor?: MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * User.chatsOwned
+   */
+  export type User$chatsOwnedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chat
+     */
+    select?: ChatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chat
+     */
+    omit?: ChatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChatInclude<ExtArgs> | null
+    where?: ChatWhereInput
+    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
+    cursor?: ChatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
+  }
+
+  /**
+   * User.chatsParticipated
+   */
+  export type User$chatsParticipatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chat
+     */
+    select?: ChatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chat
+     */
+    omit?: ChatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChatInclude<ExtArgs> | null
+    where?: ChatWhereInput
+    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
+    cursor?: ChatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
   }
 
   /**
@@ -4211,8 +4211,8 @@ export namespace Prisma {
     id: string
     type: $Enums.PostType
     title: string
-    caption: string | null
-    description: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location: string | null
@@ -4258,11 +4258,11 @@ export namespace Prisma {
     imageUrl?: boolean
     categoryId?: boolean
     status?: boolean
-    Chat?: boolean | Post$ChatArgs<ExtArgs>
     deal?: boolean | Post$dealArgs<ExtArgs>
     interests?: boolean | Post$interestsArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    chats?: boolean | Post$chatsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -4323,11 +4323,11 @@ export namespace Prisma {
 
   export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "title" | "caption" | "description" | "price" | "priceUnit" | "location" | "urgency" | "createdAt" | "userId" | "imageUrl" | "categoryId" | "status", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat?: boolean | Post$ChatArgs<ExtArgs>
     deal?: boolean | Post$dealArgs<ExtArgs>
     interests?: boolean | Post$interestsArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    chats?: boolean | Post$chatsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4342,18 +4342,18 @@ export namespace Prisma {
   export type $PostPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Post"
     objects: {
-      Chat: Prisma.$ChatPayload<ExtArgs>[]
       deal: Prisma.$DealPayload<ExtArgs> | null
       interests: Prisma.$InterestPayload<ExtArgs>[]
       category: Prisma.$CategoryPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
+      chats: Prisma.$ChatPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       type: $Enums.PostType
       title: string
-      caption: string | null
-      description: string | null
+      caption: string
+      description: string
       price: number
       priceUnit: string
       location: string | null
@@ -4757,11 +4757,11 @@ export namespace Prisma {
    */
   export interface Prisma__PostClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Chat<T extends Post$ChatArgs<ExtArgs> = {}>(args?: Subset<T, Post$ChatArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     deal<T extends Post$dealArgs<ExtArgs> = {}>(args?: Subset<T, Post$dealArgs<ExtArgs>>): Prisma__DealClient<$Result.GetResult<Prisma.$DealPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     interests<T extends Post$interestsArgs<ExtArgs> = {}>(args?: Subset<T, Post$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chats<T extends Post$chatsArgs<ExtArgs> = {}>(args?: Subset<T, Post$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5201,30 +5201,6 @@ export namespace Prisma {
   }
 
   /**
-   * Post.Chat
-   */
-  export type Post$ChatArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chat
-     */
-    select?: ChatSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chat
-     */
-    omit?: ChatOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChatInclude<ExtArgs> | null
-    where?: ChatWhereInput
-    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
-    cursor?: ChatWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
-  }
-
-  /**
    * Post.deal
    */
   export type Post$dealArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5265,6 +5241,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InterestScalarFieldEnum | InterestScalarFieldEnum[]
+  }
+
+  /**
+   * Post.chats
+   */
+  export type Post$chatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chat
+     */
+    select?: ChatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chat
+     */
+    omit?: ChatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChatInclude<ExtArgs> | null
+    where?: ChatWhereInput
+    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
+    cursor?: ChatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
   }
 
   /**
@@ -7728,10 +7728,10 @@ export namespace Prisma {
     participantId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    User_Chat_ownerIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    User_Chat_participantIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    Post?: boolean | PostDefaultArgs<ExtArgs>
-    Message?: boolean | Chat$MessageArgs<ExtArgs>
+    messages?: boolean | Chat$messagesArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    participant?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | ChatCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chat"]>
 
@@ -7742,9 +7742,9 @@ export namespace Prisma {
     participantId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    User_Chat_ownerIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    User_Chat_participantIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    Post?: boolean | PostDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    participant?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chat"]>
 
   export type ChatSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7754,9 +7754,9 @@ export namespace Prisma {
     participantId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    User_Chat_ownerIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    User_Chat_participantIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    Post?: boolean | PostDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    participant?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chat"]>
 
   export type ChatSelectScalar = {
@@ -7770,30 +7770,30 @@ export namespace Prisma {
 
   export type ChatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "ownerId" | "participantId" | "createdAt" | "updatedAt", ExtArgs["result"]["chat"]>
   export type ChatInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    User_Chat_ownerIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    User_Chat_participantIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    Post?: boolean | PostDefaultArgs<ExtArgs>
-    Message?: boolean | Chat$MessageArgs<ExtArgs>
+    messages?: boolean | Chat$messagesArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    participant?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | ChatCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ChatIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    User_Chat_ownerIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    User_Chat_participantIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    Post?: boolean | PostDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    participant?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ChatIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    User_Chat_ownerIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    User_Chat_participantIdToUser?: boolean | UserDefaultArgs<ExtArgs>
-    Post?: boolean | PostDefaultArgs<ExtArgs>
+    post?: boolean | PostDefaultArgs<ExtArgs>
+    owner?: boolean | UserDefaultArgs<ExtArgs>
+    participant?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $ChatPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Chat"
     objects: {
-      User_Chat_ownerIdToUser: Prisma.$UserPayload<ExtArgs>
-      User_Chat_participantIdToUser: Prisma.$UserPayload<ExtArgs>
-      Post: Prisma.$PostPayload<ExtArgs>
-      Message: Prisma.$MessagePayload<ExtArgs>[]
+      messages: Prisma.$MessagePayload<ExtArgs>[]
+      post: Prisma.$PostPayload<ExtArgs>
+      owner: Prisma.$UserPayload<ExtArgs>
+      participant: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8196,10 +8196,10 @@ export namespace Prisma {
    */
   export interface Prisma__ChatClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    User_Chat_ownerIdToUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    User_Chat_participantIdToUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    Post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    Message<T extends Chat$MessageArgs<ExtArgs> = {}>(args?: Subset<T, Chat$MessageArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messages<T extends Chat$messagesArgs<ExtArgs> = {}>(args?: Subset<T, Chat$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    post<T extends PostDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PostDefaultArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    participant<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8631,9 +8631,9 @@ export namespace Prisma {
   }
 
   /**
-   * Chat.Message
+   * Chat.messages
    */
-  export type Chat$MessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Chat$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Message
      */
@@ -8837,8 +8837,8 @@ export namespace Prisma {
     senderId?: boolean
     content?: boolean
     createdAt?: boolean
-    Chat?: boolean | ChatDefaultArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
+    chat?: boolean | ChatDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8847,8 +8847,8 @@ export namespace Prisma {
     senderId?: boolean
     content?: boolean
     createdAt?: boolean
-    Chat?: boolean | ChatDefaultArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
+    chat?: boolean | ChatDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8857,8 +8857,8 @@ export namespace Prisma {
     senderId?: boolean
     content?: boolean
     createdAt?: boolean
-    Chat?: boolean | ChatDefaultArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
+    chat?: boolean | ChatDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["message"]>
 
   export type MessageSelectScalar = {
@@ -8871,23 +8871,23 @@ export namespace Prisma {
 
   export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chatId" | "senderId" | "content" | "createdAt", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat?: boolean | ChatDefaultArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
+    chat?: boolean | ChatDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type MessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat?: boolean | ChatDefaultArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
+    chat?: boolean | ChatDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type MessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Chat?: boolean | ChatDefaultArgs<ExtArgs>
-    User?: boolean | UserDefaultArgs<ExtArgs>
+    chat?: boolean | ChatDefaultArgs<ExtArgs>
+    sender?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Message"
     objects: {
-      Chat: Prisma.$ChatPayload<ExtArgs>
-      User: Prisma.$UserPayload<ExtArgs>
+      chat: Prisma.$ChatPayload<ExtArgs>
+      sender: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9289,8 +9289,8 @@ export namespace Prisma {
    */
   export interface Prisma__MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Chat<T extends ChatDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChatDefaultArgs<ExtArgs>>): Prisma__ChatClient<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    User<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chat<T extends ChatDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChatDefaultArgs<ExtArgs>>): Prisma__ChatClient<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sender<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10027,12 +10027,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     upiId?: StringNullableFilter<"User"> | string | null
-    Chat_Chat_ownerIdToUser?: ChatListRelationFilter
-    Chat_Chat_participantIdToUser?: ChatListRelationFilter
     deals?: DealListRelationFilter
     interests?: InterestListRelationFilter
-    Message?: MessageListRelationFilter
     posts?: PostListRelationFilter
+    messagesSent?: MessageListRelationFilter
+    chatsOwned?: ChatListRelationFilter
+    chatsParticipated?: ChatListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -10043,12 +10043,12 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     upiId?: SortOrderInput | SortOrder
-    Chat_Chat_ownerIdToUser?: ChatOrderByRelationAggregateInput
-    Chat_Chat_participantIdToUser?: ChatOrderByRelationAggregateInput
     deals?: DealOrderByRelationAggregateInput
     interests?: InterestOrderByRelationAggregateInput
-    Message?: MessageOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
+    messagesSent?: MessageOrderByRelationAggregateInput
+    chatsOwned?: ChatOrderByRelationAggregateInput
+    chatsParticipated?: ChatOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -10062,12 +10062,12 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     upiId?: StringNullableFilter<"User"> | string | null
-    Chat_Chat_ownerIdToUser?: ChatListRelationFilter
-    Chat_Chat_participantIdToUser?: ChatListRelationFilter
     deals?: DealListRelationFilter
     interests?: InterestListRelationFilter
-    Message?: MessageListRelationFilter
     posts?: PostListRelationFilter
+    messagesSent?: MessageListRelationFilter
+    chatsOwned?: ChatListRelationFilter
+    chatsParticipated?: ChatListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -10163,8 +10163,8 @@ export namespace Prisma {
     id?: StringFilter<"Post"> | string
     type?: EnumPostTypeFilter<"Post"> | $Enums.PostType
     title?: StringFilter<"Post"> | string
-    caption?: StringNullableFilter<"Post"> | string | null
-    description?: StringNullableFilter<"Post"> | string | null
+    caption?: StringFilter<"Post"> | string
+    description?: StringFilter<"Post"> | string
     price?: FloatFilter<"Post"> | number
     priceUnit?: StringFilter<"Post"> | string
     location?: StringNullableFilter<"Post"> | string | null
@@ -10174,19 +10174,19 @@ export namespace Prisma {
     imageUrl?: StringNullableListFilter<"Post">
     categoryId?: StringFilter<"Post"> | string
     status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
-    Chat?: ChatListRelationFilter
     deal?: XOR<DealNullableScalarRelationFilter, DealWhereInput> | null
     interests?: InterestListRelationFilter
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    chats?: ChatListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
     id?: SortOrder
     type?: SortOrder
     title?: SortOrder
-    caption?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
+    caption?: SortOrder
+    description?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -10196,11 +10196,11 @@ export namespace Prisma {
     imageUrl?: SortOrder
     categoryId?: SortOrder
     status?: SortOrder
-    Chat?: ChatOrderByRelationAggregateInput
     deal?: DealOrderByWithRelationInput
     interests?: InterestOrderByRelationAggregateInput
     category?: CategoryOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    chats?: ChatOrderByRelationAggregateInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -10210,8 +10210,8 @@ export namespace Prisma {
     NOT?: PostWhereInput | PostWhereInput[]
     type?: EnumPostTypeFilter<"Post"> | $Enums.PostType
     title?: StringFilter<"Post"> | string
-    caption?: StringNullableFilter<"Post"> | string | null
-    description?: StringNullableFilter<"Post"> | string | null
+    caption?: StringFilter<"Post"> | string
+    description?: StringFilter<"Post"> | string
     price?: FloatFilter<"Post"> | number
     priceUnit?: StringFilter<"Post"> | string
     location?: StringNullableFilter<"Post"> | string | null
@@ -10221,19 +10221,19 @@ export namespace Prisma {
     imageUrl?: StringNullableListFilter<"Post">
     categoryId?: StringFilter<"Post"> | string
     status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
-    Chat?: ChatListRelationFilter
     deal?: XOR<DealNullableScalarRelationFilter, DealWhereInput> | null
     interests?: InterestListRelationFilter
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    chats?: ChatListRelationFilter
   }, "id">
 
   export type PostOrderByWithAggregationInput = {
     id?: SortOrder
     type?: SortOrder
     title?: SortOrder
-    caption?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
+    caption?: SortOrder
+    description?: SortOrder
     price?: SortOrder
     priceUnit?: SortOrder
     location?: SortOrderInput | SortOrder
@@ -10257,8 +10257,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Post"> | string
     type?: EnumPostTypeWithAggregatesFilter<"Post"> | $Enums.PostType
     title?: StringWithAggregatesFilter<"Post"> | string
-    caption?: StringNullableWithAggregatesFilter<"Post"> | string | null
-    description?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    caption?: StringWithAggregatesFilter<"Post"> | string
+    description?: StringWithAggregatesFilter<"Post"> | string
     price?: FloatWithAggregatesFilter<"Post"> | number
     priceUnit?: StringWithAggregatesFilter<"Post"> | string
     location?: StringNullableWithAggregatesFilter<"Post"> | string | null
@@ -10439,10 +10439,10 @@ export namespace Prisma {
     participantId?: StringFilter<"Chat"> | string
     createdAt?: DateTimeFilter<"Chat"> | Date | string
     updatedAt?: DateTimeFilter<"Chat"> | Date | string
-    User_Chat_ownerIdToUser?: XOR<UserScalarRelationFilter, UserWhereInput>
-    User_Chat_participantIdToUser?: XOR<UserScalarRelationFilter, UserWhereInput>
-    Post?: XOR<PostScalarRelationFilter, PostWhereInput>
-    Message?: MessageListRelationFilter
+    messages?: MessageListRelationFilter
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    participant?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type ChatOrderByWithRelationInput = {
@@ -10452,10 +10452,10 @@ export namespace Prisma {
     participantId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    User_Chat_ownerIdToUser?: UserOrderByWithRelationInput
-    User_Chat_participantIdToUser?: UserOrderByWithRelationInput
-    Post?: PostOrderByWithRelationInput
-    Message?: MessageOrderByRelationAggregateInput
+    messages?: MessageOrderByRelationAggregateInput
+    post?: PostOrderByWithRelationInput
+    owner?: UserOrderByWithRelationInput
+    participant?: UserOrderByWithRelationInput
   }
 
   export type ChatWhereUniqueInput = Prisma.AtLeast<{
@@ -10469,10 +10469,10 @@ export namespace Prisma {
     participantId?: StringFilter<"Chat"> | string
     createdAt?: DateTimeFilter<"Chat"> | Date | string
     updatedAt?: DateTimeFilter<"Chat"> | Date | string
-    User_Chat_ownerIdToUser?: XOR<UserScalarRelationFilter, UserWhereInput>
-    User_Chat_participantIdToUser?: XOR<UserScalarRelationFilter, UserWhereInput>
-    Post?: XOR<PostScalarRelationFilter, PostWhereInput>
-    Message?: MessageListRelationFilter
+    messages?: MessageListRelationFilter
+    post?: XOR<PostScalarRelationFilter, PostWhereInput>
+    owner?: XOR<UserScalarRelationFilter, UserWhereInput>
+    participant?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "postId_participantId">
 
   export type ChatOrderByWithAggregationInput = {
@@ -10508,8 +10508,8 @@ export namespace Prisma {
     senderId?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
-    Chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
-    User?: XOR<UserScalarRelationFilter, UserWhereInput>
+    chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type MessageOrderByWithRelationInput = {
@@ -10518,8 +10518,8 @@ export namespace Prisma {
     senderId?: SortOrder
     content?: SortOrder
     createdAt?: SortOrder
-    Chat?: ChatOrderByWithRelationInput
-    User?: UserOrderByWithRelationInput
+    chat?: ChatOrderByWithRelationInput
+    sender?: UserOrderByWithRelationInput
   }
 
   export type MessageWhereUniqueInput = Prisma.AtLeast<{
@@ -10531,8 +10531,8 @@ export namespace Prisma {
     senderId?: StringFilter<"Message"> | string
     content?: StringFilter<"Message"> | string
     createdAt?: DateTimeFilter<"Message"> | Date | string
-    Chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
-    User?: XOR<UserScalarRelationFilter, UserWhereInput>
+    chat?: XOR<ChatScalarRelationFilter, ChatWhereInput>
+    sender?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type MessageOrderByWithAggregationInput = {
@@ -10565,12 +10565,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealCreateNestedManyWithoutSelectedUserInput
     interests?: InterestCreateNestedManyWithoutUserInput
-    Message?: MessageCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatCreateNestedManyWithoutParticipantInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10581,12 +10581,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
     interests?: InterestUncheckedCreateNestedManyWithoutUserInput
-    Message?: MessageUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatUncheckedCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatUncheckedCreateNestedManyWithoutParticipantInput
   }
 
   export type UserUpdateInput = {
@@ -10597,12 +10597,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
     interests?: InterestUpdateManyWithoutUserNestedInput
-    Message?: MessageUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUpdateManyWithoutParticipantNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10613,12 +10613,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
     interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
-    Message?: MessageUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUncheckedUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUncheckedUpdateManyWithoutParticipantNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10722,8 +10722,8 @@ export namespace Prisma {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -10731,19 +10731,19 @@ export namespace Prisma {
     createdAt?: Date | string
     imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    Chat?: ChatCreateNestedManyWithoutPostInput
     deal?: DealCreateNestedOneWithoutPostInput
     interests?: InterestCreateNestedManyWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
+    chats?: ChatCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -10753,17 +10753,17 @@ export namespace Prisma {
     imageUrl?: PostCreateimageUrlInput | string[]
     categoryId: string
     status?: $Enums.STATUS
-    Chat?: ChatUncheckedCreateNestedManyWithoutPostInput
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
     interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+    chats?: ChatUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10771,19 +10771,19 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUpdateManyWithoutPostNestedInput
     deal?: DealUpdateOneWithoutPostNestedInput
     interests?: InterestUpdateManyWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
+    chats?: ChatUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10793,17 +10793,17 @@ export namespace Prisma {
     imageUrl?: PostUpdateimageUrlInput | string[]
     categoryId?: StringFieldUpdateOperationsInput | string
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUncheckedUpdateManyWithoutPostNestedInput
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
     interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+    chats?: ChatUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -10819,8 +10819,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10834,8 +10834,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11012,33 +11012,33 @@ export namespace Prisma {
   }
 
   export type ChatCreateInput = {
-    id: string
+    id?: string
     createdAt?: Date | string
-    updatedAt: Date | string
-    User_Chat_ownerIdToUser: UserCreateNestedOneWithoutChat_Chat_ownerIdToUserInput
-    User_Chat_participantIdToUser: UserCreateNestedOneWithoutChat_Chat_participantIdToUserInput
-    Post: PostCreateNestedOneWithoutChatInput
-    Message?: MessageCreateNestedManyWithoutChatInput
+    updatedAt?: Date | string
+    messages?: MessageCreateNestedManyWithoutChatInput
+    post: PostCreateNestedOneWithoutChatsInput
+    owner: UserCreateNestedOneWithoutChatsOwnedInput
+    participant: UserCreateNestedOneWithoutChatsParticipatedInput
   }
 
   export type ChatUncheckedCreateInput = {
-    id: string
+    id?: string
     postId: string
     ownerId: string
     participantId: string
     createdAt?: Date | string
-    updatedAt: Date | string
-    Message?: MessageUncheckedCreateNestedManyWithoutChatInput
+    updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutChatInput
   }
 
   export type ChatUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User_Chat_ownerIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_ownerIdToUserNestedInput
-    User_Chat_participantIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_participantIdToUserNestedInput
-    Post?: PostUpdateOneRequiredWithoutChatNestedInput
-    Message?: MessageUpdateManyWithoutChatNestedInput
+    messages?: MessageUpdateManyWithoutChatNestedInput
+    post?: PostUpdateOneRequiredWithoutChatsNestedInput
+    owner?: UserUpdateOneRequiredWithoutChatsOwnedNestedInput
+    participant?: UserUpdateOneRequiredWithoutChatsParticipatedNestedInput
   }
 
   export type ChatUncheckedUpdateInput = {
@@ -11048,16 +11048,16 @@ export namespace Prisma {
     participantId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Message?: MessageUncheckedUpdateManyWithoutChatNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutChatNestedInput
   }
 
   export type ChatCreateManyInput = {
-    id: string
+    id?: string
     postId: string
     ownerId: string
     participantId: string
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
   }
 
   export type ChatUpdateManyMutationInput = {
@@ -11076,15 +11076,15 @@ export namespace Prisma {
   }
 
   export type MessageCreateInput = {
-    id: string
+    id?: string
     content: string
     createdAt?: Date | string
-    Chat: ChatCreateNestedOneWithoutMessageInput
-    User: UserCreateNestedOneWithoutMessageInput
+    chat: ChatCreateNestedOneWithoutMessagesInput
+    sender: UserCreateNestedOneWithoutMessagesSentInput
   }
 
   export type MessageUncheckedCreateInput = {
-    id: string
+    id?: string
     chatId: string
     senderId: string
     content: string
@@ -11095,8 +11095,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Chat?: ChatUpdateOneRequiredWithoutMessageNestedInput
-    User?: UserUpdateOneRequiredWithoutMessageNestedInput
+    chat?: ChatUpdateOneRequiredWithoutMessagesNestedInput
+    sender?: UserUpdateOneRequiredWithoutMessagesSentNestedInput
   }
 
   export type MessageUncheckedUpdateInput = {
@@ -11108,7 +11108,7 @@ export namespace Prisma {
   }
 
   export type MessageCreateManyInput = {
-    id: string
+    id?: string
     chatId: string
     senderId: string
     content: string
@@ -11170,12 +11170,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ChatListRelationFilter = {
-    every?: ChatWhereInput
-    some?: ChatWhereInput
-    none?: ChatWhereInput
-  }
-
   export type DealListRelationFilter = {
     every?: DealWhereInput
     some?: DealWhereInput
@@ -11188,25 +11182,27 @@ export namespace Prisma {
     none?: InterestWhereInput
   }
 
-  export type MessageListRelationFilter = {
-    every?: MessageWhereInput
-    some?: MessageWhereInput
-    none?: MessageWhereInput
-  }
-
   export type PostListRelationFilter = {
     every?: PostWhereInput
     some?: PostWhereInput
     none?: PostWhereInput
   }
 
+  export type MessageListRelationFilter = {
+    every?: MessageWhereInput
+    some?: MessageWhereInput
+    none?: MessageWhereInput
+  }
+
+  export type ChatListRelationFilter = {
+    every?: ChatWhereInput
+    some?: ChatWhereInput
+    none?: ChatWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
-  }
-
-  export type ChatOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type DealOrderByRelationAggregateInput = {
@@ -11217,11 +11213,15 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type PostOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type MessageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type PostOrderByRelationAggregateInput = {
+  export type ChatOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11740,20 +11740,6 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput> | ChatCreateWithoutUser_Chat_ownerIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_ownerIdToUserInputEnvelope
-    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-  }
-
-  export type ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput> | ChatCreateWithoutUser_Chat_participantIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_participantIdToUserInputEnvelope
-    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-  }
-
   export type DealCreateNestedManyWithoutSelectedUserInput = {
     create?: XOR<DealCreateWithoutSelectedUserInput, DealUncheckedCreateWithoutSelectedUserInput> | DealCreateWithoutSelectedUserInput[] | DealUncheckedCreateWithoutSelectedUserInput[]
     connectOrCreate?: DealCreateOrConnectWithoutSelectedUserInput | DealCreateOrConnectWithoutSelectedUserInput[]
@@ -11768,13 +11754,6 @@ export namespace Prisma {
     connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
   }
 
-  export type MessageCreateNestedManyWithoutUserInput = {
-    create?: XOR<MessageCreateWithoutUserInput, MessageUncheckedCreateWithoutUserInput> | MessageCreateWithoutUserInput[] | MessageUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutUserInput | MessageCreateOrConnectWithoutUserInput[]
-    createMany?: MessageCreateManyUserInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
   export type PostCreateNestedManyWithoutUserInput = {
     create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
@@ -11782,17 +11761,24 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
-  export type ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput> | ChatCreateWithoutUser_Chat_ownerIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_ownerIdToUserInputEnvelope
+  export type MessageCreateNestedManyWithoutSenderInput = {
+    create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
+    createMany?: MessageCreateManySenderInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type ChatCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<ChatCreateWithoutOwnerInput, ChatUncheckedCreateWithoutOwnerInput> | ChatCreateWithoutOwnerInput[] | ChatUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutOwnerInput | ChatCreateOrConnectWithoutOwnerInput[]
+    createMany?: ChatCreateManyOwnerInputEnvelope
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
-  export type ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput> | ChatCreateWithoutUser_Chat_participantIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_participantIdToUserInputEnvelope
+  export type ChatCreateNestedManyWithoutParticipantInput = {
+    create?: XOR<ChatCreateWithoutParticipantInput, ChatUncheckedCreateWithoutParticipantInput> | ChatCreateWithoutParticipantInput[] | ChatUncheckedCreateWithoutParticipantInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutParticipantInput | ChatCreateOrConnectWithoutParticipantInput[]
+    createMany?: ChatCreateManyParticipantInputEnvelope
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
@@ -11810,18 +11796,32 @@ export namespace Prisma {
     connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
   }
 
-  export type MessageUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<MessageCreateWithoutUserInput, MessageUncheckedCreateWithoutUserInput> | MessageCreateWithoutUserInput[] | MessageUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutUserInput | MessageCreateOrConnectWithoutUserInput[]
-    createMany?: MessageCreateManyUserInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
   export type PostUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
     createMany?: PostCreateManyUserInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type MessageUncheckedCreateNestedManyWithoutSenderInput = {
+    create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
+    createMany?: MessageCreateManySenderInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type ChatUncheckedCreateNestedManyWithoutOwnerInput = {
+    create?: XOR<ChatCreateWithoutOwnerInput, ChatUncheckedCreateWithoutOwnerInput> | ChatCreateWithoutOwnerInput[] | ChatUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutOwnerInput | ChatCreateOrConnectWithoutOwnerInput[]
+    createMany?: ChatCreateManyOwnerInputEnvelope
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+  }
+
+  export type ChatUncheckedCreateNestedManyWithoutParticipantInput = {
+    create?: XOR<ChatCreateWithoutParticipantInput, ChatUncheckedCreateWithoutParticipantInput> | ChatCreateWithoutParticipantInput[] | ChatUncheckedCreateWithoutParticipantInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutParticipantInput | ChatCreateOrConnectWithoutParticipantInput[]
+    createMany?: ChatCreateManyParticipantInputEnvelope
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11834,34 +11834,6 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
-  }
-
-  export type ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput> | ChatCreateWithoutUser_Chat_ownerIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput[]
-    upsert?: ChatUpsertWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput | ChatUpsertWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_ownerIdToUserInputEnvelope
-    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    update?: ChatUpdateWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput | ChatUpdateWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput[]
-    updateMany?: ChatUpdateManyWithWhereWithoutUser_Chat_ownerIdToUserInput | ChatUpdateManyWithWhereWithoutUser_Chat_ownerIdToUserInput[]
-    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
-  }
-
-  export type ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput> | ChatCreateWithoutUser_Chat_participantIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput[]
-    upsert?: ChatUpsertWithWhereUniqueWithoutUser_Chat_participantIdToUserInput | ChatUpsertWithWhereUniqueWithoutUser_Chat_participantIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_participantIdToUserInputEnvelope
-    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    update?: ChatUpdateWithWhereUniqueWithoutUser_Chat_participantIdToUserInput | ChatUpdateWithWhereUniqueWithoutUser_Chat_participantIdToUserInput[]
-    updateMany?: ChatUpdateManyWithWhereWithoutUser_Chat_participantIdToUserInput | ChatUpdateManyWithWhereWithoutUser_Chat_participantIdToUserInput[]
-    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
   export type DealUpdateManyWithoutSelectedUserNestedInput = {
@@ -11892,20 +11864,6 @@ export namespace Prisma {
     deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
   }
 
-  export type MessageUpdateManyWithoutUserNestedInput = {
-    create?: XOR<MessageCreateWithoutUserInput, MessageUncheckedCreateWithoutUserInput> | MessageCreateWithoutUserInput[] | MessageUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutUserInput | MessageCreateOrConnectWithoutUserInput[]
-    upsert?: MessageUpsertWithWhereUniqueWithoutUserInput | MessageUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: MessageCreateManyUserInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?: MessageUpdateWithWhereUniqueWithoutUserInput | MessageUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: MessageUpdateManyWithWhereWithoutUserInput | MessageUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
   export type PostUpdateManyWithoutUserNestedInput = {
     create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
@@ -11920,31 +11878,45 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
-  export type ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput> | ChatCreateWithoutUser_Chat_ownerIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput[]
-    upsert?: ChatUpsertWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput | ChatUpsertWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_ownerIdToUserInputEnvelope
+  export type MessageUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutSenderInput | MessageUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: MessageCreateManySenderInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutSenderInput | MessageUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutSenderInput | MessageUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type ChatUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<ChatCreateWithoutOwnerInput, ChatUncheckedCreateWithoutOwnerInput> | ChatCreateWithoutOwnerInput[] | ChatUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutOwnerInput | ChatCreateOrConnectWithoutOwnerInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutOwnerInput | ChatUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: ChatCreateManyOwnerInputEnvelope
     set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
     disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
     delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    update?: ChatUpdateWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput | ChatUpdateWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput[]
-    updateMany?: ChatUpdateManyWithWhereWithoutUser_Chat_ownerIdToUserInput | ChatUpdateManyWithWhereWithoutUser_Chat_ownerIdToUserInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutOwnerInput | ChatUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutOwnerInput | ChatUpdateManyWithWhereWithoutOwnerInput[]
     deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
-  export type ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput = {
-    create?: XOR<ChatCreateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput> | ChatCreateWithoutUser_Chat_participantIdToUserInput[] | ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput | ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput[]
-    upsert?: ChatUpsertWithWhereUniqueWithoutUser_Chat_participantIdToUserInput | ChatUpsertWithWhereUniqueWithoutUser_Chat_participantIdToUserInput[]
-    createMany?: ChatCreateManyUser_Chat_participantIdToUserInputEnvelope
+  export type ChatUpdateManyWithoutParticipantNestedInput = {
+    create?: XOR<ChatCreateWithoutParticipantInput, ChatUncheckedCreateWithoutParticipantInput> | ChatCreateWithoutParticipantInput[] | ChatUncheckedCreateWithoutParticipantInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutParticipantInput | ChatCreateOrConnectWithoutParticipantInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutParticipantInput | ChatUpsertWithWhereUniqueWithoutParticipantInput[]
+    createMany?: ChatCreateManyParticipantInputEnvelope
     set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
     disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
     delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    update?: ChatUpdateWithWhereUniqueWithoutUser_Chat_participantIdToUserInput | ChatUpdateWithWhereUniqueWithoutUser_Chat_participantIdToUserInput[]
-    updateMany?: ChatUpdateManyWithWhereWithoutUser_Chat_participantIdToUserInput | ChatUpdateManyWithWhereWithoutUser_Chat_participantIdToUserInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutParticipantInput | ChatUpdateWithWhereUniqueWithoutParticipantInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutParticipantInput | ChatUpdateManyWithWhereWithoutParticipantInput[]
     deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
@@ -11976,20 +11948,6 @@ export namespace Prisma {
     deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
   }
 
-  export type MessageUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<MessageCreateWithoutUserInput, MessageUncheckedCreateWithoutUserInput> | MessageCreateWithoutUserInput[] | MessageUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutUserInput | MessageCreateOrConnectWithoutUserInput[]
-    upsert?: MessageUpsertWithWhereUniqueWithoutUserInput | MessageUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: MessageCreateManyUserInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?: MessageUpdateWithWhereUniqueWithoutUserInput | MessageUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: MessageUpdateManyWithWhereWithoutUserInput | MessageUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
   export type PostUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<PostCreateWithoutUserInput, PostUncheckedCreateWithoutUserInput> | PostCreateWithoutUserInput[] | PostUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
@@ -12002,6 +11960,48 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type MessageUncheckedUpdateManyWithoutSenderNestedInput = {
+    create?: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput> | MessageCreateWithoutSenderInput[] | MessageUncheckedCreateWithoutSenderInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderInput | MessageCreateOrConnectWithoutSenderInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutSenderInput | MessageUpsertWithWhereUniqueWithoutSenderInput[]
+    createMany?: MessageCreateManySenderInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutSenderInput | MessageUpdateWithWhereUniqueWithoutSenderInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutSenderInput | MessageUpdateManyWithWhereWithoutSenderInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type ChatUncheckedUpdateManyWithoutOwnerNestedInput = {
+    create?: XOR<ChatCreateWithoutOwnerInput, ChatUncheckedCreateWithoutOwnerInput> | ChatCreateWithoutOwnerInput[] | ChatUncheckedCreateWithoutOwnerInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutOwnerInput | ChatCreateOrConnectWithoutOwnerInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutOwnerInput | ChatUpsertWithWhereUniqueWithoutOwnerInput[]
+    createMany?: ChatCreateManyOwnerInputEnvelope
+    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutOwnerInput | ChatUpdateWithWhereUniqueWithoutOwnerInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutOwnerInput | ChatUpdateManyWithWhereWithoutOwnerInput[]
+    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
+  }
+
+  export type ChatUncheckedUpdateManyWithoutParticipantNestedInput = {
+    create?: XOR<ChatCreateWithoutParticipantInput, ChatUncheckedCreateWithoutParticipantInput> | ChatCreateWithoutParticipantInput[] | ChatUncheckedCreateWithoutParticipantInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutParticipantInput | ChatCreateOrConnectWithoutParticipantInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutParticipantInput | ChatUpsertWithWhereUniqueWithoutParticipantInput[]
+    createMany?: ChatCreateManyParticipantInputEnvelope
+    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutParticipantInput | ChatUpdateWithWhereUniqueWithoutParticipantInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutParticipantInput | ChatUpdateManyWithWhereWithoutParticipantInput[]
+    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
   export type PostCreateNestedManyWithoutCategoryInput = {
@@ -12050,13 +12050,6 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type ChatCreateNestedManyWithoutPostInput = {
-    create?: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput> | ChatCreateWithoutPostInput[] | ChatUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutPostInput | ChatCreateOrConnectWithoutPostInput[]
-    createMany?: ChatCreateManyPostInputEnvelope
-    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-  }
-
   export type DealCreateNestedOneWithoutPostInput = {
     create?: XOR<DealCreateWithoutPostInput, DealUncheckedCreateWithoutPostInput>
     connectOrCreate?: DealCreateOrConnectWithoutPostInput
@@ -12082,7 +12075,7 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type ChatUncheckedCreateNestedManyWithoutPostInput = {
+  export type ChatCreateNestedManyWithoutPostInput = {
     create?: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput> | ChatCreateWithoutPostInput[] | ChatUncheckedCreateWithoutPostInput[]
     connectOrCreate?: ChatCreateOrConnectWithoutPostInput | ChatCreateOrConnectWithoutPostInput[]
     createMany?: ChatCreateManyPostInputEnvelope
@@ -12100,6 +12093,13 @@ export namespace Prisma {
     connectOrCreate?: InterestCreateOrConnectWithoutPostInput | InterestCreateOrConnectWithoutPostInput[]
     createMany?: InterestCreateManyPostInputEnvelope
     connect?: InterestWhereUniqueInput | InterestWhereUniqueInput[]
+  }
+
+  export type ChatUncheckedCreateNestedManyWithoutPostInput = {
+    create?: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput> | ChatCreateWithoutPostInput[] | ChatUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutPostInput | ChatCreateOrConnectWithoutPostInput[]
+    createMany?: ChatCreateManyPostInputEnvelope
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
   export type EnumPostTypeFieldUpdateOperationsInput = {
@@ -12125,20 +12125,6 @@ export namespace Prisma {
 
   export type EnumSTATUSFieldUpdateOperationsInput = {
     set?: $Enums.STATUS
-  }
-
-  export type ChatUpdateManyWithoutPostNestedInput = {
-    create?: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput> | ChatCreateWithoutPostInput[] | ChatUncheckedCreateWithoutPostInput[]
-    connectOrCreate?: ChatCreateOrConnectWithoutPostInput | ChatCreateOrConnectWithoutPostInput[]
-    upsert?: ChatUpsertWithWhereUniqueWithoutPostInput | ChatUpsertWithWhereUniqueWithoutPostInput[]
-    createMany?: ChatCreateManyPostInputEnvelope
-    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
-    update?: ChatUpdateWithWhereUniqueWithoutPostInput | ChatUpdateWithWhereUniqueWithoutPostInput[]
-    updateMany?: ChatUpdateManyWithWhereWithoutPostInput | ChatUpdateManyWithWhereWithoutPostInput[]
-    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
   export type DealUpdateOneWithoutPostNestedInput = {
@@ -12181,7 +12167,7 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPostsInput, UserUpdateWithoutPostsInput>, UserUncheckedUpdateWithoutPostsInput>
   }
 
-  export type ChatUncheckedUpdateManyWithoutPostNestedInput = {
+  export type ChatUpdateManyWithoutPostNestedInput = {
     create?: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput> | ChatCreateWithoutPostInput[] | ChatUncheckedCreateWithoutPostInput[]
     connectOrCreate?: ChatCreateOrConnectWithoutPostInput | ChatCreateOrConnectWithoutPostInput[]
     upsert?: ChatUpsertWithWhereUniqueWithoutPostInput | ChatUpsertWithWhereUniqueWithoutPostInput[]
@@ -12217,6 +12203,20 @@ export namespace Prisma {
     update?: InterestUpdateWithWhereUniqueWithoutPostInput | InterestUpdateWithWhereUniqueWithoutPostInput[]
     updateMany?: InterestUpdateManyWithWhereWithoutPostInput | InterestUpdateManyWithWhereWithoutPostInput[]
     deleteMany?: InterestScalarWhereInput | InterestScalarWhereInput[]
+  }
+
+  export type ChatUncheckedUpdateManyWithoutPostNestedInput = {
+    create?: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput> | ChatCreateWithoutPostInput[] | ChatUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutPostInput | ChatCreateOrConnectWithoutPostInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutPostInput | ChatUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: ChatCreateManyPostInputEnvelope
+    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutPostInput | ChatUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutPostInput | ChatUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
   export type PostCreateNestedOneWithoutInterestsInput = {
@@ -12299,24 +12299,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDealsInput, UserUpdateWithoutDealsInput>, UserUncheckedUpdateWithoutDealsInput>
   }
 
-  export type UserCreateNestedOneWithoutChat_Chat_ownerIdToUserInput = {
-    create?: XOR<UserCreateWithoutChat_Chat_ownerIdToUserInput, UserUncheckedCreateWithoutChat_Chat_ownerIdToUserInput>
-    connectOrCreate?: UserCreateOrConnectWithoutChat_Chat_ownerIdToUserInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutChat_Chat_participantIdToUserInput = {
-    create?: XOR<UserCreateWithoutChat_Chat_participantIdToUserInput, UserUncheckedCreateWithoutChat_Chat_participantIdToUserInput>
-    connectOrCreate?: UserCreateOrConnectWithoutChat_Chat_participantIdToUserInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type PostCreateNestedOneWithoutChatInput = {
-    create?: XOR<PostCreateWithoutChatInput, PostUncheckedCreateWithoutChatInput>
-    connectOrCreate?: PostCreateOrConnectWithoutChatInput
-    connect?: PostWhereUniqueInput
-  }
-
   export type MessageCreateNestedManyWithoutChatInput = {
     create?: XOR<MessageCreateWithoutChatInput, MessageUncheckedCreateWithoutChatInput> | MessageCreateWithoutChatInput[] | MessageUncheckedCreateWithoutChatInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutChatInput | MessageCreateOrConnectWithoutChatInput[]
@@ -12324,35 +12306,29 @@ export namespace Prisma {
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
   }
 
+  export type PostCreateNestedOneWithoutChatsInput = {
+    create?: XOR<PostCreateWithoutChatsInput, PostUncheckedCreateWithoutChatsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutChatsInput
+    connect?: PostWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutChatsOwnedInput = {
+    create?: XOR<UserCreateWithoutChatsOwnedInput, UserUncheckedCreateWithoutChatsOwnedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutChatsOwnedInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutChatsParticipatedInput = {
+    create?: XOR<UserCreateWithoutChatsParticipatedInput, UserUncheckedCreateWithoutChatsParticipatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutChatsParticipatedInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type MessageUncheckedCreateNestedManyWithoutChatInput = {
     create?: XOR<MessageCreateWithoutChatInput, MessageUncheckedCreateWithoutChatInput> | MessageCreateWithoutChatInput[] | MessageUncheckedCreateWithoutChatInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutChatInput | MessageCreateOrConnectWithoutChatInput[]
     createMany?: MessageCreateManyChatInputEnvelope
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type UserUpdateOneRequiredWithoutChat_Chat_ownerIdToUserNestedInput = {
-    create?: XOR<UserCreateWithoutChat_Chat_ownerIdToUserInput, UserUncheckedCreateWithoutChat_Chat_ownerIdToUserInput>
-    connectOrCreate?: UserCreateOrConnectWithoutChat_Chat_ownerIdToUserInput
-    upsert?: UserUpsertWithoutChat_Chat_ownerIdToUserInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutChat_Chat_ownerIdToUserInput, UserUpdateWithoutChat_Chat_ownerIdToUserInput>, UserUncheckedUpdateWithoutChat_Chat_ownerIdToUserInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutChat_Chat_participantIdToUserNestedInput = {
-    create?: XOR<UserCreateWithoutChat_Chat_participantIdToUserInput, UserUncheckedCreateWithoutChat_Chat_participantIdToUserInput>
-    connectOrCreate?: UserCreateOrConnectWithoutChat_Chat_participantIdToUserInput
-    upsert?: UserUpsertWithoutChat_Chat_participantIdToUserInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutChat_Chat_participantIdToUserInput, UserUpdateWithoutChat_Chat_participantIdToUserInput>, UserUncheckedUpdateWithoutChat_Chat_participantIdToUserInput>
-  }
-
-  export type PostUpdateOneRequiredWithoutChatNestedInput = {
-    create?: XOR<PostCreateWithoutChatInput, PostUncheckedCreateWithoutChatInput>
-    connectOrCreate?: PostCreateOrConnectWithoutChatInput
-    upsert?: PostUpsertWithoutChatInput
-    connect?: PostWhereUniqueInput
-    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutChatInput, PostUpdateWithoutChatInput>, PostUncheckedUpdateWithoutChatInput>
   }
 
   export type MessageUpdateManyWithoutChatNestedInput = {
@@ -12369,6 +12345,30 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
+  export type PostUpdateOneRequiredWithoutChatsNestedInput = {
+    create?: XOR<PostCreateWithoutChatsInput, PostUncheckedCreateWithoutChatsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutChatsInput
+    upsert?: PostUpsertWithoutChatsInput
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutChatsInput, PostUpdateWithoutChatsInput>, PostUncheckedUpdateWithoutChatsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutChatsOwnedNestedInput = {
+    create?: XOR<UserCreateWithoutChatsOwnedInput, UserUncheckedCreateWithoutChatsOwnedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutChatsOwnedInput
+    upsert?: UserUpsertWithoutChatsOwnedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutChatsOwnedInput, UserUpdateWithoutChatsOwnedInput>, UserUncheckedUpdateWithoutChatsOwnedInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutChatsParticipatedNestedInput = {
+    create?: XOR<UserCreateWithoutChatsParticipatedInput, UserUncheckedCreateWithoutChatsParticipatedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutChatsParticipatedInput
+    upsert?: UserUpsertWithoutChatsParticipatedInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutChatsParticipatedInput, UserUpdateWithoutChatsParticipatedInput>, UserUncheckedUpdateWithoutChatsParticipatedInput>
+  }
+
   export type MessageUncheckedUpdateManyWithoutChatNestedInput = {
     create?: XOR<MessageCreateWithoutChatInput, MessageUncheckedCreateWithoutChatInput> | MessageCreateWithoutChatInput[] | MessageUncheckedCreateWithoutChatInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutChatInput | MessageCreateOrConnectWithoutChatInput[]
@@ -12383,32 +12383,32 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
-  export type ChatCreateNestedOneWithoutMessageInput = {
-    create?: XOR<ChatCreateWithoutMessageInput, ChatUncheckedCreateWithoutMessageInput>
-    connectOrCreate?: ChatCreateOrConnectWithoutMessageInput
+  export type ChatCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<ChatCreateWithoutMessagesInput, ChatUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: ChatCreateOrConnectWithoutMessagesInput
     connect?: ChatWhereUniqueInput
   }
 
-  export type UserCreateNestedOneWithoutMessageInput = {
-    create?: XOR<UserCreateWithoutMessageInput, UserUncheckedCreateWithoutMessageInput>
-    connectOrCreate?: UserCreateOrConnectWithoutMessageInput
+  export type UserCreateNestedOneWithoutMessagesSentInput = {
+    create?: XOR<UserCreateWithoutMessagesSentInput, UserUncheckedCreateWithoutMessagesSentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessagesSentInput
     connect?: UserWhereUniqueInput
   }
 
-  export type ChatUpdateOneRequiredWithoutMessageNestedInput = {
-    create?: XOR<ChatCreateWithoutMessageInput, ChatUncheckedCreateWithoutMessageInput>
-    connectOrCreate?: ChatCreateOrConnectWithoutMessageInput
-    upsert?: ChatUpsertWithoutMessageInput
+  export type ChatUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<ChatCreateWithoutMessagesInput, ChatUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: ChatCreateOrConnectWithoutMessagesInput
+    upsert?: ChatUpsertWithoutMessagesInput
     connect?: ChatWhereUniqueInput
-    update?: XOR<XOR<ChatUpdateToOneWithWhereWithoutMessageInput, ChatUpdateWithoutMessageInput>, ChatUncheckedUpdateWithoutMessageInput>
+    update?: XOR<XOR<ChatUpdateToOneWithWhereWithoutMessagesInput, ChatUpdateWithoutMessagesInput>, ChatUncheckedUpdateWithoutMessagesInput>
   }
 
-  export type UserUpdateOneRequiredWithoutMessageNestedInput = {
-    create?: XOR<UserCreateWithoutMessageInput, UserUncheckedCreateWithoutMessageInput>
-    connectOrCreate?: UserCreateOrConnectWithoutMessageInput
-    upsert?: UserUpsertWithoutMessageInput
+  export type UserUpdateOneRequiredWithoutMessagesSentNestedInput = {
+    create?: XOR<UserCreateWithoutMessagesSentInput, UserUncheckedCreateWithoutMessagesSentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMessagesSentInput
+    upsert?: UserUpsertWithoutMessagesSentInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMessageInput, UserUpdateWithoutMessageInput>, UserUncheckedUpdateWithoutMessageInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMessagesSentInput, UserUpdateWithoutMessagesSentInput>, UserUncheckedUpdateWithoutMessagesSentInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -12697,62 +12697,6 @@ export namespace Prisma {
     _max?: NestedEnumPaymentStatusFilter<$PrismaModel>
   }
 
-  export type ChatCreateWithoutUser_Chat_ownerIdToUserInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    User_Chat_participantIdToUser: UserCreateNestedOneWithoutChat_Chat_participantIdToUserInput
-    Post: PostCreateNestedOneWithoutChatInput
-    Message?: MessageCreateNestedManyWithoutChatInput
-  }
-
-  export type ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput = {
-    id: string
-    postId: string
-    participantId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Message?: MessageUncheckedCreateNestedManyWithoutChatInput
-  }
-
-  export type ChatCreateOrConnectWithoutUser_Chat_ownerIdToUserInput = {
-    where: ChatWhereUniqueInput
-    create: XOR<ChatCreateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput>
-  }
-
-  export type ChatCreateManyUser_Chat_ownerIdToUserInputEnvelope = {
-    data: ChatCreateManyUser_Chat_ownerIdToUserInput | ChatCreateManyUser_Chat_ownerIdToUserInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ChatCreateWithoutUser_Chat_participantIdToUserInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    User_Chat_ownerIdToUser: UserCreateNestedOneWithoutChat_Chat_ownerIdToUserInput
-    Post: PostCreateNestedOneWithoutChatInput
-    Message?: MessageCreateNestedManyWithoutChatInput
-  }
-
-  export type ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput = {
-    id: string
-    postId: string
-    ownerId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Message?: MessageUncheckedCreateNestedManyWithoutChatInput
-  }
-
-  export type ChatCreateOrConnectWithoutUser_Chat_participantIdToUserInput = {
-    where: ChatWhereUniqueInput
-    create: XOR<ChatCreateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput>
-  }
-
-  export type ChatCreateManyUser_Chat_participantIdToUserInputEnvelope = {
-    data: ChatCreateManyUser_Chat_participantIdToUserInput | ChatCreateManyUser_Chat_participantIdToUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DealCreateWithoutSelectedUserInput = {
     id?: string
     status?: $Enums.DealStatus
@@ -12817,36 +12761,12 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MessageCreateWithoutUserInput = {
-    id: string
-    content: string
-    createdAt?: Date | string
-    Chat: ChatCreateNestedOneWithoutMessageInput
-  }
-
-  export type MessageUncheckedCreateWithoutUserInput = {
-    id: string
-    chatId: string
-    content: string
-    createdAt?: Date | string
-  }
-
-  export type MessageCreateOrConnectWithoutUserInput = {
-    where: MessageWhereUniqueInput
-    create: XOR<MessageCreateWithoutUserInput, MessageUncheckedCreateWithoutUserInput>
-  }
-
-  export type MessageCreateManyUserInputEnvelope = {
-    data: MessageCreateManyUserInput | MessageCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type PostCreateWithoutUserInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -12854,18 +12774,18 @@ export namespace Prisma {
     createdAt?: Date | string
     imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    Chat?: ChatCreateNestedManyWithoutPostInput
     deal?: DealCreateNestedOneWithoutPostInput
     interests?: InterestCreateNestedManyWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
+    chats?: ChatCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutUserInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -12874,9 +12794,9 @@ export namespace Prisma {
     imageUrl?: PostCreateimageUrlInput | string[]
     categoryId: string
     status?: $Enums.STATUS
-    Chat?: ChatUncheckedCreateNestedManyWithoutPostInput
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
     interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+    chats?: ChatUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutUserInput = {
@@ -12889,48 +12809,84 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ChatUpsertWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput = {
+  export type MessageCreateWithoutSenderInput = {
+    id?: string
+    content: string
+    createdAt?: Date | string
+    chat: ChatCreateNestedOneWithoutMessagesInput
+  }
+
+  export type MessageUncheckedCreateWithoutSenderInput = {
+    id?: string
+    chatId: string
+    content: string
+    createdAt?: Date | string
+  }
+
+  export type MessageCreateOrConnectWithoutSenderInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput>
+  }
+
+  export type MessageCreateManySenderInputEnvelope = {
+    data: MessageCreateManySenderInput | MessageCreateManySenderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChatCreateWithoutOwnerInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageCreateNestedManyWithoutChatInput
+    post: PostCreateNestedOneWithoutChatsInput
+    participant: UserCreateNestedOneWithoutChatsParticipatedInput
+  }
+
+  export type ChatUncheckedCreateWithoutOwnerInput = {
+    id?: string
+    postId: string
+    participantId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutChatInput
+  }
+
+  export type ChatCreateOrConnectWithoutOwnerInput = {
     where: ChatWhereUniqueInput
-    update: XOR<ChatUpdateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedUpdateWithoutUser_Chat_ownerIdToUserInput>
-    create: XOR<ChatCreateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_ownerIdToUserInput>
+    create: XOR<ChatCreateWithoutOwnerInput, ChatUncheckedCreateWithoutOwnerInput>
   }
 
-  export type ChatUpdateWithWhereUniqueWithoutUser_Chat_ownerIdToUserInput = {
+  export type ChatCreateManyOwnerInputEnvelope = {
+    data: ChatCreateManyOwnerInput | ChatCreateManyOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChatCreateWithoutParticipantInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageCreateNestedManyWithoutChatInput
+    post: PostCreateNestedOneWithoutChatsInput
+    owner: UserCreateNestedOneWithoutChatsOwnedInput
+  }
+
+  export type ChatUncheckedCreateWithoutParticipantInput = {
+    id?: string
+    postId: string
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutChatInput
+  }
+
+  export type ChatCreateOrConnectWithoutParticipantInput = {
     where: ChatWhereUniqueInput
-    data: XOR<ChatUpdateWithoutUser_Chat_ownerIdToUserInput, ChatUncheckedUpdateWithoutUser_Chat_ownerIdToUserInput>
+    create: XOR<ChatCreateWithoutParticipantInput, ChatUncheckedCreateWithoutParticipantInput>
   }
 
-  export type ChatUpdateManyWithWhereWithoutUser_Chat_ownerIdToUserInput = {
-    where: ChatScalarWhereInput
-    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserInput>
-  }
-
-  export type ChatScalarWhereInput = {
-    AND?: ChatScalarWhereInput | ChatScalarWhereInput[]
-    OR?: ChatScalarWhereInput[]
-    NOT?: ChatScalarWhereInput | ChatScalarWhereInput[]
-    id?: StringFilter<"Chat"> | string
-    postId?: StringFilter<"Chat"> | string
-    ownerId?: StringFilter<"Chat"> | string
-    participantId?: StringFilter<"Chat"> | string
-    createdAt?: DateTimeFilter<"Chat"> | Date | string
-    updatedAt?: DateTimeFilter<"Chat"> | Date | string
-  }
-
-  export type ChatUpsertWithWhereUniqueWithoutUser_Chat_participantIdToUserInput = {
-    where: ChatWhereUniqueInput
-    update: XOR<ChatUpdateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedUpdateWithoutUser_Chat_participantIdToUserInput>
-    create: XOR<ChatCreateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedCreateWithoutUser_Chat_participantIdToUserInput>
-  }
-
-  export type ChatUpdateWithWhereUniqueWithoutUser_Chat_participantIdToUserInput = {
-    where: ChatWhereUniqueInput
-    data: XOR<ChatUpdateWithoutUser_Chat_participantIdToUserInput, ChatUncheckedUpdateWithoutUser_Chat_participantIdToUserInput>
-  }
-
-  export type ChatUpdateManyWithWhereWithoutUser_Chat_participantIdToUserInput = {
-    where: ChatScalarWhereInput
-    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserInput>
+  export type ChatCreateManyParticipantInputEnvelope = {
+    data: ChatCreateManyParticipantInput | ChatCreateManyParticipantInput[]
+    skipDuplicates?: boolean
   }
 
   export type DealUpsertWithWhereUniqueWithoutSelectedUserInput = {
@@ -12995,33 +12951,6 @@ export namespace Prisma {
     description?: StringFilter<"Interest"> | string
   }
 
-  export type MessageUpsertWithWhereUniqueWithoutUserInput = {
-    where: MessageWhereUniqueInput
-    update: XOR<MessageUpdateWithoutUserInput, MessageUncheckedUpdateWithoutUserInput>
-    create: XOR<MessageCreateWithoutUserInput, MessageUncheckedCreateWithoutUserInput>
-  }
-
-  export type MessageUpdateWithWhereUniqueWithoutUserInput = {
-    where: MessageWhereUniqueInput
-    data: XOR<MessageUpdateWithoutUserInput, MessageUncheckedUpdateWithoutUserInput>
-  }
-
-  export type MessageUpdateManyWithWhereWithoutUserInput = {
-    where: MessageScalarWhereInput
-    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type MessageScalarWhereInput = {
-    AND?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    OR?: MessageScalarWhereInput[]
-    NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    id?: StringFilter<"Message"> | string
-    chatId?: StringFilter<"Message"> | string
-    senderId?: StringFilter<"Message"> | string
-    content?: StringFilter<"Message"> | string
-    createdAt?: DateTimeFilter<"Message"> | Date | string
-  }
-
   export type PostUpsertWithWhereUniqueWithoutUserInput = {
     where: PostWhereUniqueInput
     update: XOR<PostUpdateWithoutUserInput, PostUncheckedUpdateWithoutUserInput>
@@ -13045,8 +12974,8 @@ export namespace Prisma {
     id?: StringFilter<"Post"> | string
     type?: EnumPostTypeFilter<"Post"> | $Enums.PostType
     title?: StringFilter<"Post"> | string
-    caption?: StringNullableFilter<"Post"> | string | null
-    description?: StringNullableFilter<"Post"> | string | null
+    caption?: StringFilter<"Post"> | string
+    description?: StringFilter<"Post"> | string
     price?: FloatFilter<"Post"> | number
     priceUnit?: StringFilter<"Post"> | string
     location?: StringNullableFilter<"Post"> | string | null
@@ -13058,12 +12987,83 @@ export namespace Prisma {
     status?: EnumSTATUSFilter<"Post"> | $Enums.STATUS
   }
 
+  export type MessageUpsertWithWhereUniqueWithoutSenderInput = {
+    where: MessageWhereUniqueInput
+    update: XOR<MessageUpdateWithoutSenderInput, MessageUncheckedUpdateWithoutSenderInput>
+    create: XOR<MessageCreateWithoutSenderInput, MessageUncheckedCreateWithoutSenderInput>
+  }
+
+  export type MessageUpdateWithWhereUniqueWithoutSenderInput = {
+    where: MessageWhereUniqueInput
+    data: XOR<MessageUpdateWithoutSenderInput, MessageUncheckedUpdateWithoutSenderInput>
+  }
+
+  export type MessageUpdateManyWithWhereWithoutSenderInput = {
+    where: MessageScalarWhereInput
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutSenderInput>
+  }
+
+  export type MessageScalarWhereInput = {
+    AND?: MessageScalarWhereInput | MessageScalarWhereInput[]
+    OR?: MessageScalarWhereInput[]
+    NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
+    id?: StringFilter<"Message"> | string
+    chatId?: StringFilter<"Message"> | string
+    senderId?: StringFilter<"Message"> | string
+    content?: StringFilter<"Message"> | string
+    createdAt?: DateTimeFilter<"Message"> | Date | string
+  }
+
+  export type ChatUpsertWithWhereUniqueWithoutOwnerInput = {
+    where: ChatWhereUniqueInput
+    update: XOR<ChatUpdateWithoutOwnerInput, ChatUncheckedUpdateWithoutOwnerInput>
+    create: XOR<ChatCreateWithoutOwnerInput, ChatUncheckedCreateWithoutOwnerInput>
+  }
+
+  export type ChatUpdateWithWhereUniqueWithoutOwnerInput = {
+    where: ChatWhereUniqueInput
+    data: XOR<ChatUpdateWithoutOwnerInput, ChatUncheckedUpdateWithoutOwnerInput>
+  }
+
+  export type ChatUpdateManyWithWhereWithoutOwnerInput = {
+    where: ChatScalarWhereInput
+    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutOwnerInput>
+  }
+
+  export type ChatScalarWhereInput = {
+    AND?: ChatScalarWhereInput | ChatScalarWhereInput[]
+    OR?: ChatScalarWhereInput[]
+    NOT?: ChatScalarWhereInput | ChatScalarWhereInput[]
+    id?: StringFilter<"Chat"> | string
+    postId?: StringFilter<"Chat"> | string
+    ownerId?: StringFilter<"Chat"> | string
+    participantId?: StringFilter<"Chat"> | string
+    createdAt?: DateTimeFilter<"Chat"> | Date | string
+    updatedAt?: DateTimeFilter<"Chat"> | Date | string
+  }
+
+  export type ChatUpsertWithWhereUniqueWithoutParticipantInput = {
+    where: ChatWhereUniqueInput
+    update: XOR<ChatUpdateWithoutParticipantInput, ChatUncheckedUpdateWithoutParticipantInput>
+    create: XOR<ChatCreateWithoutParticipantInput, ChatUncheckedCreateWithoutParticipantInput>
+  }
+
+  export type ChatUpdateWithWhereUniqueWithoutParticipantInput = {
+    where: ChatWhereUniqueInput
+    data: XOR<ChatUpdateWithoutParticipantInput, ChatUncheckedUpdateWithoutParticipantInput>
+  }
+
+  export type ChatUpdateManyWithWhereWithoutParticipantInput = {
+    where: ChatScalarWhereInput
+    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutParticipantInput>
+  }
+
   export type PostCreateWithoutCategoryInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -13071,18 +13071,18 @@ export namespace Prisma {
     createdAt?: Date | string
     imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    Chat?: ChatCreateNestedManyWithoutPostInput
     deal?: DealCreateNestedOneWithoutPostInput
     interests?: InterestCreateNestedManyWithoutPostInput
     user: UserCreateNestedOneWithoutPostsInput
+    chats?: ChatCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCategoryInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -13091,9 +13091,9 @@ export namespace Prisma {
     userId: string
     imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    Chat?: ChatUncheckedCreateNestedManyWithoutPostInput
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
     interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+    chats?: ChatUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCategoryInput = {
@@ -13120,34 +13120,6 @@ export namespace Prisma {
   export type PostUpdateManyWithWhereWithoutCategoryInput = {
     where: PostScalarWhereInput
     data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutCategoryInput>
-  }
-
-  export type ChatCreateWithoutPostInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    User_Chat_ownerIdToUser: UserCreateNestedOneWithoutChat_Chat_ownerIdToUserInput
-    User_Chat_participantIdToUser: UserCreateNestedOneWithoutChat_Chat_participantIdToUserInput
-    Message?: MessageCreateNestedManyWithoutChatInput
-  }
-
-  export type ChatUncheckedCreateWithoutPostInput = {
-    id: string
-    ownerId: string
-    participantId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    Message?: MessageUncheckedCreateNestedManyWithoutChatInput
-  }
-
-  export type ChatCreateOrConnectWithoutPostInput = {
-    where: ChatWhereUniqueInput
-    create: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput>
-  }
-
-  export type ChatCreateManyPostInputEnvelope = {
-    data: ChatCreateManyPostInput | ChatCreateManyPostInput[]
-    skipDuplicates?: boolean
   }
 
   export type DealCreateWithoutPostInput = {
@@ -13240,11 +13212,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealCreateNestedManyWithoutSelectedUserInput
     interests?: InterestCreateNestedManyWithoutUserInput
-    Message?: MessageCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatCreateNestedManyWithoutParticipantInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -13255,11 +13227,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
     interests?: InterestUncheckedCreateNestedManyWithoutUserInput
-    Message?: MessageUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatUncheckedCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatUncheckedCreateNestedManyWithoutParticipantInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -13267,20 +13239,32 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
   }
 
-  export type ChatUpsertWithWhereUniqueWithoutPostInput = {
+  export type ChatCreateWithoutPostInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageCreateNestedManyWithoutChatInput
+    owner: UserCreateNestedOneWithoutChatsOwnedInput
+    participant: UserCreateNestedOneWithoutChatsParticipatedInput
+  }
+
+  export type ChatUncheckedCreateWithoutPostInput = {
+    id?: string
+    ownerId: string
+    participantId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutChatInput
+  }
+
+  export type ChatCreateOrConnectWithoutPostInput = {
     where: ChatWhereUniqueInput
-    update: XOR<ChatUpdateWithoutPostInput, ChatUncheckedUpdateWithoutPostInput>
     create: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput>
   }
 
-  export type ChatUpdateWithWhereUniqueWithoutPostInput = {
-    where: ChatWhereUniqueInput
-    data: XOR<ChatUpdateWithoutPostInput, ChatUncheckedUpdateWithoutPostInput>
-  }
-
-  export type ChatUpdateManyWithWhereWithoutPostInput = {
-    where: ChatScalarWhereInput
-    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutPostInput>
+  export type ChatCreateManyPostInputEnvelope = {
+    data: ChatCreateManyPostInput | ChatCreateManyPostInput[]
+    skipDuplicates?: boolean
   }
 
   export type DealUpsertWithoutPostInput = {
@@ -13388,11 +13372,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
     interests?: InterestUpdateManyWithoutUserNestedInput
-    Message?: MessageUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUpdateManyWithoutParticipantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -13403,19 +13387,35 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
     interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
-    Message?: MessageUncheckedUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUncheckedUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUncheckedUpdateManyWithoutParticipantNestedInput
+  }
+
+  export type ChatUpsertWithWhereUniqueWithoutPostInput = {
+    where: ChatWhereUniqueInput
+    update: XOR<ChatUpdateWithoutPostInput, ChatUncheckedUpdateWithoutPostInput>
+    create: XOR<ChatCreateWithoutPostInput, ChatUncheckedCreateWithoutPostInput>
+  }
+
+  export type ChatUpdateWithWhereUniqueWithoutPostInput = {
+    where: ChatWhereUniqueInput
+    data: XOR<ChatUpdateWithoutPostInput, ChatUncheckedUpdateWithoutPostInput>
+  }
+
+  export type ChatUpdateManyWithWhereWithoutPostInput = {
+    where: ChatScalarWhereInput
+    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutPostInput>
   }
 
   export type PostCreateWithoutInterestsInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -13423,18 +13423,18 @@ export namespace Prisma {
     createdAt?: Date | string
     imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    Chat?: ChatCreateNestedManyWithoutPostInput
     deal?: DealCreateNestedOneWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
+    chats?: ChatCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutInterestsInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -13444,8 +13444,8 @@ export namespace Prisma {
     imageUrl?: PostCreateimageUrlInput | string[]
     categoryId: string
     status?: $Enums.STATUS
-    Chat?: ChatUncheckedCreateNestedManyWithoutPostInput
     deal?: DealUncheckedCreateNestedOneWithoutPostInput
+    chats?: ChatUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutInterestsInput = {
@@ -13461,11 +13461,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealCreateNestedManyWithoutSelectedUserInput
-    Message?: MessageCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatCreateNestedManyWithoutParticipantInput
   }
 
   export type UserUncheckedCreateWithoutInterestsInput = {
@@ -13476,11 +13476,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
-    Message?: MessageUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatUncheckedCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatUncheckedCreateNestedManyWithoutParticipantInput
   }
 
   export type UserCreateOrConnectWithoutInterestsInput = {
@@ -13503,8 +13503,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13512,18 +13512,18 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUpdateManyWithoutPostNestedInput
     deal?: DealUpdateOneWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
+    chats?: ChatUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutInterestsInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13533,8 +13533,8 @@ export namespace Prisma {
     imageUrl?: PostUpdateimageUrlInput | string[]
     categoryId?: StringFieldUpdateOperationsInput | string
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUncheckedUpdateManyWithoutPostNestedInput
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
+    chats?: ChatUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type UserUpsertWithoutInterestsInput = {
@@ -13556,11 +13556,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
-    Message?: MessageUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUpdateManyWithoutParticipantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInterestsInput = {
@@ -13571,19 +13571,19 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
-    Message?: MessageUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUncheckedUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUncheckedUpdateManyWithoutParticipantNestedInput
   }
 
   export type PostCreateWithoutDealInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -13591,18 +13591,18 @@ export namespace Prisma {
     createdAt?: Date | string
     imageUrl?: PostCreateimageUrlInput | string[]
     status?: $Enums.STATUS
-    Chat?: ChatCreateNestedManyWithoutPostInput
     interests?: InterestCreateNestedManyWithoutPostInput
     category: CategoryCreateNestedOneWithoutPostsInput
     user: UserCreateNestedOneWithoutPostsInput
+    chats?: ChatCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutDealInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -13612,8 +13612,8 @@ export namespace Prisma {
     imageUrl?: PostCreateimageUrlInput | string[]
     categoryId: string
     status?: $Enums.STATUS
-    Chat?: ChatUncheckedCreateNestedManyWithoutPostInput
     interests?: InterestUncheckedCreateNestedManyWithoutPostInput
+    chats?: ChatUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutDealInput = {
@@ -13629,11 +13629,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     interests?: InterestCreateNestedManyWithoutUserInput
-    Message?: MessageCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatCreateNestedManyWithoutParticipantInput
   }
 
   export type UserUncheckedCreateWithoutDealsInput = {
@@ -13644,11 +13644,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     interests?: InterestUncheckedCreateNestedManyWithoutUserInput
-    Message?: MessageUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatUncheckedCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatUncheckedCreateNestedManyWithoutParticipantInput
   }
 
   export type UserCreateOrConnectWithoutDealsInput = {
@@ -13671,8 +13671,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13680,18 +13680,18 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUpdateManyWithoutPostNestedInput
     interests?: InterestUpdateManyWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
+    chats?: ChatUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutDealInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13701,8 +13701,8 @@ export namespace Prisma {
     imageUrl?: PostUpdateimageUrlInput | string[]
     categoryId?: StringFieldUpdateOperationsInput | string
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUncheckedUpdateManyWithoutPostNestedInput
     interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+    chats?: ChatUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type UserUpsertWithoutDealsInput = {
@@ -13724,11 +13724,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     interests?: InterestUpdateManyWithoutUserNestedInput
-    Message?: MessageUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUpdateManyWithoutParticipantNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDealsInput = {
@@ -13739,135 +13739,22 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
-    Message?: MessageUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserCreateWithoutChat_Chat_ownerIdToUserInput = {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    upiId?: string | null
-    Chat_Chat_participantIdToUser?: ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput
-    deals?: DealCreateNestedManyWithoutSelectedUserInput
-    interests?: InterestCreateNestedManyWithoutUserInput
-    Message?: MessageCreateNestedManyWithoutUserInput
-    posts?: PostCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutChat_Chat_ownerIdToUserInput = {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    upiId?: string | null
-    Chat_Chat_participantIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput
-    deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
-    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
-    Message?: MessageUncheckedCreateNestedManyWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutChat_Chat_ownerIdToUserInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutChat_Chat_ownerIdToUserInput, UserUncheckedCreateWithoutChat_Chat_ownerIdToUserInput>
-  }
-
-  export type UserCreateWithoutChat_Chat_participantIdToUserInput = {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    deals?: DealCreateNestedManyWithoutSelectedUserInput
-    interests?: InterestCreateNestedManyWithoutUserInput
-    Message?: MessageCreateNestedManyWithoutUserInput
-    posts?: PostCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutChat_Chat_participantIdToUserInput = {
-    id: string
-    email: string
-    firstName: string
-    lastName: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
-    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
-    Message?: MessageUncheckedCreateNestedManyWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutChat_Chat_participantIdToUserInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutChat_Chat_participantIdToUserInput, UserUncheckedCreateWithoutChat_Chat_participantIdToUserInput>
-  }
-
-  export type PostCreateWithoutChatInput = {
-    id?: string
-    type: $Enums.PostType
-    title: string
-    caption?: string | null
-    description?: string | null
-    price: number
-    priceUnit: string
-    location?: string | null
-    urgency?: $Enums.Urgency | null
-    createdAt?: Date | string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    status?: $Enums.STATUS
-    deal?: DealCreateNestedOneWithoutPostInput
-    interests?: InterestCreateNestedManyWithoutPostInput
-    category: CategoryCreateNestedOneWithoutPostsInput
-    user: UserCreateNestedOneWithoutPostsInput
-  }
-
-  export type PostUncheckedCreateWithoutChatInput = {
-    id?: string
-    type: $Enums.PostType
-    title: string
-    caption?: string | null
-    description?: string | null
-    price: number
-    priceUnit: string
-    location?: string | null
-    urgency?: $Enums.Urgency | null
-    createdAt?: Date | string
-    userId: string
-    imageUrl?: PostCreateimageUrlInput | string[]
-    categoryId: string
-    status?: $Enums.STATUS
-    deal?: DealUncheckedCreateNestedOneWithoutPostInput
-    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
-  }
-
-  export type PostCreateOrConnectWithoutChatInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutChatInput, PostUncheckedCreateWithoutChatInput>
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUncheckedUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUncheckedUpdateManyWithoutParticipantNestedInput
   }
 
   export type MessageCreateWithoutChatInput = {
-    id: string
+    id?: string
     content: string
     createdAt?: Date | string
-    User: UserCreateNestedOneWithoutMessageInput
+    sender: UserCreateNestedOneWithoutMessagesSentInput
   }
 
   export type MessageUncheckedCreateWithoutChatInput = {
-    id: string
+    id?: string
     senderId: string
     content: string
     createdAt?: Date | string
@@ -13883,135 +13770,117 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutChat_Chat_ownerIdToUserInput = {
-    update: XOR<UserUpdateWithoutChat_Chat_ownerIdToUserInput, UserUncheckedUpdateWithoutChat_Chat_ownerIdToUserInput>
-    create: XOR<UserCreateWithoutChat_Chat_ownerIdToUserInput, UserUncheckedCreateWithoutChat_Chat_ownerIdToUserInput>
-    where?: UserWhereInput
+  export type PostCreateWithoutChatsInput = {
+    id?: string
+    type: $Enums.PostType
+    title: string
+    caption: string
+    description: string
+    price: number
+    priceUnit: string
+    location?: string | null
+    urgency?: $Enums.Urgency | null
+    createdAt?: Date | string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    status?: $Enums.STATUS
+    deal?: DealCreateNestedOneWithoutPostInput
+    interests?: InterestCreateNestedManyWithoutPostInput
+    category: CategoryCreateNestedOneWithoutPostsInput
+    user: UserCreateNestedOneWithoutPostsInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutChat_Chat_ownerIdToUserInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutChat_Chat_ownerIdToUserInput, UserUncheckedUpdateWithoutChat_Chat_ownerIdToUserInput>
+  export type PostUncheckedCreateWithoutChatsInput = {
+    id?: string
+    type: $Enums.PostType
+    title: string
+    caption: string
+    description: string
+    price: number
+    priceUnit: string
+    location?: string | null
+    urgency?: $Enums.Urgency | null
+    createdAt?: Date | string
+    userId: string
+    imageUrl?: PostCreateimageUrlInput | string[]
+    categoryId: string
+    status?: $Enums.STATUS
+    deal?: DealUncheckedCreateNestedOneWithoutPostInput
+    interests?: InterestUncheckedCreateNestedManyWithoutPostInput
   }
 
-  export type UserUpdateWithoutChat_Chat_ownerIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_participantIdToUser?: ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
-    deals?: DealUpdateManyWithoutSelectedUserNestedInput
-    interests?: InterestUpdateManyWithoutUserNestedInput
-    Message?: MessageUpdateManyWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutUserNestedInput
+  export type PostCreateOrConnectWithoutChatsInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutChatsInput, PostUncheckedCreateWithoutChatsInput>
   }
 
-  export type UserUncheckedUpdateWithoutChat_Chat_ownerIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_participantIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
-    deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
-    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
-    Message?: MessageUncheckedUpdateManyWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+  export type UserCreateWithoutChatsOwnedInput = {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    upiId?: string | null
+    deals?: DealCreateNestedManyWithoutSelectedUserInput
+    interests?: InterestCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    chatsParticipated?: ChatCreateNestedManyWithoutParticipantInput
   }
 
-  export type UserUpsertWithoutChat_Chat_participantIdToUserInput = {
-    update: XOR<UserUpdateWithoutChat_Chat_participantIdToUserInput, UserUncheckedUpdateWithoutChat_Chat_participantIdToUserInput>
-    create: XOR<UserCreateWithoutChat_Chat_participantIdToUserInput, UserUncheckedCreateWithoutChat_Chat_participantIdToUserInput>
-    where?: UserWhereInput
+  export type UserUncheckedCreateWithoutChatsOwnedInput = {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    upiId?: string | null
+    deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
+    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    chatsParticipated?: ChatUncheckedCreateNestedManyWithoutParticipantInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutChat_Chat_participantIdToUserInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutChat_Chat_participantIdToUserInput, UserUncheckedUpdateWithoutChat_Chat_participantIdToUserInput>
+  export type UserCreateOrConnectWithoutChatsOwnedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutChatsOwnedInput, UserUncheckedCreateWithoutChatsOwnedInput>
   }
 
-  export type UserUpdateWithoutChat_Chat_participantIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    deals?: DealUpdateManyWithoutSelectedUserNestedInput
-    interests?: InterestUpdateManyWithoutUserNestedInput
-    Message?: MessageUpdateManyWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutUserNestedInput
+  export type UserCreateWithoutChatsParticipatedInput = {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    upiId?: string | null
+    deals?: DealCreateNestedManyWithoutSelectedUserInput
+    interests?: InterestCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    messagesSent?: MessageCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatCreateNestedManyWithoutOwnerInput
   }
 
-  export type UserUncheckedUpdateWithoutChat_Chat_participantIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
-    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
-    Message?: MessageUncheckedUpdateManyWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+  export type UserUncheckedCreateWithoutChatsParticipatedInput = {
+    id: string
+    email: string
+    firstName: string
+    lastName: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    upiId?: string | null
+    deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
+    interests?: InterestUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    messagesSent?: MessageUncheckedCreateNestedManyWithoutSenderInput
+    chatsOwned?: ChatUncheckedCreateNestedManyWithoutOwnerInput
   }
 
-  export type PostUpsertWithoutChatInput = {
-    update: XOR<PostUpdateWithoutChatInput, PostUncheckedUpdateWithoutChatInput>
-    create: XOR<PostCreateWithoutChatInput, PostUncheckedCreateWithoutChatInput>
-    where?: PostWhereInput
-  }
-
-  export type PostUpdateToOneWithWhereWithoutChatInput = {
-    where?: PostWhereInput
-    data: XOR<PostUpdateWithoutChatInput, PostUncheckedUpdateWithoutChatInput>
-  }
-
-  export type PostUpdateWithoutChatInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
-    title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: FloatFieldUpdateOperationsInput | number
-    priceUnit?: StringFieldUpdateOperationsInput | string
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    deal?: DealUpdateOneWithoutPostNestedInput
-    interests?: InterestUpdateManyWithoutPostNestedInput
-    category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
-    user?: UserUpdateOneRequiredWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutChatInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
-    title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: FloatFieldUpdateOperationsInput | number
-    priceUnit?: StringFieldUpdateOperationsInput | string
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
-    imageUrl?: PostUpdateimageUrlInput | string[]
-    categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    deal?: DealUncheckedUpdateOneWithoutPostNestedInput
-    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+  export type UserCreateOrConnectWithoutChatsParticipatedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutChatsParticipatedInput, UserUncheckedCreateWithoutChatsParticipatedInput>
   }
 
   export type MessageUpsertWithWhereUniqueWithoutChatInput = {
@@ -14030,30 +13899,161 @@ export namespace Prisma {
     data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutChatInput>
   }
 
-  export type ChatCreateWithoutMessageInput = {
-    id: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    User_Chat_ownerIdToUser: UserCreateNestedOneWithoutChat_Chat_ownerIdToUserInput
-    User_Chat_participantIdToUser: UserCreateNestedOneWithoutChat_Chat_participantIdToUserInput
-    Post: PostCreateNestedOneWithoutChatInput
+  export type PostUpsertWithoutChatsInput = {
+    update: XOR<PostUpdateWithoutChatsInput, PostUncheckedUpdateWithoutChatsInput>
+    create: XOR<PostCreateWithoutChatsInput, PostUncheckedCreateWithoutChatsInput>
+    where?: PostWhereInput
   }
 
-  export type ChatUncheckedCreateWithoutMessageInput = {
-    id: string
+  export type PostUpdateToOneWithWhereWithoutChatsInput = {
+    where?: PostWhereInput
+    data: XOR<PostUpdateWithoutChatsInput, PostUncheckedUpdateWithoutChatsInput>
+  }
+
+  export type PostUpdateWithoutChatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
+    title?: StringFieldUpdateOperationsInput | string
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    priceUnit?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    deal?: DealUpdateOneWithoutPostNestedInput
+    interests?: InterestUpdateManyWithoutPostNestedInput
+    category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    user?: UserUpdateOneRequiredWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutChatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
+    title?: StringFieldUpdateOperationsInput | string
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    priceUnit?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    urgency?: NullableEnumUrgencyFieldUpdateOperationsInput | $Enums.Urgency | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    imageUrl?: PostUpdateimageUrlInput | string[]
+    categoryId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
+    deal?: DealUncheckedUpdateOneWithoutPostNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type UserUpsertWithoutChatsOwnedInput = {
+    update: XOR<UserUpdateWithoutChatsOwnedInput, UserUncheckedUpdateWithoutChatsOwnedInput>
+    create: XOR<UserCreateWithoutChatsOwnedInput, UserUncheckedCreateWithoutChatsOwnedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutChatsOwnedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutChatsOwnedInput, UserUncheckedUpdateWithoutChatsOwnedInput>
+  }
+
+  export type UserUpdateWithoutChatsOwnedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    deals?: DealUpdateManyWithoutSelectedUserNestedInput
+    interests?: InterestUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    chatsParticipated?: ChatUpdateManyWithoutParticipantNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutChatsOwnedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    chatsParticipated?: ChatUncheckedUpdateManyWithoutParticipantNestedInput
+  }
+
+  export type UserUpsertWithoutChatsParticipatedInput = {
+    update: XOR<UserUpdateWithoutChatsParticipatedInput, UserUncheckedUpdateWithoutChatsParticipatedInput>
+    create: XOR<UserCreateWithoutChatsParticipatedInput, UserUncheckedCreateWithoutChatsParticipatedInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutChatsParticipatedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutChatsParticipatedInput, UserUncheckedUpdateWithoutChatsParticipatedInput>
+  }
+
+  export type UserUpdateWithoutChatsParticipatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    deals?: DealUpdateManyWithoutSelectedUserNestedInput
+    interests?: InterestUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutChatsParticipatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    upiId?: NullableStringFieldUpdateOperationsInput | string | null
+    deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
+    interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    messagesSent?: MessageUncheckedUpdateManyWithoutSenderNestedInput
+    chatsOwned?: ChatUncheckedUpdateManyWithoutOwnerNestedInput
+  }
+
+  export type ChatCreateWithoutMessagesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    post: PostCreateNestedOneWithoutChatsInput
+    owner: UserCreateNestedOneWithoutChatsOwnedInput
+    participant: UserCreateNestedOneWithoutChatsParticipatedInput
+  }
+
+  export type ChatUncheckedCreateWithoutMessagesInput = {
+    id?: string
     postId: string
     ownerId: string
     participantId: string
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ChatCreateOrConnectWithoutMessageInput = {
+  export type ChatCreateOrConnectWithoutMessagesInput = {
     where: ChatWhereUniqueInput
-    create: XOR<ChatCreateWithoutMessageInput, ChatUncheckedCreateWithoutMessageInput>
+    create: XOR<ChatCreateWithoutMessagesInput, ChatUncheckedCreateWithoutMessagesInput>
   }
 
-  export type UserCreateWithoutMessageInput = {
+  export type UserCreateWithoutMessagesSentInput = {
     id: string
     email: string
     firstName: string
@@ -14061,14 +14061,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealCreateNestedManyWithoutSelectedUserInput
     interests?: InterestCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    chatsOwned?: ChatCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatCreateNestedManyWithoutParticipantInput
   }
 
-  export type UserUncheckedCreateWithoutMessageInput = {
+  export type UserUncheckedCreateWithoutMessagesSentInput = {
     id: string
     email: string
     firstName: string
@@ -14076,39 +14076,39 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     upiId?: string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_ownerIdToUserInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedCreateNestedManyWithoutUser_Chat_participantIdToUserInput
     deals?: DealUncheckedCreateNestedManyWithoutSelectedUserInput
     interests?: InterestUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    chatsOwned?: ChatUncheckedCreateNestedManyWithoutOwnerInput
+    chatsParticipated?: ChatUncheckedCreateNestedManyWithoutParticipantInput
   }
 
-  export type UserCreateOrConnectWithoutMessageInput = {
+  export type UserCreateOrConnectWithoutMessagesSentInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutMessageInput, UserUncheckedCreateWithoutMessageInput>
+    create: XOR<UserCreateWithoutMessagesSentInput, UserUncheckedCreateWithoutMessagesSentInput>
   }
 
-  export type ChatUpsertWithoutMessageInput = {
-    update: XOR<ChatUpdateWithoutMessageInput, ChatUncheckedUpdateWithoutMessageInput>
-    create: XOR<ChatCreateWithoutMessageInput, ChatUncheckedCreateWithoutMessageInput>
+  export type ChatUpsertWithoutMessagesInput = {
+    update: XOR<ChatUpdateWithoutMessagesInput, ChatUncheckedUpdateWithoutMessagesInput>
+    create: XOR<ChatCreateWithoutMessagesInput, ChatUncheckedCreateWithoutMessagesInput>
     where?: ChatWhereInput
   }
 
-  export type ChatUpdateToOneWithWhereWithoutMessageInput = {
+  export type ChatUpdateToOneWithWhereWithoutMessagesInput = {
     where?: ChatWhereInput
-    data: XOR<ChatUpdateWithoutMessageInput, ChatUncheckedUpdateWithoutMessageInput>
+    data: XOR<ChatUpdateWithoutMessagesInput, ChatUncheckedUpdateWithoutMessagesInput>
   }
 
-  export type ChatUpdateWithoutMessageInput = {
+  export type ChatUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User_Chat_ownerIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_ownerIdToUserNestedInput
-    User_Chat_participantIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_participantIdToUserNestedInput
-    Post?: PostUpdateOneRequiredWithoutChatNestedInput
+    post?: PostUpdateOneRequiredWithoutChatsNestedInput
+    owner?: UserUpdateOneRequiredWithoutChatsOwnedNestedInput
+    participant?: UserUpdateOneRequiredWithoutChatsParticipatedNestedInput
   }
 
-  export type ChatUncheckedUpdateWithoutMessageInput = {
+  export type ChatUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     postId?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
@@ -14117,18 +14117,18 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserUpsertWithoutMessageInput = {
-    update: XOR<UserUpdateWithoutMessageInput, UserUncheckedUpdateWithoutMessageInput>
-    create: XOR<UserCreateWithoutMessageInput, UserUncheckedCreateWithoutMessageInput>
+  export type UserUpsertWithoutMessagesSentInput = {
+    update: XOR<UserUpdateWithoutMessagesSentInput, UserUncheckedUpdateWithoutMessagesSentInput>
+    create: XOR<UserCreateWithoutMessagesSentInput, UserUncheckedCreateWithoutMessagesSentInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutMessageInput = {
+  export type UserUpdateToOneWithWhereWithoutMessagesSentInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutMessageInput, UserUncheckedUpdateWithoutMessageInput>
+    data: XOR<UserUpdateWithoutMessagesSentInput, UserUncheckedUpdateWithoutMessagesSentInput>
   }
 
-  export type UserUpdateWithoutMessageInput = {
+  export type UserUpdateWithoutMessagesSentInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -14136,14 +14136,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUpdateManyWithoutSelectedUserNestedInput
     interests?: InterestUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    chatsOwned?: ChatUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUpdateManyWithoutParticipantNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutMessageInput = {
+  export type UserUncheckedUpdateWithoutMessagesSentInput = {
     id?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -14151,27 +14151,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     upiId?: NullableStringFieldUpdateOperationsInput | string | null
-    Chat_Chat_ownerIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserNestedInput
-    Chat_Chat_participantIdToUser?: ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserNestedInput
     deals?: DealUncheckedUpdateManyWithoutSelectedUserNestedInput
     interests?: InterestUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type ChatCreateManyUser_Chat_ownerIdToUserInput = {
-    id: string
-    postId: string
-    participantId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-  }
-
-  export type ChatCreateManyUser_Chat_participantIdToUserInput = {
-    id: string
-    postId: string
-    ownerId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
+    chatsOwned?: ChatUncheckedUpdateManyWithoutOwnerNestedInput
+    chatsParticipated?: ChatUncheckedUpdateManyWithoutParticipantNestedInput
   }
 
   export type DealCreateManySelectedUserInput = {
@@ -14196,19 +14180,12 @@ export namespace Prisma {
     description: string
   }
 
-  export type MessageCreateManyUserInput = {
-    id: string
-    chatId: string
-    content: string
-    createdAt?: Date | string
-  }
-
   export type PostCreateManyUserInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -14219,56 +14196,27 @@ export namespace Prisma {
     status?: $Enums.STATUS
   }
 
-  export type ChatUpdateWithoutUser_Chat_ownerIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User_Chat_participantIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_participantIdToUserNestedInput
-    Post?: PostUpdateOneRequiredWithoutChatNestedInput
-    Message?: MessageUpdateManyWithoutChatNestedInput
+  export type MessageCreateManySenderInput = {
+    id?: string
+    chatId: string
+    content: string
+    createdAt?: Date | string
   }
 
-  export type ChatUncheckedUpdateWithoutUser_Chat_ownerIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
-    participantId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Message?: MessageUncheckedUpdateManyWithoutChatNestedInput
+  export type ChatCreateManyOwnerInput = {
+    id?: string
+    postId: string
+    participantId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ChatUncheckedUpdateManyWithoutUser_Chat_ownerIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
-    participantId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ChatUpdateWithoutUser_Chat_participantIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User_Chat_ownerIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_ownerIdToUserNestedInput
-    Post?: PostUpdateOneRequiredWithoutChatNestedInput
-    Message?: MessageUpdateManyWithoutChatNestedInput
-  }
-
-  export type ChatUncheckedUpdateWithoutUser_Chat_participantIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
-    ownerId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Message?: MessageUncheckedUpdateManyWithoutChatNestedInput
-  }
-
-  export type ChatUncheckedUpdateManyWithoutUser_Chat_participantIdToUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    postId?: StringFieldUpdateOperationsInput | string
-    ownerId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type ChatCreateManyParticipantInput = {
+    id?: string
+    postId: string
+    ownerId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type DealUpdateWithoutSelectedUserInput = {
@@ -14337,33 +14285,12 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
   }
 
-  export type MessageUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Chat?: ChatUpdateOneRequiredWithoutMessageNestedInput
-  }
-
-  export type MessageUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    chatId?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    chatId?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type PostUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14371,18 +14298,18 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUpdateManyWithoutPostNestedInput
     deal?: DealUpdateOneWithoutPostNestedInput
     interests?: InterestUpdateManyWithoutPostNestedInput
     category?: CategoryUpdateOneRequiredWithoutPostsNestedInput
+    chats?: ChatUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14391,17 +14318,17 @@ export namespace Prisma {
     imageUrl?: PostUpdateimageUrlInput | string[]
     categoryId?: StringFieldUpdateOperationsInput | string
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUncheckedUpdateManyWithoutPostNestedInput
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
     interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+    chats?: ChatUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14412,12 +14339,85 @@ export namespace Prisma {
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
   }
 
+  export type MessageUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chat?: ChatUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chatId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageUncheckedUpdateManyWithoutSenderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    chatId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChatUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUpdateManyWithoutChatNestedInput
+    post?: PostUpdateOneRequiredWithoutChatsNestedInput
+    participant?: UserUpdateOneRequiredWithoutChatsParticipatedNestedInput
+  }
+
+  export type ChatUncheckedUpdateWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    participantId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUncheckedUpdateManyWithoutChatNestedInput
+  }
+
+  export type ChatUncheckedUpdateManyWithoutOwnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    participantId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChatUpdateWithoutParticipantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUpdateManyWithoutChatNestedInput
+    post?: PostUpdateOneRequiredWithoutChatsNestedInput
+    owner?: UserUpdateOneRequiredWithoutChatsOwnedNestedInput
+  }
+
+  export type ChatUncheckedUpdateWithoutParticipantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUncheckedUpdateManyWithoutChatNestedInput
+  }
+
+  export type ChatUncheckedUpdateManyWithoutParticipantInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postId?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PostCreateManyCategoryInput = {
     id?: string
     type: $Enums.PostType
     title: string
-    caption?: string | null
-    description?: string | null
+    caption: string
+    description: string
     price: number
     priceUnit: string
     location?: string | null
@@ -14432,8 +14432,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14441,18 +14441,18 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUpdateManyWithoutPostNestedInput
     deal?: DealUpdateOneWithoutPostNestedInput
     interests?: InterestUpdateManyWithoutPostNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
+    chats?: ChatUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14461,17 +14461,17 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-    Chat?: ChatUncheckedUpdateManyWithoutPostNestedInput
     deal?: DealUncheckedUpdateOneWithoutPostNestedInput
     interests?: InterestUncheckedUpdateManyWithoutPostNestedInput
+    chats?: ChatUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumPostTypeFieldUpdateOperationsInput | $Enums.PostType
     title?: StringFieldUpdateOperationsInput | string
-    caption?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    caption?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     price?: FloatFieldUpdateOperationsInput | number
     priceUnit?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14480,14 +14480,6 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     imageUrl?: PostUpdateimageUrlInput | string[]
     status?: EnumSTATUSFieldUpdateOperationsInput | $Enums.STATUS
-  }
-
-  export type ChatCreateManyPostInput = {
-    id: string
-    ownerId: string
-    participantId: string
-    createdAt?: Date | string
-    updatedAt: Date | string
   }
 
   export type InterestCreateManyPostInput = {
@@ -14497,30 +14489,12 @@ export namespace Prisma {
     description: string
   }
 
-  export type ChatUpdateWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User_Chat_ownerIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_ownerIdToUserNestedInput
-    User_Chat_participantIdToUser?: UserUpdateOneRequiredWithoutChat_Chat_participantIdToUserNestedInput
-    Message?: MessageUpdateManyWithoutChatNestedInput
-  }
-
-  export type ChatUncheckedUpdateWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ownerId?: StringFieldUpdateOperationsInput | string
-    participantId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Message?: MessageUncheckedUpdateManyWithoutChatNestedInput
-  }
-
-  export type ChatUncheckedUpdateManyWithoutPostInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ownerId?: StringFieldUpdateOperationsInput | string
-    participantId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type ChatCreateManyPostInput = {
+    id?: string
+    ownerId: string
+    participantId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type InterestUpdateWithoutPostInput = {
@@ -14544,8 +14518,34 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ChatUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUpdateManyWithoutChatNestedInput
+    owner?: UserUpdateOneRequiredWithoutChatsOwnedNestedInput
+    participant?: UserUpdateOneRequiredWithoutChatsParticipatedNestedInput
+  }
+
+  export type ChatUncheckedUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    participantId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: MessageUncheckedUpdateManyWithoutChatNestedInput
+  }
+
+  export type ChatUncheckedUpdateManyWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    participantId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MessageCreateManyChatInput = {
-    id: string
+    id?: string
     senderId: string
     content: string
     createdAt?: Date | string
@@ -14555,7 +14555,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    User?: UserUpdateOneRequiredWithoutMessageNestedInput
+    sender?: UserUpdateOneRequiredWithoutMessagesSentNestedInput
   }
 
   export type MessageUncheckedUpdateWithoutChatInput = {

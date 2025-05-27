@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         }, { status: 201 });
 
     } catch (error) {
-        console.error("Error registering interest:", error);
+        console.log("Error registering interest:", error);
         return NextResponse.json(
             { success: false, message: "Failed to register interest" },
             { status: 500 }
