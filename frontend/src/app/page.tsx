@@ -4,7 +4,7 @@ import FeaturesSection from '../components/features-section';
 import HowItWorksSection from '../components/works-section';
 import TestimonialsSection from '../components/testimonal-section';
 import Footer from '@/components/footer';
-
+import Link from 'next/link';
 export default function Home() {
   return (
     <main className="min-h-screen relative">
@@ -17,6 +17,8 @@ export default function Home() {
           backgroundPosition: "center",
         }}
       />
+      
+
       
       <HeroSection />
       <FeaturesSection />

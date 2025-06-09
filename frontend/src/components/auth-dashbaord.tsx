@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useUser, useClerk } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
+import { BsChatDots } from 'react-icons/bs';
 
 interface UserData {
   id: string;
@@ -80,7 +81,9 @@ function AuthDashboard() {
     return (
       <div className="bg-transparent text-black p-4 flex items-center justify-between">
         <div className="flex items-center space-x-8">
-          <div className="font-bold text-xl">amEx</div>
+          <Link href="/dashboard">
+            <div className="font-bold text-xl">amEx</div>
+          </Link>
           <div className="flex space-x-6">
             <Link href="/listings" className="text-black hover:text-gray-600 font-bold">Listings</Link>
             <Link href="/requests" className="text-black hover:text-gray-600 font-bold">Requests</Link>
@@ -95,7 +98,9 @@ function AuthDashboard() {
     return (
       <div className="bg-transparent text-black p-4 flex items-center justify-between">
         <div className="flex items-center space-x-8 flex-1">
-          <div className="font-bold text-xl">amEx</div>
+          <Link href="/dashboard">
+            <div className="font-bold text-xl">amEx</div>
+          </Link>
           <div className="flex space-x-6">
             <Link href="/listings" className="text-black hover:text-gray-600 font-bold">Listings</Link>
             <Link href="/requests" className="text-black hover:text-gray-600 font-bold">Requests</Link>
@@ -135,7 +140,9 @@ function AuthDashboard() {
     <div className="bg-transparent text-black p-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8 flex-1">
-          <div className="font-bold text-xl">amEx</div>
+          <Link href="/dashboard" className="font-bold text-xl hover:text-gray-600 transition-colors">
+            amEx
+          </Link>
           <div className="flex space-x-6">
             <Link href="/listings" className="text-black hover:text-gray-600 font-bold">Listings</Link>
             <Link href="/requests" className="text-black hover:text-gray-600 font-bold">Requests</Link>
@@ -163,6 +170,14 @@ function AuthDashboard() {
         <div className="flex items-center space-x-4">
           <Link href="/create-post" className="bg-black text-white px-4 py-2 rounded-md text-sm font-bold">
             Create a Post
+          </Link>
+
+          <Link 
+            href="/chat" 
+            className="text-gray-600 hover:text-gray-800 transition-colors"
+            aria-label="Chat"
+          >
+            <BsChatDots className="w-6 h-6" />
           </Link>
           
           <div 

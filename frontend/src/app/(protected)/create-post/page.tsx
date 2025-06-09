@@ -5,6 +5,8 @@ import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { uploadImages } from '@/lib/uploadImage';
+import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 type PostType = 'listing' | 'request';
 
@@ -65,7 +67,7 @@ function CreatePost() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-
+  const router = useRouter();
   // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
@@ -235,11 +237,15 @@ function CreatePost() {
       console.log('Response from server:', data);
     
       if (!response.ok) {
+        toast.error('Failed to create post');
+        router.push('/dashboard');
         throw new Error(data.error || 'Failed to create post');
       }
     
       // Handle success
       console.log('Post created successfully:', data);
+      toast.success('Post created successfully');
+      router.push('/dashboard');
       // Redirect to the dashboard or post view
       // router.push('/dashboard');
     

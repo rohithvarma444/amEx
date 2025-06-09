@@ -8,6 +8,7 @@ export async function POST(request: Request) {
     const { userId } =await auth();
 
     console.log('userId', userId);
+    console.log("--------------------------------")
 
     if (!userId) {
       return NextResponse.json(

@@ -5,6 +5,7 @@ import axios from 'axios';
 import CategoriesSlider from '../../../components/categories-slider';
 import CardGrid from '../../../components/card-grid';
 import Link from 'next/link';
+import LoadingSkeleton from '../../../components/loading-skeleton';
 
 // Types for our data
 interface User {
@@ -112,11 +113,7 @@ function Dashboard() {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4 text-center">
-        <p>Loading dashboard...</p>
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
   return (
