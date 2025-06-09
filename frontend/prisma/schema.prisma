@@ -186,7 +186,6 @@ enum ExchangeStatus {
 enum STATUS {
   ACTIVE
   DELETED
-  FULLFILLED
 }
 
 enum PaymentStatus {
