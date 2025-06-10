@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useUser } from "@clerk/nextjs";
+import { use } from 'react';
+import ChatButton from '@/components/chat-button';
 
 interface Post {
   id: string;
@@ -51,11 +53,11 @@ const fetchPostById = async (postId: string): Promise<Post | null> => {
   }
 };
 
-export default function PostPage({ params }: { params: { postId: string } }) {
+export default function PostPage({ params }: { params: Promise<{ postId: string }> }) {
   const router = useRouter(); 
   const { user } = useUser(); 
   // alert(JSON.stringify(user));
-  const { postId } = params;
+  const { postId } = use(params);
   const [post, setPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showConfirmInterestModal, setShowConfirmInterestModal] = useState(false);
@@ -181,10 +183,6 @@ export default function PostPage({ params }: { params: { postId: string } }) {
                 >
                   I'm interested
                 </button>
-                <ChatButton
-                  postId={postId}
-                  participantId={post.user.id}
-                />
               </div>
             )}
           </div>

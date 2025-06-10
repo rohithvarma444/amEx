@@ -217,8 +217,8 @@ export default function MyActivity() {
                 {myDeals.map((deal) => (
                   <div 
                     key={deal.id} 
-                    className="bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-                    onClick={() => handleOpenDealDialog(deal)}
+                    className={`bg-white rounded-xl shadow-md overflow-hidden ${deal.status === 'COMPLETED' ? '' : 'cursor-pointer hover:shadow-lg transition-shadow'}`}
+                    onClick={() => deal.status !== 'COMPLETED' && handleOpenDealDialog(deal)}
                   >
                     <div className="relative h-48">
                       <Image 
@@ -410,8 +410,8 @@ export default function MyActivity() {
                 </div>
               )}
 
-              {/* UPI Payment section - only show when OTP has been used */}
-              {selectedDeal.selectedUser.id === user?.id && selectedDeal.otpUsed && selectedDeal.paymentStatus === 'PENDING' && (
+              {/* UPI Payment section - only show when OTP has been used and deal is not completed */}
+              {selectedDeal.selectedUser.id === user?.id && selectedDeal.otpUsed && selectedDeal.paymentStatus === 'PENDING' && selectedDeal.status !== 'COMPLETED' && (
                 <div className="space-y-4 mb-6">
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <p className="text-sm font-medium mb-4">Payment Details</p>
@@ -473,12 +473,14 @@ export default function MyActivity() {
                 >
                   Close
                 </button>
-                <button
-                  onClick={() => handleStartChat(selectedDeal)}
-                  className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  Chat with {selectedDeal.post.userId === user?.id ? 'Selected User' : 'Post Owner'}
-                </button>
+                {selectedDeal.status !== 'COMPLETED' && (
+                  <button
+                    onClick={() => handleStartChat(selectedDeal)}
+                    className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+                  >
+                    Chat with {selectedDeal.post.userId === user?.id ? 'Selected User' : 'Post Owner'}
+                  </button>
+                )}
               </div>
             </div>
           </div>

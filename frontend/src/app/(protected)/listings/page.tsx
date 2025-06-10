@@ -5,6 +5,7 @@ import CardItem from '@/components/card-item';
 
 interface Listing {
   id: string;
+  imageUrl: string[];
   title: string;
   description: string;
   price: number;
@@ -35,6 +36,7 @@ export default function ListingsPage() {
       try {
         const response = await fetch('/api/get-listings');
         const data = await response.json();
+        console.log(data);
 
         if (!data.success) {
           throw new Error(data.error || 'Failed to fetch listings');
@@ -88,10 +90,10 @@ export default function ListingsPage() {
         {listings.map((listing) => (
           <CardItem
             key={listing.id}
-            href={`/listing/${listing.id}`}
+            href={`/post/${listing.id}`}
             title={listing.title}
             description={listing.description}
-            imageUrl={listing.category.imageUrl}
+            imageUrl={listing.imageUrl[0]}
             price={listing.price}
             priceUnit={listing.priceUnit}
             category={listing.category}

@@ -38,6 +38,7 @@ export default function ChatButton({
       });
 
       if (!response.ok) {
+        console.log(response);
         throw new Error('Failed to initiate chat');
       }
 

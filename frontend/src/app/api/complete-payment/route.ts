@@ -44,6 +44,14 @@ export async function POST(req: NextRequest) {
       }
     });
 
+    // Update the associated post to mark it as deleted
+    await db.post.update({
+      where: { id: deal.postId },
+      data: {
+        status: 'DELETED'
+      }
+    });
+
     return NextResponse.json({
       success: true,
       data: updatedDeal

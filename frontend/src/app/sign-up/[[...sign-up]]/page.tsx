@@ -100,14 +100,6 @@ export default function SignUpPage() {
 
       console.log("✅ Account creation response:", createResponse);
 
-      // Extra check before preparing email verification
-      if (
-        signUp?.emailAddress === email &&
-        signUp?.status === "missing_requirements"
-      ) {
-        console.warn("⚠️ Sign-up missing requirements, verification might fail.");
-      }
-
       // Prepare email verification
       console.log("📤 Preparing email verification...");
       const verificationResponse = await signUp.prepareEmailAddressVerification({
@@ -116,17 +108,20 @@ export default function SignUpPage() {
 
       console.log("📨 Email verification preparation response:", verificationResponse);
 
-      // Check if the verification status indicates successful email sending
-      if (
-        verificationResponse?.verifications?.emailAddress?.status === "unverified" &&
-        verificationResponse?.verifications?.emailAddress?.nextAction === "needs_attempt"
-      ) {
+      // Fixed: Check if email verification was prepared successfully
+      // The key indicator is that the email address status should be "unverified" 
+      // and nextAction should be "needs_attempt"
+      const emailVerification = verificationResponse?.verifications?.emailAddress;
+      
+      if (emailVerification && emailVerification.status === "unverified") {
         toast.success("Verification code sent to your email!");
         setStep(3);
       } else {
-        toast.error("Unexpected verification response. Please try again.");
-        console.error("❌ Verification preparation unexpected:", verificationResponse);
+        // Log the full response for debugging
+        console.error("❌ Unexpected verification response:", verificationResponse);
+        toast.error("Unable to send verification code. Please try again.");
       }
+      
     } catch (err) {
       console.error("🚨 Error during sign-up:", err);
       
@@ -172,15 +167,9 @@ export default function SignUpPage() {
       
       console.log("✅ Verification response:", response);
       
-      if (response.status !== "complete") {
-        console.error("⚠️ Verification not complete:", response.status);
-        toast.error("Verification failed. Please check the code and try again.");
-        return;
-      }
-      
-      console.log("🎉 Email verified successfully!");
-      
-      if (response.createdSessionId) {
+      // Fixed: Check for completion more robustly
+      if (response.status === "complete" && response.createdSessionId) {
+        console.log("🎉 Email verified successfully!");
         console.log("🔐 Setting active session with ID:", response.createdSessionId);
         
         // Set the user's session as active
@@ -188,18 +177,33 @@ export default function SignUpPage() {
         console.log("✅ User session activated");
         toast.success("Account created successfully!");
         router.push("/sync-user");
-      } else {
-        console.error("❌ No session ID in verification response");
-        toast.error("Account created but unable to sign in automatically. Please log in.");
+        
+      } else if (response.status === "complete") {
+        // Account created but no session - redirect to sign in
+        console.log("✅ Account verified but no session created");
+        toast.success("Account created successfully! Please sign in.");
         router.push("/sign-in");
+        
+      } else {
+        console.error("⚠️ Verification not complete:", response.status);
+        toast.error("Verification failed. Please check the code and try again.");
       }
+      
     } catch (err) {
       console.error("🚨 Error during verification:", err);
       
       if (err.errors) {
         err.errors.forEach(error => {
           console.error(`Error code: ${error.code}, message: ${error.message}`);
-          toast.error(error.message || "Verification failed.");
+          
+          // Handle specific verification errors
+          if (error.code === "form_code_incorrect") {
+            toast.error("Incorrect verification code. Please try again.");
+          } else if (error.code === "verification_expired") {
+            toast.error("Verification code has expired. Please request a new one.");
+          } else {
+            toast.error(error.message || "Verification failed.");
+          }
         });
       } else {
         toast.error(err.message || "Verification failed. Please try again.");
@@ -223,13 +227,19 @@ export default function SignUpPage() {
     
     // Auto-focus to next input if value is entered
     if (value && index < 5) {
-      document.getElementById(`code-input-${index + 1}`).focus();
+      const nextInput = document.getElementById(`code-input-${index + 1}`);
+      if (nextInput) {
+        nextInput.focus();
+      }
     }
     
     // Auto-submit if all digits are filled
     if (value && index === 5 && newCode.every(digit => digit.length === 1)) {
       setTimeout(() => {
-        document.getElementById("verification-submit-button").click();
+        const submitButton = document.getElementById("verification-submit-button");
+        if (submitButton) {
+          submitButton.click();
+        }
       }, 500);
     }
   };
@@ -244,11 +254,17 @@ export default function SignUpPage() {
     }
     
     try {
-      const response = await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      const response = await signUp.prepareEmailAddressVerification({ 
+        strategy: "email_code" 
+      });
       console.log("📨 New verification code sent, response:", response);
       
       toast.success("New verification code sent to your email!");
       setTimeLeft(30); // Reset timer
+      
+      // Reset the verification code inputs
+      setVerificationCode(["", "", "", "", "", ""]);
+      
     } catch (err) {
       console.error("🚨 Error resending verification code:", err);
       
