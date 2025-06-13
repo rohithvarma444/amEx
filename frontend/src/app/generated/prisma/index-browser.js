@@ -221,8 +221,7 @@ exports.Urgency = exports.$Enums.Urgency = {
 
 exports.STATUS = exports.$Enums.STATUS = {
   ACTIVE: 'ACTIVE',
-  DELETED: 'DELETED',
-  FULLFILLED: 'FULLFILLED'
+  DELETED: 'DELETED'
 };
 
 exports.DealStatus = exports.$Enums.DealStatus = {

@@ -90,8 +90,7 @@ export type ExchangeStatus = (typeof ExchangeStatus)[keyof typeof ExchangeStatus
 
 export const STATUS: {
   ACTIVE: 'ACTIVE',
-  DELETED: 'DELETED',
-  FULLFILLED: 'FULLFILLED'
+  DELETED: 'DELETED'
 };
 
 export type STATUS = (typeof STATUS)[keyof typeof STATUS]

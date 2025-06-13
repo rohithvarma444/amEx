@@ -187,7 +187,7 @@ export default function PostDetail({ params }: { params: { postId: string } }) {
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <p className="text-red-500">{error || 'Post not found'}</p>
         <button
-          onClick={() => router.back()}
+          onClick={() => router.push('/my-posts')}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
         >
           Go Back
@@ -201,7 +201,7 @@ export default function PostDetail({ params }: { params: { postId: string } }) {
       <div className="sticky top-0 z-10 backdrop-blur-sm border-b">
         <div className="max-w-5xl mx-auto px-4 py-4 w-full">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push('/my-posts')}
             className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
           >
             <span className="mr-2">←</span> Back

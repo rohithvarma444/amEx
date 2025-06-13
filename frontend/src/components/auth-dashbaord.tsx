@@ -105,22 +105,6 @@ function AuthDashboard() {
             <Link href="/listings" className="text-black hover:text-gray-600 font-bold">Listings</Link>
             <Link href="/requests" className="text-black hover:text-gray-600 font-bold">Requests</Link>
           </div>
-          <div className="relative flex-1 mx-4">
-            <input 
-              type="text" 
-              placeholder="Search for items, services, categories, and more..." 
-              className="pl-4 pr-10 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-200"
-            />
-            <svg 
-              className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
         </div>
         <Link href="/sign-in" className="bg-black text-white px-4 py-2 rounded-md text-sm font-bold">
           Sign In
@@ -148,22 +132,6 @@ function AuthDashboard() {
             <Link href="/requests" className="text-black hover:text-gray-600 font-bold">Requests</Link>
             <Link href="/my-posts" className="text-black hover:text-gray-600 font-bold">My Posts</Link>
             <Link href="/my-activity" className="text-black hover:text-gray-600 font-bold">My Activity</Link>
-          </div>
-          <div className="relative flex-1 mx-4">
-            <input 
-              type="text" 
-              placeholder="Search for items, services, categories, and more..." 
-              className="pl-4 pr-10 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-200"
-            />
-            <svg 
-              className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24" 
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
           </div>
         </div>
         
@@ -207,13 +175,7 @@ function AuthDashboard() {
                   <p className="text-sm text-gray-500 truncate" title={email}>{email}</p>
                 </div>
                 <div className="p-2">
-                  <Link 
-                    href="/profile" 
-                    className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left font-medium"
-                    role="menuitem"
-                  >
-                    Profile
-                  </Link>
+                
                   <Link 
                     href="/settings" 
                     className="block px-3 py-2 rounded-md hover:bg-gray-100 w-full text-left font-medium"
